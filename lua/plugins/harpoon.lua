@@ -1,5 +1,9 @@
 local M = { "ThePrimeagen/harpoon" }
 
+M.dependencies = {
+	"nvim-lua/plenary.nvim",
+}
+
 M.branch = "harpoon2"
 
 M.config = function()
@@ -17,6 +21,13 @@ M.keys = function()
 				harpoon:list():add()
 			end,
 			desc = "Add file (Harpoon)",
+		},
+		{
+			"<leader>p",
+			function()
+				harpoon:list():prepend()
+			end,
+			desc = "Add file to top (Harpoon)",
 		},
 		{
 			"",

@@ -1,8 +1,10 @@
 local M = { "nvim-telescope/telescope.nvim" }
 
-M.event = "VeryLazy"
+M.dependencies = {
+	"nvim-lua/plenary.nvim"
+}
 
-M.dependencies = { "nvim-lua/plenary.nvim" }
+M.event = "VeryLazy"
 M.tag = "0.1.8"
 
 M.opts = {}
@@ -11,8 +13,7 @@ M.keys = function()
 	local builtin = require("telescope.builtin")
 
 	return {
-		{ "<C-Space>", builtin.find_files, {} },
-		{ "tb", builtin.buffers, {} },
+		{ "<C-f>", builtin.find_files, {} },
 		{ "", builtin.live_grep, {} },
 		{
 			"tiw",
@@ -30,7 +31,6 @@ M.keys = function()
 			end,
 			{},
 		},
-		{ "z=", builtin.spell_suggest, {} },
 		{
 			"ts",
 			function()
@@ -46,6 +46,8 @@ M.keys = function()
 			require("telescope.builtin").diagnostics,
 			desc = "Lsp diagnostics",
 		},
+		{ "z=", builtin.spell_suggest, {} },
+		{ "tb", builtin.buffers, {} },
 		{ "tr", builtin.registers, {} },
 		{ "th", builtin.help_tags, {} },
 		{ "tk", builtin.keymaps, {} },

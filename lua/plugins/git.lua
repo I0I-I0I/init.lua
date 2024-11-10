@@ -1,10 +1,5 @@
 local M = { "NeogitOrg/neogit" }
 
-M.dependencies = {
-	"nvim-lua/plenary.nvim",
-	"nvim-telescope/telescope.nvim"
-}
-
 M.config = true
 
 M.keys = {

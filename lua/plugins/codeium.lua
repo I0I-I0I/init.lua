@@ -4,10 +4,7 @@ M.event = "VeryLazy"
 
 M.config = function()
 	local neocodeium = require("neocodeium")
-	neocodeium.setup({
-		enabled = true,
-		silent = true,
-	})
+	neocodeium.setup({ silent = true })
 
 	local commands = require("neocodeium.commands")
 
