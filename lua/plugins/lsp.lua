@@ -2,6 +2,7 @@ local M = { "neovim/nvim-lspconfig" }
 
 M.dependencies = {
 	"williamboman/mason.nvim",
+	"artemave/workspace-diagnostics.nvim"
 }
 
 M.event = "VeryLazy"
@@ -15,11 +16,75 @@ function M.config()
 	if ok then
 		capabilities = cmp_nvim_lsp.default_capabilities()
 	end
+	capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-	-- lsp.vtsls.setup({ capabilities = capabilities })
-	lsp.clangd.setup({ capabilities = capabilities })
-	lsp.pyright.setup({ capabilities = capabilities })
+	-- Frontend
+	lsp.ts_ls.setup({
+		on_attach = function(client, bufnr)
+			require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+		end,
+		capabilities = capabilities,
+		init_options = {
+			completions = {
+				completeFunctionCalls = true,
+			},
+			preferences = {
+				includeInlayParameterNameHints = 'all',
+				includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+				includeInlayFunctionParameterTypeHints = true,
+				includeInlayVariableTypeHints = false,
+				includeInlayPropertyDeclarationTypeHints = true,
+				includeInlayFunctionLikeReturnTypeHints = true,
+				includeInlayEnumMemberValueHints = true,
+				importModuleSpecifierPreference = 'non-relative',
+				includeCompletionsForModuleExports = true,
+				quotePreference = "double",
+				displayPartsForJSDoc = true,
+				generateReturnInDocTemplate = true,
+			},
+		},
+	})
+	lsp.html.setup({ capabilities = capabilities })
+	lsp.cssls.setup({ capabilities = capabilities })
+	lsp.css_variables.setup({ capabilities = capabilities })
+	lsp.emmet_ls.setup({
+		capabilities = capabilities,
+		filetypes = { "css", "eruby", "html", "javascript", "javascriptreact", "less", "sass", "scss", "svelte", "pug", "typescriptreact", "vue" },
+		init_options = {
+			html = {
+				options = { ["bem.enabled"] = true, },
+			},
+		}
+	})
+
+	-- Other
+	lsp.clangd.setup({
+		on_attach = function(client, bufnr)
+			require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+		end,
+		capabilities = capabilities,
+		cmd = { "clangd", "--compile-commands-dir=." },
+		filetypes = { "c", "cpp", "objc", "objcpp" },
+		root_dir = require'lspconfig'.util.root_pattern("compile_commands.json", ".git"),
+		settings = {
+			clangd = {
+				compilationDatabasePath = ".",
+				fallbackFlags = { "-std=c++17", "-I/usr/x86_64-w64-mingw32/include" },
+			}
+		}
+	})
+	lsp.pyright.setup({
+		on_attach = function(client, bufnr)
+			require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+		end,
+		capabilities = capabilities
+	})
+
+	-- Lua
 	lsp.lua_ls.setup({
+		on_attach = function(client, bufnr)
+			require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+		end,
 		capabilities = capabilities,
 		settings = {
 			Lua = {
@@ -35,30 +100,6 @@ function M.config()
 			},
 		},
 		single_file_support = true,
-	})
-
-	lsp.ts_ls.setup({
-		capabilities = capabilities,
-		init_options = {
-			completions = {
-				completeFunctionCalls = true,
-			},
-			preferences = {
-				includeInlayParameterNameHints = 'all',
-				includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-				includeInlayFunctionParameterTypeHints = true,
-				includeInlayVariableTypeHints = false,
-				includeInlayPropertyDeclarationTypeHints = true,
-				includeInlayFunctionLikeReturnTypeHints = true,
-				includeInlayEnumMemberValueHints = true,
-				importModuleSpecifierPreference = 'non-relative',
-
-				includeCompletionsForModuleExports = true,
-				quotePreference = "double",
-				displayPartsForJSDoc = true,
-				generateReturnInDocTemplate = true,
-			},
-		},
 	})
 
 	-- Attach/Mappings

@@ -20,24 +20,7 @@ M.init = function()
 end
 
 M.keys = {
-	{ "<leader>db", "<cmd>DBUIToggle<cr>", desc = "Open DataBase UI", silent = true }
+	{ "<leader>db", "<cmd>tabnew<cr><cmd>DBUIToggle<cr>", desc = "Open DataBase UI", silent = true }
 }
 
 return M
--- local M = {
---   "kndndrj/nvim-dbee",
--- }
---
--- M.dependencies = {
--- 	"MunifTanjim/nui.nvim",
--- }
---
--- M.build = function()
--- 	require("dbee").install()
--- end
---
--- M.config = function()
--- 	require("dbee").setup()
--- end
---
--- return M

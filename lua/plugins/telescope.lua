@@ -1,4 +1,4 @@
-local M = { "nvim-telescope/telescope.nvim" }
+local M = { "nvim-telescope/telescope.nvim", cond = false }
 
 M.dependencies = {
 	"nvim-lua/plenary.nvim"

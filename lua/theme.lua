@@ -1,1 +1,1 @@
-SetColor("solarized-osaka", "")
+SetColor("rose-pine", "fkjd")

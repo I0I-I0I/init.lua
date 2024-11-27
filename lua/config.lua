@@ -17,7 +17,7 @@ vim.opt.smartindent = true
 vim.opt.expandtab = false -- false == tabs
 vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
-vim.opt.completeopt = { "menu", "menuone", "fuzzy", "noselect", "popup" }
+vim.opt.completeopt = { "menu", "menuone", "fuzzy", "noinsert", "popup" }
 vim.opt.linebreak = true
 vim.opt.smartcase = true
 vim.opt.mouse = "a"
@@ -25,6 +25,7 @@ vim.opt.laststatus = 3
 vim.opt.signcolumn = "yes"
 vim.opt.rnu = true
 vim.opt.nu = true
+vim.opt.cursorline = true
 
 vim.api.nvim_create_autocmd("BufWritePre", {
 	pattern = "*.*",
@@ -61,20 +62,14 @@ vim.keymap.set("n", "<C-p>", "<cmd>cprevious<cr>zz", { table.insert(opts, { desc
 vim.keymap.set("n", "<leader><leader>", "<cmd>nohlsearch<cr>", { table.insert(opts, { desc = "Turn off search highlight" }) })
 vim.keymap.set("v", "K", ":m '<-2<cr>gv=gv", { silent = true })
 vim.keymap.set("v", "J", ":m '>+1<cr>gv=gv", { silent = true })
-vim.keymap.set("n", "<C-t>", "<cmd>silent !tmux neww tmux-sessionizer<cr>")
-vim.keymap.set("n", "<C-Space>", "<cmd>silent !tmux-yazi<cr>")
-
 vim.keymap.set("v", "x", '"_x')
-vim.keymap.set({ "n", "v" }, "Y", '"+y')
 vim.keymap.set("x", "P", '"0P')
 
-vim.api.nvim_create_autocmd("BufEnter", {
-	pattern = "*.*",
-	callback = function ()
-		vim.keymap.set("n", "-", "mB<cmd>Ex<cr>",
-		{ desc = "Open netrw", silent = true, buffer = true })
-	end
-})
+vim.keymap.set("n", "<C-t>", "<cmd>silent !tmux neww tmux-sessionizer<cr>")
+vim.keymap.set("n", "<C-Space>", function ()
+	local current_path = vim.fn.expand("%:p:h")
+	vim.cmd("silent !tmux-yazi " .. current_path)
+end)
 
 --
 -- Plugins
