@@ -1,1 +1,1 @@
-SetColor("rose-pine", "fkjd")
+SetColor("rose-pine", "")

@@ -1,38 +1,29 @@
-local M = { "monkoose/neocodeium" }
+local M = { "Exafunction/codeium.vim" }
 
-M.event = "VeryLazy"
+M.init = function ()
+	vim.g.codeium_enabled = false
+end
 
-M.config = function()
-	local neocodeium = require("neocodeium")
-	local flag = false
+M.config = function ()
+	local opts = { expr = true, silent = true }
+	vim.keymap.set("i", "<A-w>", function() return vim.fn["codeium#AcceptNextWord"]() end, opts)
+	vim.keymap.set("i", "<A-l>", function() return vim.fn["codeium#AcceptNextLine"]() end, opts)
+	vim.keymap.set("i", "<A-y>", function() return vim.fn["codeium#Accept"]() end, opts)
+	vim.keymap.set("i", "<A-n>", function() return vim.fn["codeium#CycleOrComplete"]() end, opts)
+	vim.keymap.set("i", "<A-p>", function() return vim.fn["codeium#CycleCompletions"](-1) end, opts)
 
-	neocodeium.setup({
-		enabled = flag,
-		silent = true
-	})
-
-	local commands = require("neocodeium.commands")
-
-	vim.keymap.set({ "n", "i" }, "<A-t>", function ()
-		if flag then
-			commands.disable()
-			if neocodeium.visible() then
-				neocodeium.clear()
-			end
-			print("NeoCodeium disabled")
+	vim.keymap.set({ "i", "n" }, "<A-t>", function()
+		if vim.g.codeium_enabled then
+			vim.cmd("CodeiumDisable")
+			vim.fn["codeium#Clear"]()
+			vim.notify("Codeium is now disabled", 3)
+			vim.g.codeium_enabled = false
 		else
-			commands.enable()
-			print("NeoCodeium enabled")
+			vim.cmd("CodeiumEnable")
+			vim.notify("Codeium is now active", 3)
+			vim.g.codeium_enabled = true
 		end
-		flag = not flag
-	end)
-	vim.keymap.set("i", "<A-w>", neocodeium.accept_word)
-	vim.keymap.set("i", "<A-l>", neocodeium.accept_line)
-	vim.keymap.set("i", "<A-y>", neocodeium.accept)
-	vim.keymap.set("i", "<A-n>", neocodeium.cycle_or_complete)
-	vim.keymap.set("i", "<A-p>", function()
-		neocodeium.cycle_or_complete(-1)
-	end)
+	end, opts)
 end
 
 return M

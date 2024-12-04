@@ -5,14 +5,13 @@ M.dependencies = {
 }
 
 M.config = function()
-	require("fzf-lua").setup()
+	local fzf = require("fzf-lua")
+	fzf.register_ui_select()
+	fzf.setup()
 end
 
 M.keys = function()
 	local fzf = require("fzf-lua")
-
-	fzf.register_ui_select()
-
 	return {
 		{ "<C-f>", fzf.files, {} },
 		{ "<C-b>", fzf.buffers, {} },

@@ -1,4 +1,6 @@
-local M = { "stevearc/oil.nvim", event = "VimEnter" }
+local M = { "stevearc/oil.nvim" }
+
+M.event = "VimEnter"
 
 ---@module 'oil'
 ---@type oil.SetupOpts
@@ -22,7 +24,7 @@ M.opts = {
 		["g."] = "actions.toggle_hidden",
 		["g\\"] = "actions.toggle_trash",
 	},
-	use_default_keymaps = false,
+	use_default_keymaps = false
 }
 
 M.keys = {

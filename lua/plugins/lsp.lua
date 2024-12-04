@@ -5,8 +5,6 @@ M.dependencies = {
 	"artemave/workspace-diagnostics.nvim"
 }
 
-M.event = "VeryLazy"
-
 function M.config()
 	require("mason").setup()
 
@@ -42,7 +40,7 @@ function M.config()
 				displayPartsForJSDoc = true,
 				generateReturnInDocTemplate = true,
 			},
-		},
+		}
 	})
 	lsp.html.setup({ capabilities = capabilities })
 	lsp.cssls.setup({ capabilities = capabilities })
@@ -53,7 +51,7 @@ function M.config()
 		init_options = {
 			html = {
 				options = { ["bem.enabled"] = true, },
-			},
+			}
 		}
 	})
 
@@ -99,14 +97,21 @@ function M.config()
 				diagnostics = { globals = { "vim" } },
 			},
 		},
-		single_file_support = true,
+		single_file_support = true
+	})
+
+	vim.api.nvim_create_autocmd("LspNotify", {
+		callback = function(args)
+			if args.data.method == "textDocument/didOpen" then
+				vim.lsp.foldclose("imports", vim.fn.bufwinid(args.buf))
+			end
+		end
 	})
 
 	-- Attach/Mappings
 	vim.api.nvim_create_autocmd("LspAttach", {
 		callback = function(event)
 			local opts = { buffer = event.buf }
-
 			vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, { desc = "Lsp Signature" })
 			vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Lsp Definitions" })
 			vim.keymap.set("n", "gD", vim.lsp.buf.type_definition,
@@ -123,7 +128,7 @@ function M.config()
 			local client = vim.lsp.get_client_by_id(event.data.client_id)
 			if not client then return end
 
-			if client.supports_method("textDocument/completion") then
+			if client:supports_method("textDocument/completion") then
 				vim.lsp.completion.enable(true, client.id, event.buf,
 				{ autotrigger = false })
 			else
@@ -133,7 +138,7 @@ function M.config()
 			if client.server_capabilities.inlayHintProvider then
 				vim.lsp.inlay_hint.enable(true)
 			end
-		end,
+		end
 	})
 end
 

@@ -1,8 +1,10 @@
 local M = { "ThePrimeagen/harpoon" }
 
 M.dependencies = {
-	"nvim-lua/plenary.nvim",
+	"nvim-lua/plenary.nvim"
 }
+
+M.lazy = true
 
 M.branch = "harpoon2"
 
@@ -13,7 +15,6 @@ end
 
 M.keys = function()
 	local harpoon = require("harpoon")
-
 	return {
 		{
 			"<leader>a",
@@ -70,7 +71,7 @@ M.keys = function()
 				harpoon:list():select(5)
 			end,
 			desc = "Select 5 (Harpoon)",
-		},
+		}
 	}
 end
 

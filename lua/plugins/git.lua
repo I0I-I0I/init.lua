@@ -19,7 +19,7 @@ M.config = function()
 end
 
 M.keys = {
-	{ "<leader>g", "<cmd>Neogit<cr>", desc = "Open git", { silent = true } },
+	{ "<leader>g", "<cmd>Neogit<cr>", desc = "Open git", { silent = true } }
 }
 
 return M
