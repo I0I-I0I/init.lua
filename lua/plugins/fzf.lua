@@ -6,8 +6,22 @@ M.dependencies = {
 
 M.config = function()
 	local fzf = require("fzf-lua")
+	local actions = require("fzf-lua.actions")
+
 	fzf.register_ui_select()
-	fzf.setup()
+	fzf.setup({
+		"max-perf",
+		awesome_colorschemes = {
+			actions = {
+				["enter"] = function(selected, opts)
+					actions.colorscheme(selected, opts)
+					local dbkey, idx = selected[1]:match("^(.-):(%d+):")
+					local theme = opts._adm.db[dbkey].colorschemes[tonumber(idx)]
+					SetColorAndSave(theme , "default", dbkey)
+				end
+			},
+		},
+	})
 end
 
 M.keys = function()

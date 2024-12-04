@@ -1,15 +1,15 @@
-local M = { 'kristijanhusak/vim-dadbod-ui' }
+local M = { "kristijanhusak/vim-dadbod-ui" }
 
 M.dependencies = {
-	{ 'tpope/vim-dadbod', lazy = true },
-	{ 'kristijanhusak/vim-dadbod-completion', ft = { 'sql', 'mysql', 'plsql' }, lazy = true },
+	{ "tpope/vim-dadbod", lazy = true },
+	{ "kristijanhusak/vim-dadbod-completion", ft = { "sql", "mysql", "plsql" }, lazy = true }
 }
 
 M.cmd = {
-	'DBUI',
-	'DBUIToggle',
-	'DBUIAddConnection',
-	'DBUIFindBuffer',
+	"DBUI",
+	"DBUIToggle",
+	"DBUIAddConnection",
+	"DBUIFindBuffer",
 }
 
 M.init = function()
