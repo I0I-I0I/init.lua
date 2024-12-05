@@ -12,7 +12,7 @@ M.config = function ()
 	vim.keymap.set("i", "<A-n>", function() return vim.fn["codeium#CycleOrComplete"]() end, opts)
 	vim.keymap.set("i", "<A-p>", function() return vim.fn["codeium#CycleCompletions"](-1) end, opts)
 
-	vim.keymap.set({ "i", "n" }, "<A-t>", function()
+	local function toggle()
 		if vim.g.codeium_enabled then
 			vim.cmd("CodeiumDisable")
 			vim.fn["codeium#Clear"]()
@@ -23,7 +23,10 @@ M.config = function ()
 			vim.notify("Codeium is now active", 3)
 			vim.g.codeium_enabled = true
 		end
-	end, opts)
+	end
+
+	vim.keymap.set("n" , "<leader>t", toggle, opts)
+	vim.keymap.set("i" , "<A-t>", toggle, opts)
 end
 
 return M

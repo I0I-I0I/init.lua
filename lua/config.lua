@@ -71,7 +71,7 @@ end)
 --
 -- Plugins
 --
-local lazypath = vim.fn.stdpath("data") .. "/lazy-mini/lazy.nvim"
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
 	local lazyrepo = "https://github.com/folke/lazy.nvim.git"
 	local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
@@ -90,6 +90,4 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
 	spec = "plugins",
 	change_detection = { notify = false },
-	root = vim.fn.stdpath("data") .. "/lazy-mini",
-	state = vim.fn.stdpath("state") .. "/lazy-mini/state.json",
 })

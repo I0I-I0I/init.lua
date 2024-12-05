@@ -40,6 +40,7 @@ M.keys = function()
 		{ "th", fzf.helptags, {} },
 		{ "tk", fzf.keymaps, {} },
 		{ "tt", fzf.awesome_colorschemes, {} },
+		{ "tm", fzf.manpages, {} },
 
 		{ "gra", fzf.lsp_code_actions, {} },
 		{ "grr", fzf.lsp_references, { noremap = true } },
