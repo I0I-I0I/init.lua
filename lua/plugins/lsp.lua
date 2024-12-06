@@ -135,6 +135,11 @@ function M.config()
 				vim.bo[event.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
 			end
 
+			local keys = { ".", "->", ":" }
+			for _, key in ipairs(keys) do
+				vim.keymap.set("i", key, key .. "<C-x><C-o>", { buffer = event.buf })
+			end
+
 			if client.server_capabilities.inlayHintProvider then
 				vim.lsp.inlay_hint.enable(true)
 			end
