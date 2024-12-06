@@ -1,13 +1,4 @@
-function SetColor(color, bg, packet)
-	if packet ~= nil then
-		local path = vim.fn.stdpath("cache") .. "/fzf-lua/pack/fzf-lua/opt/"
-		vim.opt.rtp:prepend(path .. packet)
-	end
-
-	if color ~= "" then
-		vim.cmd.colorscheme(color)
-	end
-
+function SetBg(bg)
 	if bg == "default" then return end
 
 	vim.cmd.hi("Normal guibg=" .. bg)
@@ -19,6 +10,23 @@ function SetColor(color, bg, packet)
 	]])
 end
 
+function LoadColor(packet)
+	local path = vim.fn.stdpath("cache") .. "/fzf-lua/pack/fzf-lua/opt/"
+	vim.opt.rtp:prepend(path .. packet)
+end
+
+function SetColor(color, bg, packet)
+	if packet ~= nil then
+		LoadColor(packet)
+	end
+
+	if color ~= "" then
+		vim.cmd.colorscheme(color)
+	end
+
+	SetBg(bg)
+end
+
 function SetColorAndSave(theme, bg, packet)
 	if packet == nil then
 		packet = ""
@@ -27,11 +35,10 @@ function SetColorAndSave(theme, bg, packet)
 	local cmd
 	if theme.lua ~= nil then
 		theme = theme.lua:gsub("'", "\"")
-		cmd = "SetColor(" ..
-			"\"\", " ..
-			"\"" .. bg .. "\", " ..
-			"\"" .. packet .. "\"" .. ")"
-			.. ";" .. theme
+		cmd = "LoadColor(\"" .. packet .. "\")" .. ";"
+			.. theme .. ";"
+			.. "SetBg(\"" .. bg .. "\")"
+		vim.cmd.lua(theme)
 		theme = ""
 	elseif theme.name ~= nil then
 		theme = theme.name

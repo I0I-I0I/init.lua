@@ -4,9 +4,10 @@ M.dependencies = {
 	"rktjmp/lush.nvim"
 }
 
+local transparent = false
+
 M.config = function()
 	local fzf = require("fzf-lua")
-	local actions = require("fzf-lua.actions")
 
 	fzf.register_ui_select()
 	fzf.setup({
@@ -14,13 +15,17 @@ M.config = function()
 		awesome_colorschemes = {
 			actions = {
 				["enter"] = function(selected, opts)
-					actions.colorscheme(selected, opts)
 					local dbkey, idx = selected[1]:match("^(.-):(%d+):")
 					local theme = opts._adm.db[dbkey].colorschemes[tonumber(idx)]
-					SetColorAndSave(theme , "default", dbkey)
+					local bg = "default"
+					if transparent then
+						vim.api.nvim_del_augroup_by_name("TransparentGroup")
+						bg = "NONE"
+					end
+					SetColorAndSave(theme , bg, dbkey)
 				end
-			},
-		},
+			}
+		}
 	})
 end
 
@@ -39,8 +44,21 @@ M.keys = function()
 		{ "tr", fzf.registers, {} },
 		{ "th", fzf.helptags, {} },
 		{ "tk", fzf.keymaps, {} },
-		{ "tt", fzf.awesome_colorschemes, {} },
 		{ "tm", fzf.manpages, {} },
+		{ "tt", function ()
+			transparent = false
+			fzf.awesome_colorschemes()
+		end, {} },
+		{ "tat", function ()
+			vim.api.nvim_create_autocmd("ColorScheme", {
+				group = vim.api.nvim_create_augroup("TransparentGroup", {}),
+				callback = function()
+					SetBg("NONE")
+				end
+			})
+			transparent = true
+			fzf.awesome_colorschemes()
+		end, {} },
 
 		{ "gra", fzf.lsp_code_actions, {} },
 		{ "grr", fzf.lsp_references, { noremap = true } },
