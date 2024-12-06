@@ -5,6 +5,11 @@ M.dependencies = {
 }
 
 local transparent = false
+local external = {
+	["solarized-osaka.nvim"] = "#05181f",
+	["neosolarized.nvim"] = "#05181f",
+	["oceanic-next"] = "#1c1c1c"
+}
 
 M.config = function()
 	local fzf = require("fzf-lua")
@@ -21,6 +26,8 @@ M.config = function()
 					if transparent then
 						vim.api.nvim_del_augroup_by_name("TransparentGroup")
 						bg = "NONE"
+					elseif external[dbkey] ~= nil then
+						bg = external[dbkey]
 					end
 					SetColorAndSave(theme , bg, dbkey)
 				end

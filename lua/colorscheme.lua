@@ -7,6 +7,12 @@ function SetBg(bg)
 		hi EndOfBuffer guibg=Normal
 		hi LineNr guibg=Normal
 		hi SignColumn guibg=Normal
+		hi DiagnosticSignError guibg=Normal
+		hi DiagnosticSignWarn guibg=Normal
+		hi DiagnosticSignOk guibg=Normal
+		hi DiagnosticSignHint guibg=Normal
+		hi DiagnosticSignInfo guibg=Normal
+		hi StatusLine guibg=Normal
 	]])
 end
 
