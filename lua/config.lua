@@ -24,6 +24,10 @@ vim.opt.signcolumn = "yes"
 vim.opt.rnu = true
 vim.opt.nu = true
 vim.opt.cursorline = true
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.foldlevel = 99
+vim.opt.foldnestmax = 1
 
 vim.api.nvim_create_autocmd("BufWritePre", {
 	pattern = "*.*",
@@ -46,6 +50,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 local opts = { noremap = true, silent = true }
 
 vim.g.mapleader = " "
+
 
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")

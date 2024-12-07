@@ -17,7 +17,8 @@ M.keys = function()
 		nu = o.nu,
 		laststatus = o.laststatus,
 		cmdheight = o.cmdheight,
-		fillchars = o.fillchars
+		fillchars = o.fillchars,
+		foldlevel = o.foldlevel
 	}
 
 	local on_open = {
@@ -25,7 +26,8 @@ M.keys = function()
 		rnu = false,
 		nu = false,
 		laststatus = 0,
-		cmdheight = 0
+		cmdheight = 0,
+		foldlevel = 0
 	}
 
 	local function setOpts(arr)
@@ -35,27 +37,19 @@ M.keys = function()
 	end
 
 	return {
-		{ "zF",  function()
-				vim.cmd("ZenmodeOpenAll 20")
-				setOpts(on_open)
-			end, { silent = true } },
-		{ "zf",  function()
+		{ "<leader>zf",  function()
 				vim.cmd("ZenmodeOpenAll 40")
 				setOpts(on_open)
 			end, { silent = true } },
 
-		{ "zO",  function()
+		{ "<leader>zo",  function()
 				setOpts(defaults)
 				o.fillchars = "eob:\\u00A0,vert:\\u00A0"
+				o.foldlevel = 0
 				vim.cmd("ZenmodeOpenAll 20")
 			end, { silent = true } },
-		{ "zo",  function()
-				setOpts(defaults)
-				o.fillchars = "eob:\\u00A0,vert:\\u00A0"
-				vim.cmd("ZenmodeOpenAll 40")
-			end, { silent = true } },
 
-		{ "zc", function()
+		{ "<leader>zc", function()
 				vim.cmd("ZenmodeCloseAll")
 				setOpts(defaults)
 			end, { silent = true } }

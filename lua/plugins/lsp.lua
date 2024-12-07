@@ -10,10 +10,6 @@ function M.config()
 
 	local lsp = require("lspconfig")
 	local capabilities = vim.lsp.protocol.make_client_capabilities()
-	local ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-	if ok then
-		capabilities = cmp_nvim_lsp.default_capabilities()
-	end
 	capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 	-- Frontend
@@ -113,23 +109,13 @@ function M.config()
 		single_file_support = true
 	})
 
-	vim.api.nvim_create_autocmd("LspNotify", {
-		callback = function(args)
-			if args.data.method == "textDocument/didOpen" then
-				vim.lsp.foldclose("imports", vim.fn.bufwinid(args.buf))
-			end
-		end
-	})
-
 	-- Attach/Mappings
 	vim.api.nvim_create_autocmd("LspAttach", {
 		callback = function(event)
 			local opts = { buffer = event.buf }
-			vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, { desc = "Lsp Signature" })
-			vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Lsp Definitions" })
-			vim.keymap.set("n", "gD", vim.lsp.buf.type_definition,
+			vim.keymap.set("n", "<C-S-]>", vim.lsp.buf.type_definition,
 				{ table.insert(opts, { desc = "Lsp type definition" }) })
-			vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float,
+			vim.keymap.set("n", "gre", vim.diagnostic.open_float,
 				{ table.insert(opts, { desc = "Show line diagnostics" }) })
 			vim.keymap.set("n", "]d", function()
 				vim.diagnostic.jump({ float = true, count = 1 })
@@ -144,8 +130,6 @@ function M.config()
 			if client:supports_method("textDocument/completion") then
 				vim.lsp.completion.enable(true, client.id, event.buf,
 				{ autotrigger = false })
-			else
-				vim.bo[event.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
 			end
 
 			local keys = { ".", "->", ":" }

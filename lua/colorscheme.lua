@@ -13,6 +13,7 @@ function SetBg(bg)
 		hi DiagnosticSignHint guibg=Normal
 		hi DiagnosticSignInfo guibg=Normal
 		hi StatusLine guibg=Normal
+		hi Folded guibg=Normal
 	]])
 end
 
