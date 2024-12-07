@@ -13,14 +13,11 @@ M.cmd = {
 }
 
 M.init = function()
-	vim.g.db_ui_use_nerd_fonts = 1
-	vim.cmd([[
-		autocmd FileType sql setlocal omnifunc=vim_dadbod_completion#omni
-	]])
+	vim.cmd("autocmd FileType sql setlocal omnifunc=vim_dadbod_completion#omni")
 end
 
 M.keys = {
-	{ "<leader>db", "<cmd>tabnew<cr><cmd>DBUIToggle<cr>", desc = "Open DataBase UI", silent = true }
+	{ "<localleader>d", "<cmd>tabnew<cr><cmd>DBUIToggle<cr>", desc = "Open DataBase UI", silent = true }
 }
 
 return M
