@@ -41,6 +41,15 @@ M.config = function()
 			--
 		end
 	end)
+	set("n", "<C-[>", function()
+		if not mc.cursorsEnabled() then
+			mc.enableCursors()
+		elseif mc.hasCursors() then
+			mc.clearCursors()
+		else
+			--
+		end
+	end)
 
 	set("n", "<A-g><A-v>", mc.restoreCursors)
 

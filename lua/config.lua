@@ -24,6 +24,7 @@ vim.opt.signcolumn = "yes"
 vim.opt.rnu = true
 vim.opt.nu = true
 vim.opt.cursorline = true
+vim.opt.messagesopt = "history:500,wait:500"
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.opt.foldlevel = 99
@@ -33,7 +34,6 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 	pattern = "*.*",
 	command = [[%s/\s\+$//e]],
 })
-
 vim.api.nvim_create_autocmd("TextYankPost", {
 	pattern = "*",
 	callback = function()
@@ -51,19 +51,16 @@ local opts = { noremap = true, silent = true }
 
 vim.g.mapleader = " "
 
-
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 vim.keymap.set("n", "<C-y>", "3<C-y>")
 vim.keymap.set("n", "<C-e>", "3<C-e>")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
-vim.keymap.set("n", "<C-n>", "<cmd>cnext<cr>zz", { table.insert(opts, { desc = "Next qfix" }) })
-vim.keymap.set("n", "<C-p>", "<cmd>cprevious<cr>zz", { table.insert(opts, { desc = "Previous qfix" }) })
 
 vim.keymap.set("n", "<leader><leader>", "<cmd>nohlsearch<cr>", { table.insert(opts, { desc = "Turn off search highlight" }) })
-vim.keymap.set("v", "K", ":m '<-2<cr>gv=gv", { silent = true })
-vim.keymap.set("v", "J", ":m '>+1<cr>gv=gv", { silent = true })
+vim.keymap.set("v", "K", ":m '<-2<cr>gv=gv", { silent = true, noremap = true })
+vim.keymap.set("v", "J", ":m '>+1<cr>gv=gv", { silent = true, noremap = true })
 vim.keymap.set("v", "x", '"_x')
 vim.keymap.set("x", "P", '"0P')
 

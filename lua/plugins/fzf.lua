@@ -52,6 +52,7 @@ M.keys = function()
 		{ "th", fzf.helptags, {} },
 		{ "tk", fzf.keymaps, {} },
 		{ "tm", fzf.manpages, {} },
+
 		{ "tt", function ()
 			transparent = false
 			fzf.awesome_colorschemes()
@@ -67,9 +68,9 @@ M.keys = function()
 			fzf.awesome_colorschemes()
 		end, {} },
 
-		{ "gra", fzf.lsp_code_actions, {} },
 		{ "grr", fzf.lsp_references, { noremap = true } },
-		{ "td", fzf.lsp_workspace_diagnostics, {} },
+		{ "grf", fzf.lsp_finder, { noremap = true } },
+		{ "grd", fzf.lsp_workspace_diagnostics, {} },
 	}
 end
 

@@ -5,108 +5,101 @@ M.dependencies = {
 	"artemave/workspace-diagnostics.nvim"
 }
 
-function M.config()
-	require("mason").setup()
-
+local function setup_servers(servers)
 	local lsp = require("lspconfig")
+	local diagnostics = require("workspace-diagnostics")
 	local capabilities = vim.lsp.protocol.make_client_capabilities()
 	capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-	-- Frontend
-	lsp.ts_ls.setup({
-		on_attach = function(client, bufnr)
-			require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
-		end,
-		capabilities = capabilities,
-		init_options = {
-			completions = {
-				completeFunctionCalls = true,
-			},
-			preferences = {
-				includeInlayParameterNameHints = 'all',
-				includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-				includeInlayFunctionParameterTypeHints = true,
-				includeInlayVariableTypeHints = false,
-				includeInlayPropertyDeclarationTypeHints = true,
-				includeInlayFunctionLikeReturnTypeHints = true,
-				includeInlayEnumMemberValueHints = true,
-				importModuleSpecifierPreference = 'non-relative',
-				includeCompletionsForModuleExports = true,
-				quotePreference = "double",
-				displayPartsForJSDoc = true,
-				generateReturnInDocTemplate = true,
-			},
-		}
-	})
-	lsp.html.setup({ capabilities = capabilities })
-	lsp.cssls.setup({ capabilities = capabilities })
-	lsp.css_variables.setup({ capabilities = capabilities })
-	lsp.emmet_ls.setup({
-		capabilities = capabilities,
-		filetypes = {
-			"css",
-			"eruby",
-			"html",
-			"javascript",
-			"javascriptreact",
-			"less",
-			"sass",
-			"scss",
-			"svelte",
-			"pug",
-			"typescriptreact",
-			"vue"
-		},
-		init_options = {
-			html = {
-				options = { ["bem.enabled"] = true, },
-			}
-		}
-	})
+	local exclude = { "html", "cssls", "css_variables", "emmet_ls" }
+	for name, config in pairs(servers) do
+		if not vim.tbl_contains(exclude, name) then
+			config.on_attach = function (client, bufnr)
+				diagnostics.populate_workspace_diagnostics(client, bufnr)
+			end
+		end
+		config.capabilities = capabilities
+		lsp[name].setup(config)
+	end
+end
 
-	-- Other
-	lsp.clangd.setup({
-		on_attach = function(client, bufnr)
-			require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
-		end,
-		capabilities = capabilities,
-		cmd = { "clangd", "--compile-commands-dir=." },
-		filetypes = { "c", "cpp", "objc", "objcpp" },
-		root_dir = require'lspconfig'.util.root_pattern("compile_commands.json", ".git"),
-		settings = {
-			clangd = {
-				compilationDatabasePath = ".",
-				fallbackFlags = { "-std=c++17", "-I/usr/x86_64-w64-mingw32/include" },
-			}
-		}
-	})
-	lsp.pyright.setup({
-		on_attach = function(client, bufnr)
-			require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
-		end,
-		capabilities = capabilities
-	})
+function M.config()
+	require("mason").setup()
 
-	-- Lua
-	lsp.lua_ls.setup({
-		on_attach = function(client, bufnr)
-			require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
-		end,
-		capabilities = capabilities,
-		settings = {
-			Lua = {
-				hint = { enable = true },
-				runtime = { version = "LuaJIT" },
-				workspace = {
-					checkThirdParty = false,
-					library = { vim.env.VIMRUNTIME },
+	setup_servers({
+		["pyright"] = {},
+		["html"] = {},
+		["cssls"] = {},
+		["css_variables"] = {},
+		["ts_ls"] = {
+			init_options = {
+				completions = {
+					completeFunctionCalls = true,
 				},
-				complition = { callSnippet = "Replace" },
-				telemetry = { enable = false },
-				diagnostics = { globals = { "vim" } },
-			},
+				preferences = {
+					includeInlayParameterNameHints = 'all',
+					includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+					includeInlayFunctionParameterTypeHints = true,
+					includeInlayVariableTypeHints = false,
+					includeInlayPropertyDeclarationTypeHints = true,
+					includeInlayFunctionLikeReturnTypeHints = true,
+					includeInlayEnumMemberValueHints = true,
+					importModuleSpecifierPreference = 'non-relative',
+					includeCompletionsForModuleExports = true,
+					quotePreference = "double",
+					displayPartsForJSDoc = true,
+					generateReturnInDocTemplate = true,
+				},
+			}
 		},
-		single_file_support = true
+		["emmet_ls"] = {
+			filetypes = {
+				"css",
+				"eruby",
+				"html",
+				"javascript",
+				"javascriptreact",
+				"less",
+				"sass",
+				"scss",
+				"svelte",
+				"pug",
+				"typescriptreact",
+				"vue"
+			},
+			init_options = {
+				html = {
+					options = { ["bem.enabled"] = true, },
+				}
+			}
+		},
+		["clangd"] = {
+			cmd = { "clangd", "--compile-commands-dir=." },
+			filetypes = { "c", "cpp", "objc", "objcpp" },
+			root_dir = require'lspconfig'.util.root_pattern("compile_commands.json", ".git"),
+			settings = {
+				clangd = {
+					compilationDatabasePath = ".",
+					fallbackFlags = { "-I/usr/x86_64-w64-mingw32/include" },
+				}
+			}
+		},
+		["lua_ls"] = {
+			settings = {
+				Lua = {
+					hint = { enable = true },
+					runtime = { version = "LuaJIT" },
+					workspace = {
+						checkThirdParty = false,
+						library = { vim.env.VIMRUNTIME },
+					},
+					complition = { callSnippet = "Replace" },
+					telemetry = { enable = false },
+					diagnostics = { globals = { "vim" } },
+				},
+			},
+			single_file_support = true
+		}
 	})
 
 	-- Attach/Mappings
@@ -114,15 +107,7 @@ function M.config()
 		callback = function(event)
 			local opts = { buffer = event.buf }
 			vim.keymap.set("n", "<C-S-]>", vim.lsp.buf.type_definition,
-				{ table.insert(opts, { desc = "Lsp type definition" }) })
-			vim.keymap.set("n", "gre", vim.diagnostic.open_float,
-				{ table.insert(opts, { desc = "Show line diagnostics" }) })
-			vim.keymap.set("n", "]d", function()
-				vim.diagnostic.jump({ float = true, count = 1 })
-			end, { desc = "Lsp diagnostic go next" })
-			vim.keymap.set("n", "[d", function()
-				vim.diagnostic.jump({ float = true, count = -1 })
-			end, { desc = "Lsp diagnostic go prev" })
+				{ table.insert(opts, { desc = "vim.lsp.buf.type_definition()" }) })
 
 			local client = vim.lsp.get_client_by_id(event.data.client_id)
 			if not client then return end

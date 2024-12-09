@@ -16,7 +16,6 @@ M.keys = function()
 		rnu = o.rnu,
 		nu = o.nu,
 		laststatus = o.laststatus,
-		cmdheight = o.cmdheight,
 		fillchars = o.fillchars,
 		foldlevel = o.foldlevel
 	}
@@ -26,7 +25,6 @@ M.keys = function()
 		rnu = false,
 		nu = false,
 		laststatus = 0,
-		cmdheight = 0,
 		foldlevel = 0
 	}
 
