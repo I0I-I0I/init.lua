@@ -2,8 +2,6 @@ local M = { "stevearc/oil.nvim" }
 
 M.event = "VimEnter"
 
----@module 'oil'
----@type oil.SetupOpts
 M.opts = {
 	default_file_explorer = true,
 	delete_to_trash = true,

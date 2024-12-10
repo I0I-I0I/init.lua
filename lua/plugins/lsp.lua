@@ -24,13 +24,26 @@ local function setup_servers(servers)
 end
 
 function M.config()
-	require("mason").setup()
+	require("mason").setup({
+		ensure_installed = {
+			"lua-language-server",
+			"typescript-language-server",
+			"basedpyright",
+			"clangd",
+		}
+	})
 
 	setup_servers({
-		["pyright"] = {},
 		["html"] = {},
 		["cssls"] = {},
 		["css_variables"] = {},
+		["basedpyright"] = {
+			settings = {
+				basedpyright = {
+					typeCheckingMode = "standard",
+				},
+			},
+		},
 		["ts_ls"] = {
 			init_options = {
 				completions = {

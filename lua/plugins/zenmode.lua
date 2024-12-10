@@ -44,7 +44,7 @@ M.keys = function()
 				setOpts(defaults)
 				o.fillchars = "eob:\\u00A0,vert:\\u00A0"
 				o.foldlevel = 0
-				vim.cmd("ZenmodeOpenAll 20")
+				vim.cmd("ZenmodeOpenAll 30")
 			end, { silent = true } },
 
 		{ "<leader>zc", function()
