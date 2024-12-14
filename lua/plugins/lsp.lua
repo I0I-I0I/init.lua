@@ -130,7 +130,7 @@ function M.config()
 				{ autotrigger = false })
 			end
 
-			local keys = { ".", "->", ":" }
+			local keys = { ".", "->", "::" }
 			for _, key in ipairs(keys) do
 				vim.keymap.set("i", key, key .. "<C-x><C-o>", { buffer = event.buf })
 			end
