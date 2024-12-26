@@ -28,7 +28,11 @@ function SetColor(color, bg, packet)
 	end
 
 	if color ~= "" then
-		vim.cmd.colorscheme(color)
+		local ok, _ = pcall(vim.cmd.colorscheme, color)
+		if not ok then
+			vim.cmd.colorscheme("habamax")
+			print("Colorscheme not founded")
+		end
 	end
 
 	SetBg(bg)

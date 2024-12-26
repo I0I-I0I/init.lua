@@ -1,5 +1,7 @@
 {
+  "blink.cmp": { "branch": "main", "commit": "a9a0f96c6a1029884e37dfd74a88a075b40366dd" },
   "codeium.vim": { "branch": "main", "commit": "d152e6cd3d814a44f36447bb0d21d51f6787fe9c" },
+  "friendly-snippets": { "branch": "main", "commit": "efff286dd74c22f731cdec26a70b46e5b203c619" },
   "fzf-lua": { "branch": "main", "commit": "0063769312e913b5de9f2db21285d806dcf4efcb" },
   "harpoon": { "branch": "harpoon2", "commit": "a84ab829eaf3678b586609888ef52f7779102263" },
   "lazy.nvim": { "branch": "main", "commit": "014d1d6d78df4e58f962158e6e00261d8632612c" },

@@ -1,8 +1,9 @@
 --
 -- Config
 --
+require("utils.undo")
+
 vim.opt.termguicolors = true
-vim.opt.undodir = "/mnt/d/undo"
 vim.opt.undofile = true
 vim.opt.undolevels = 10000000
 vim.opt.undoreload = 10000000
