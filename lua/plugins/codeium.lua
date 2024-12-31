@@ -1,7 +1,7 @@
 local M = { "Exafunction/codeium.vim" }
 
 M.init = function ()
-	vim.g.codeium_enabled = false
+	vim.g.codeium_enabled = true
 end
 
 M.config = function ()

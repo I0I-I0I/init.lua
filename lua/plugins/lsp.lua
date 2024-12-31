@@ -112,7 +112,7 @@ function M.config()
 					},
 					complition = { callSnippet = "Replace" },
 					telemetry = { enable = false },
-					diagnostics = { globals = { "vim" } },
+					diagnostics = { globals = { "vim", "Snacks" } },
 				},
 			},
 			single_file_support = true

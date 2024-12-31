@@ -62,8 +62,6 @@ vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 vim.keymap.set("n", "<C-y>", "3<C-y>")
 vim.keymap.set("n", "<C-e>", "3<C-e>")
-vim.keymap.set("n", "<C-u>", "<C-u>zz")
-vim.keymap.set("n", "<C-d>", "<C-d>zz")
 
 vim.keymap.set("n", "<leader><leader>", "<cmd>nohlsearch<cr>", { table.insert(opts, { desc = "Turn off search highlight" }) })
 vim.keymap.set("v", "K", ":m '<-2<cr>gv=gv", { silent = true, noremap = true })
