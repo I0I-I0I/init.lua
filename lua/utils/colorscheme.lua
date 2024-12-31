@@ -14,6 +14,13 @@ function SetBg(bg)
 		hi DiagnosticSignInfo guibg=Normal
 		hi StatusLine guibg=Normal
 		hi Folded guibg=Normal
+
+		hi GitSignsAdd guibg=Normal
+		hi GitSignsChange guibg=Normal
+		hi GitSignsDelete guibg=Normal
+		hi GitSignsAddLn guibg=Normal
+		hi GitSignsChangeLn guibg=Normal
+		hi GitSignsDeleteLn guibg=Normal
 	]])
 end
 

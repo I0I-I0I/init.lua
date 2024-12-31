@@ -1,6 +1,10 @@
-local M = { "NeogitOrg/neogit" }
+local M = {}
 
-M.config = function()
+M.neogit = { "NeogitOrg/neogit" }
+M.gitsigns = { "lewis6991/gitsigns.nvim" }
+M.diffview = { "sindrets/diffview.nvim" }
+
+M.neogit.config = function()
 	require("neogit").setup({
 		commit_editor = { kind = "floating" },
 		commit_select_view = { kind = "floating" },
@@ -18,8 +22,20 @@ M.config = function()
 	})
 end
 
-M.keys = {
-	{ "<leader>g", "<cmd>Neogit<cr>", desc = "Open git", { silent = true } }
+M.gitsigns.config = function ()
+	require("gitsigns").setup()
+end
+
+M.diffview.config = function ()
+	require("diffview").setup()
+end
+
+M.neogit.keys = {
+	{ "<leader>gg", "<cmd>Neogit<cr>", desc = "Open git", { silent = true } }
 }
 
-return M
+return {
+	M.neogit,
+	M.gitsigns,
+	M.diffview,
+}
