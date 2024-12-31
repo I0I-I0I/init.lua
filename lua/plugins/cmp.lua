@@ -16,8 +16,6 @@ M.opts = {
 				return { "lsp", "path" }
 			elseif success and node and vim.tbl_contains({ "comment", "line_comment", "block_comment" }, node:type()) then
 				return { "buffer" }
-			elseif vim.bo.filetype == "sql" then
-				return { "dadbod" }
 			else
 				return { "lsp", "path", "snippets" }
 			end
@@ -28,7 +26,6 @@ M.opts = {
 					return ctx.trigger.initial_kind ~= "." or "\"" or "->"
 				end
 			},
-			dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
 		},
 	},
 
