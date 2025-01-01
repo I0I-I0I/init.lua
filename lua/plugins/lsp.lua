@@ -3,7 +3,6 @@ local M = { "neovim/nvim-lspconfig" }
 M.dependencies = {
 	"williamboman/mason.nvim",
 	"artemave/workspace-diagnostics.nvim",
-	"saghen/blink.cmp"
 }
 
 local function setup_servers(servers)
@@ -19,10 +18,12 @@ local function setup_servers(servers)
 				diagnostics.populate_workspace_diagnostics(client, bufnr)
 			end
 		end
-		config.capabilities = vim.tbl_deep_extend(
-			"force",
-			capabilities, require("blink.cmp").get_lsp_capabilities(config.capabilities)
-		)
+		local ok, blink = pcall(require, "blink.cmp")
+		if ok then
+			config.capabilities = vim.tbl_deep_extend("force", capabilities, blink.get_capabilities())
+		else
+			config.capabilities = capabilities
+		end
 		lsp[name].setup(config)
 	end
 end
@@ -129,15 +130,15 @@ function M.config()
 			local client = vim.lsp.get_client_by_id(event.data.client_id)
 			if not client then return end
 
-			-- if client:supports_method("textDocument/completion") then
-			-- 	vim.lsp.completion.enable(true, client.id, event.buf,
-			-- 	{ autotrigger = false })
-			-- end
-			--
-			-- local keys = { ".", "->", "::" }
-			-- for _, key in ipairs(keys) do
-			-- 	vim.keymap.set("i", key, key .. "<C-x><C-o>", { buffer = event.buf })
-			-- end
+			if client:supports_method("textDocument/completion") then
+				vim.lsp.completion.enable(true, client.id, event.buf,
+				{ autotrigger = false })
+			end
+
+			local keys = { ".", "->", "::" }
+			for _, key in ipairs(keys) do
+				vim.keymap.set("i", key, key .. "<C-x><C-o>", { buffer = event.buf })
+			end
 
 			if client.server_capabilities.inlayHintProvider then
 				vim.lsp.inlay_hint.enable(true)

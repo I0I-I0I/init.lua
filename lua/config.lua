@@ -41,6 +41,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 	pattern = "*.*",
 	command = [[%s/\s\+$//e]],
 })
+
 vim.api.nvim_create_autocmd("TextYankPost", {
 	pattern = "*",
 	callback = function()
@@ -66,11 +67,12 @@ vim.keymap.set("n", "<C-e>", "3<C-e>")
 vim.keymap.set("n", "<leader><leader>", "<cmd>nohlsearch<cr>", { table.insert(opts, { desc = "Turn off search highlight" }) })
 vim.keymap.set("v", "K", ":m '<-2<cr>gv=gv", { silent = true, noremap = true })
 vim.keymap.set("v", "J", ":m '>+1<cr>gv=gv", { silent = true, noremap = true })
-vim.keymap.set("v", "x", '"_x')
 vim.keymap.set("x", "P", '"0P')
 
-vim.keymap.set("n", "<C-t>", "<cmd>silent !tmux neww tmux-sessionizer<cr>")
+vim.keymap.set("n", "<leader><C-t>", "<cmd>silent !tmux neww tmux-sessionizer<cr>")
+vim.keymap.set("n", "<leader><C-p>", "<cmd>silent !tmux neww tmux-run atac<cr>")
+vim.keymap.set("n", "<leader><C-d>", "<cmd>silent !tmux neww tmux-run rainfrog<cr>")
 vim.keymap.set("n", "<C-Space>", function ()
 	local current_path = vim.fn.expand("%:p:h")
-	vim.cmd("silent !tmux-yazi " .. current_path)
+	vim.cmd("silent !tmux neww tmux-yazi " .. current_path)
 end)

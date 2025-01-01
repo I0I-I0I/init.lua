@@ -17,6 +17,6 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("config")
-require("lua.utils.colorscheme")
+require("utils.colorscheme")
 require("lazy").setup({ spec = "plugins", change_detection = { notify = false } })
 require("theme")

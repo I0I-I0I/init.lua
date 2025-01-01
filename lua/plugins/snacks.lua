@@ -4,8 +4,8 @@ M.priority = 1000
 M.lazy = false
 
 M.opts = {
-	lazygit = { enabled = false },
 	dashboard = { enabled = false },
+
 	bigfile = { enabled = true },
 	indent = { enabled = true },
 	input = { enabled = true },
@@ -35,7 +35,15 @@ M.opts = {
 		ft = "git",
 	},
 	zen = {
-		win = { width = 0.8 }
+		win = { width = 0.8 },
+		on_open = function(_)
+			vim.opt.cmdheight = 0
+			vim.opt.foldlevel = 0
+		end,
+		on_close = function(_)
+			vim.opt.cmdheight = 1
+			vim.opt.foldlevel = 99
+		end,
 	},
 }
 
@@ -66,10 +74,7 @@ M.keys = {
 	{ "<leader>n",  function() Snacks.notifier.show_history() end, desc = "Notification History" },
 	{ "<leader>bd", function() Snacks.bufdelete() end, desc = "Delete Buffer" },
 	{ "<leader>cR", function() Snacks.rename.rename_file() end, desc = "Rename File" },
-	{ "<leader>gB", function() Snacks.gitbrowse() end, desc = "Git Browse", mode = { "n", "v" } },
-	{ "<leader>gb", function() Snacks.git.blame_line() end, desc = "Git Blame Line" },
 	{ "<leader>un", function() Snacks.notifier.hide() end, desc = "Dismiss All Notifications" },
-	{ "<c-_>",      function() Snacks.terminal() end, desc = "which_key_ignore" },
 	{ "]]",         function() Snacks.words.jump(vim.v.count1) end, desc = "Next Reference", mode = { "n", "t" } },
 	{ "[[",         function() Snacks.words.jump(-vim.v.count1) end, desc = "Prev Reference", mode = { "n", "t" } },
 	{
@@ -89,7 +94,12 @@ M.keys = {
 				},
 			})
 		end,
-	}
+	},
+
+	{ "<leader><C-g>", function() Snacks.lazygit() end, desc = "Lazygit" },
+	{ "<leader>gf", function() Snacks.lazygit.log_file() end, desc = "Lazygit Current File History" },
+	{ "<leader>gl", function() Snacks.lazygit.log() end, desc = "Lazygit Log (cwd)" },
+	{ "<leader>gB", function() Snacks.gitbrowse() end, desc = "Git Browse", mode = { "n", "v" } },
 }
 
 M.init = function()
