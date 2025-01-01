@@ -1,5 +1,6 @@
 local M = { "jake-stewart/multicursor.nvim" }
 
+M.event = { "BufRead", "BufNewFile" }
 M.branch = "1.0"
 
 M.config = function()

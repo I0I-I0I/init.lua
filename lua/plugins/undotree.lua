@@ -5,7 +5,7 @@ M.init = function()
 end
 
 M.keys = {
-	{ "<leader>u", "<cmd>UndotreeToggle<cr>", desc = "Open UndoTree" }
+	{ "<leader>U", "<cmd>UndotreeToggle<cr>", desc = "Open UndoTree" }
 }
 
 return M

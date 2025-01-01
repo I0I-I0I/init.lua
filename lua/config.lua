@@ -3,6 +3,9 @@
 --
 require("utils.undo")
 
+vim.g.netrw_banner = 0
+vim.g.netrw_list_hide = "node_modules/,^\\.\\=/\\=$,^\\.\\.\\=/\\=$"
+vim.opt.fillchars = "eob:\\u00A0,vert:\\u00A0"
 vim.opt.termguicolors = true
 vim.opt.undofile = true
 vim.opt.undolevels = 10000000
@@ -10,8 +13,6 @@ vim.opt.undoreload = 10000000
 vim.opt.swapfile = false
 vim.opt.spelllang = "en_us"
 vim.opt.spell = true
-vim.g.netrw_banner = 0
-vim.g.netrw_list_hide = "node_modules/,^\\.\\=/\\=$,^\\.\\.\\=/\\=$"
 vim.opt.smartindent = true
 vim.opt.expandtab = false -- false == tabs
 vim.opt.shiftwidth = 4
@@ -61,12 +62,12 @@ vim.g.mapleader = " "
 
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
-vim.keymap.set("n", "<C-y>", "3<C-y>")
-vim.keymap.set("n", "<C-e>", "3<C-e>")
+vim.keymap.set("n", "<C-y>", "3<C-y>", opts)
+vim.keymap.set("n", "<C-e>", "3<C-e>", opts)
 
 vim.keymap.set("n", "<leader><leader>", "<cmd>nohlsearch<cr>", { table.insert(opts, { desc = "Turn off search highlight" }) })
-vim.keymap.set("v", "K", ":m '<-2<cr>gv=gv", { silent = true, noremap = true })
-vim.keymap.set("v", "J", ":m '>+1<cr>gv=gv", { silent = true, noremap = true })
+vim.keymap.set("v", "K", ":m '<-2<cr>gv=gv")
+vim.keymap.set("v", "J", ":m '>+1<cr>gv=gv")
 vim.keymap.set("x", "P", '"0P')
 
 vim.keymap.set("n", "<leader><C-t>", "<cmd>silent !tmux neww tmux-sessionizer<cr>")

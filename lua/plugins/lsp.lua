@@ -1,5 +1,7 @@
 local M = { "neovim/nvim-lspconfig" }
 
+M.event = { "BufRead", "BufNewFile" }
+
 M.dependencies = {
 	"williamboman/mason.nvim",
 	"artemave/workspace-diagnostics.nvim",
@@ -29,14 +31,7 @@ local function setup_servers(servers)
 end
 
 function M.config()
-	require("mason").setup({
-		ensure_installed = {
-			"lua-language-server",
-			"typescript-language-server",
-			"basedpyright",
-			"clangd",
-		}
-	})
+	require("mason").setup()
 
 	setup_servers({
 		["html"] = {},
@@ -92,15 +87,15 @@ function M.config()
 			}
 		},
 		["clangd"] = {
-			cmd = { "clangd", "--compile-commands-dir=." },
-			filetypes = { "c", "cpp", "objc", "objcpp" },
-			root_dir = require'lspconfig'.util.root_pattern("compile_commands.json", ".git"),
-			settings = {
-				clangd = {
-					compilationDatabasePath = ".",
-					fallbackFlags = { "-I/usr/x86_64-w64-mingw32/include" },
-				}
-			}
+			-- cmd = { "clangd", "--compile-commands-dir=." },
+			-- filetypes = { "c", "cpp", "objc", "objcpp" },
+			-- root_dir = require'lspconfig'.util.root_pattern("compile_commands.json", ".git"),
+			-- settings = {
+			-- 	clangd = {
+			-- 		compilationDatabasePath = ".",
+			-- 		fallbackFlags = { "-I/usr/x86_64-w64-mingw32/include" },
+			-- 	}
+			-- }
 		},
 		["lua_ls"] = {
 			settings = {

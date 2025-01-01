@@ -1,5 +1,7 @@
 local M = { "ibhagwan/fzf-lua" }
 
+M.lazy = true
+
 M.dependencies = {
 	"rktjmp/lush.nvim"
 }
