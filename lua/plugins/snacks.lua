@@ -4,7 +4,73 @@ M.priority = 1000
 M.lazy = false
 
 M.opts = {
-	dashboard = { enabled = true },
+	dashboard = {
+		enabled = true,
+		sections = {
+			{
+				section = "terminal",
+				cmd = "chafa ~/walls/wall-1.png --format symbols --symbols vhalf --size 60x17 --stretch; sleep .1",
+				height = 17,
+				width = 60,
+				padding = 2,
+			},
+			{
+				pane = 1,
+				section = "startup"
+			},
+			{
+				pane = 2,
+				{ icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
+			},
+			{
+				pane = 2,
+				action = ":quit",
+				key = "q"
+			},
+			{
+				pane = 2,
+				icon = " ",
+				desc = "Browse Repo",
+				padding = 1,
+				key = "b",
+				action = function()
+					Snacks.gitbrowse()
+				end,
+			},
+			function()
+				local in_git = Snacks.git.get_root() ~= nil
+				local cmds = {
+					{
+						title = "Notifications",
+						cmd = "gh notify -s -a -n5",
+						action = function()
+							vim.ui.open("https://github.com/notifications")
+						end,
+						key = "n",
+						icon = " ",
+						height = 5,
+						enabled = true,
+					},
+					{
+						icon = " ",
+						title = "Git Status",
+						cmd = "git --no-pager diff --stat -B -M -C",
+						height = 10,
+					},
+				}
+				return vim.tbl_map(function(cmd)
+					return vim.tbl_extend("force", {
+						pane = 2,
+						section = "terminal",
+						enabled = in_git,
+						padding = 1,
+						-- ttl = 5 * 60,
+						-- indent = 3,
+					}, cmd)
+				end, cmds)
+			end,
+		},
+	},
 	bigfile = { enabled = true },
 	indent = { enabled = true },
 	input = { enabled = true },
