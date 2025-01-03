@@ -66,8 +66,8 @@ vim.keymap.set("n", "<C-y>", "3<C-y>", opts)
 vim.keymap.set("n", "<C-e>", "3<C-e>", opts)
 
 vim.keymap.set("n", "<leader><leader>", "<cmd>nohlsearch<cr>", { table.insert(opts, { desc = "Turn off search highlight" }) })
-vim.keymap.set("v", "K", ":m '<-2<cr>gv=gv")
-vim.keymap.set("v", "J", ":m '>+1<cr>gv=gv")
+vim.keymap.set("v", "K", ":m '<-2<cr>gv=gv", { silent = true, noremap = true })
+vim.keymap.set("v", "J", ":m '>+1<cr>gv=gv", { silent = true, noremap = true })
 vim.keymap.set("x", "P", '"0P')
 
 vim.keymap.set("n", "<leader><C-t>", "<cmd>silent !tmux neww tmux-sessionizer<cr>")

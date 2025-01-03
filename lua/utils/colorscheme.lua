@@ -1,5 +1,7 @@
 function SetBg(bg)
-	if bg == "default" then return end
+	if bg == "default" then
+		return
+	end
 
 	vim.cmd.hi("Normal guibg=" .. bg)
 	vim.cmd([[

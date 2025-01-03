@@ -4,6 +4,66 @@ M.priority = 1000
 M.lazy = false
 
 M.opts = {
+	scope = {
+		min_size = 2,
+		max_size = nil,
+		cursor = true,
+		edge = true,
+		siblings = true,
+		debounce = 30,
+		treesitter = {
+			enabled = true,
+			---@type string[]|{enabled?:boolean}
+			blocks = {
+				"function_declaration",
+				"function_definition",
+				"method_declaration",
+				"method_definition",
+				"class_declaration",
+				"class_definition",
+				"do_statement",
+				"while_statement",
+				"repeat_statement",
+				"if_statement",
+				"for_statement",
+			},
+		},
+		keys = {
+			textobject = {
+				ii = {
+					min_size = 2,
+					edge = false,
+					cursor = false,
+					treesitter = { blocks = { enabled = false } },
+					desc = "inner scope",
+				},
+				ai = {
+					cursor = false,
+					min_size = 2,
+					treesitter = { blocks = { enabled = false } },
+					desc = "full scope",
+				},
+			},
+			jump = {
+				["[i"] = {
+					min_size = 2,
+					bottom = false,
+					cursor = false,
+					edge = true,
+					treesitter = { blocks = { enabled = false } },
+					desc = "jump to top edge of scope",
+				},
+				["]i"] = {
+					min_size = 2,
+					bottom = true,
+					cursor = false,
+					edge = true,
+					treesitter = { blocks = { enabled = false } },
+					desc = "jump to bottom edge of scope",
+				},
+			},
+		},
+	},
 	dashboard = {
 		enabled = true,
 		sections = {
