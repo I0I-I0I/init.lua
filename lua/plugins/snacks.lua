@@ -69,7 +69,7 @@ M.opts = {
 		sections = {
 			{
 				section = "terminal",
-				cmd = "chafa ~/walls/wall-1.png --format symbols --symbols vhalf --size 60x17 --stretch; sleep .1",
+				cmd = "chafa /home/i0i/walls/acoolrocket-dalle2-hokusai-non-prompt-landscape.png --format symbols --symbols vhalf --size 60x17 --stretch; sleep .1",
 				height = 17,
 				width = 60,
 				padding = 2,
