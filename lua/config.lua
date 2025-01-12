@@ -20,16 +20,7 @@ vim.opt.signcolumn = "yes"
 vim.opt.rnu = true
 vim.opt.nu = true
 vim.opt.wildignore:append("*/node_modules/*,*/dist/*,*/build/*,*/env/*")
-
-vim.api.nvim_create_autocmd("BufRead", {
-    pattern = "*",
-    callback = function()
-        vim.cmd([[
-            set path-=/usr/include
-            set path=**
-        ]])
-    end
-})
+vim.opt.path="**"
 
 vim.api.nvim_create_autocmd("BufWritePre", {
     pattern = "*.*",

@@ -1,30 +1,29 @@
-local M = { "mhartington/oceanic-next" }
+local rose = { "rose-pine/neovim" }
 
-M.init = function()
-    vim.cmd.colorscheme("OceanicNext")
+rose.name = "rose-pine"
 
-    local bg = "#000001"
-    vim.cmd.hi("Normal guibg=" .. bg)
+function SetBg(color)
+    vim.cmd.hi("Normal guibg=" .. color)
     vim.cmd([[
-    hi NormalNC guibg=Normal
-    hi EndOfBuffer guibg=Normal
-    hi LineNr guibg=Normal
-    hi SignColumn guibg=Normal
-    hi DiagnosticSignError guibg=Normal
-    hi DiagnosticSignWarn guibg=Normal
-    hi DiagnosticSignOk guibg=Normal
-    hi DiagnosticSignHint guibg=Normal
-    hi DiagnosticSignInfo guibg=Normal
-    hi StatusLine guibg=Normal
-    hi Folded guibg=Normal
-
-    hi GitSignsAdd guibg=Normal guifg=green
-    hi GitSignsChange guibg=Normal guifg=yellow
-    hi GitSignsDelete guibg=Normal guifg=red
-    hi GitSignsAddLn guibg=Normal guifg=green
-    hi GitSignsChangeLn guibg=Normal guifg=yellow
-    hi GitSignsDeleteLn guibg=Normal guifg=red
+        hi NormalNC guibg=Normal
+        hi EndOfBuffer guibg=Normal
+        hi LineNr guibg=Normal
+        hi SignColumn guibg=Normal
+        hi DiagnosticSignError guibg=Normal
+        hi DiagnosticSignWarn guibg=Normal
+        hi DiagnosticSignOk guibg=Normal
+        hi DiagnosticSignHint guibg=Normal
+        hi DiagnosticSignInfo guibg=Normal
+        hi StatusLine guibg=Normal
+        hi Folded guibg=Normal
     ]])
 end
 
-return M
+rose.init = function()
+    vim.cmd.colorscheme("rose-pine-main")
+    SetBg("#0e0a00")
+    vim.cmd.hi("CursorLine guibg=#1e1e1e")
+    vim.cmd.hi("StatusLine guibg=#1e1e1e")
+end
+
+return rose

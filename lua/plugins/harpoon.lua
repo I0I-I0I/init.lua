@@ -4,8 +4,7 @@ M.branch = "harpoon2"
 M.dependencies = { "nvim-lua/plenary.nvim" }
 
 M.config = function()
-    local harpoon = require("harpoon")
-    harpoon:setup({
+    require("harpoon"):setup({
         ["1"] = {},
         ["2"] = {},
     })
@@ -39,17 +38,17 @@ M.keys = function()
             desc = "Add file to top (Harpoon)",
         },
         {
-            "<leader>1",
+            "<C-s>",
             function() currentList = nil end,
             desc = "Open (main) list of files (Harpoon)",
         },
         {
-            "<leader>2",
+            "<C-f>",
             function() currentList = "1" end,
             desc = "Open (additional) list of files (Harpoon)",
         },
         {
-            "<leader>3",
+            "<C-b>",
             function() currentList = "2" end,
             desc = "Open (additional) list of files (Harpoon)",
         },
@@ -59,7 +58,7 @@ M.keys = function()
             desc = "Open list of files (Harpoon)",
         },
         {
-            "<C-s>",
+            "<C-h>",
             function() select_from_list(harpoon, 1) end,
             desc = "Select 1 (Harpoon)",
         },
