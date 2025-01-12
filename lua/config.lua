@@ -17,10 +17,11 @@ vim.opt.smartcase = true
 vim.opt.mouse = "a"
 vim.opt.laststatus = 3
 vim.opt.signcolumn = "yes"
+vim.opt.cursorline = true
 vim.opt.rnu = true
 vim.opt.nu = true
+vim.opt.path = "**"
 vim.opt.wildignore:append("*/node_modules/*,*/dist/*,*/build/*,*/env/*")
-vim.opt.path="**"
 
 vim.api.nvim_create_autocmd("BufWritePre", {
     pattern = "*.*",
@@ -59,7 +60,7 @@ vim.keymap.set("v", "J", ":m '>+1<cr>gv=gv", { silent = true, noremap = true })
 vim.keymap.set("x", "P", '"0P')
 
 vim.keymap.set("n", "<C-t>", "<cmd>silent !tmux neww tmux-sessionizer<cr>", { desc = "Sessionizer" })
-vim.keymap.set("n", "<leader>t", function ()
+vim.keymap.set("n", "T", function ()
     vim.ui.input({ prompt = "Run: " }, function (input)
         if not input or input == "" then return end
         vim.cmd("silent !tmux neww tmux-run " .. input)
