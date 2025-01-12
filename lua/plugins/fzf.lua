@@ -2,12 +2,7 @@ local M = { "ibhagwan/fzf-lua", cond = false }
 
 M.lazy = true
 
-M.config = function()
-	local fzf = require("fzf-lua")
-
-	fzf.register_ui_select()
-	fzf.setup({ "max-perf" })
-end
+M.opts = { "max-perf" }
 
 M.keys = function()
 	local fzf = require("fzf-lua")
@@ -26,8 +21,6 @@ M.keys = function()
 		{ "tk", fzf.keymaps, {} },
 		{ "tm", fzf.manpages, {} },
 
-		{ "grr", fzf.lsp_references, { noremap = true } },
-		{ "grf", fzf.lsp_finder, { noremap = true } },
 		{ "grd", fzf.lsp_workspace_diagnostics, {} },
 	}
 end
