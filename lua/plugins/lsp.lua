@@ -94,6 +94,14 @@ function M.config()
         }
     })
 
+    vim.diagnostic.config({
+        virtual_text = false,
+        signs = true,
+        underline = false,
+        update_in_insert = false,
+        severity_sort = true,
+    })
+
     -- Attach/Mappings
     vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(event)
@@ -102,6 +110,8 @@ function M.config()
             { table.insert(opts, { desc = "vim.lsp.buf.type_definition()" }) })
             vim.keymap.set("n", "grd", vim.diagnostic.setqflist,
             { table.insert(opts, { desc = "vim.diagnostic.setqflist()" }) })
+            vim.keymap.set("n", "]d", function() vim.diagnostic.jump({ count = 1, float = true }) end)
+            vim.keymap.set("n", "[d", function() vim.diagnostic.jump({ count = -1, float = true }) end)
 
             local client = vim.lsp.get_client_by_id(event.data.client_id)
             if not client then return end
