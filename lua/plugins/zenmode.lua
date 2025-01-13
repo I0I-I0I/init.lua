@@ -34,14 +34,14 @@ M.keys = function()
 
 	return {
 		{ "zf",  function()
-				vim.cmd("ZenmodeOpenAll 40")
+				vim.cmd("ZenmodeOpenAll 15")
 				setOpts(on_open)
 			end, { silent = true } },
 
 		{ "zo",  function()
 				setOpts(defaults)
 				o.fillchars = "eob:\\u00A0,vert:\\u00A0"
-				vim.cmd("ZenmodeOpenAll 30")
+				vim.cmd("ZenmodeOpenAll 10")
 			end, { silent = true } },
 
 		{ "zc", function()
