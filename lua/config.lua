@@ -38,9 +38,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     end,
 })
 
---
--- Mappings
---
+
 local opts = { noremap = true, silent = true }
 
 vim.g.mapleader = " "
@@ -53,20 +51,21 @@ vim.keymap.set("n", "<C-e>", "3<C-e>", opts)
 vim.keymap.set("n", "<C-n>", "<cmd>cn<cr>")
 vim.keymap.set("n", "<C-p>", "<cmd>cp<cr>")
 
-vim.keymap.set("n", "<leader><leader>", "<cmd>nohlsearch<cr>", { table.insert(opts, { desc = "Turn off search highlight" }) })
 vim.keymap.set("n", "-", "<cmd>Ex<cr>")
 vim.keymap.set("v", "K", ":m '<-2<cr>gv=gv", { silent = true, noremap = true })
 vim.keymap.set("v", "J", ":m '>+1<cr>gv=gv", { silent = true, noremap = true })
 vim.keymap.set("x", "P", '"0P')
 
 vim.keymap.set("n", "<C-t>", "<cmd>silent !tmux neww tmux-sessionizer<cr>", { desc = "Sessionizer" })
-vim.keymap.set("n", "T", function ()
+vim.keymap.set("n", "R", function ()
     vim.ui.input({ prompt = "Run: " }, function (input)
         if not input or input == "" then return end
         vim.cmd("silent !tmux neww tmux-run " .. input)
     end)
-end, { desc = "ATAC" })
+end, { desc = "Run terminal app" })
 vim.keymap.set("n", "<C-Space>", function ()
     local current_path = vim.fn.expand("%:p:h")
     vim.cmd("silent !tmux neww tmux-yazi " .. current_path)
 end, { desc = "Yazi" })
+
+vim.cmd.packadd("termdebug")

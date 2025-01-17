@@ -1,6 +1,4 @@
-local M = { "rcarriga/nvim-dap-ui" }
-
-M.lazy = false
+local M = { "rcarriga/nvim-dap-ui", cond = false }
 
 M.dependencies = {
     "mfussenegger/nvim-dap",
@@ -9,9 +7,9 @@ M.dependencies = {
 }
 
 M.config = function()
-    local dap = require "dap"
-    local ui = require "dapui"
-    local lldb = require "dap-lldb"
+    local dap = require("dap")
+    local ui = require("dapui")
+    local lldb = require("dap-lldb")
 
     ui.setup()
     lldb.setup({ codelldb_path = "/usr/bin/lldb-dap" })
