@@ -48,8 +48,8 @@ vim.keymap.set("n", "N", "Nzzzv")
 vim.keymap.set("n", "<C-y>", "3<C-y>", opts)
 vim.keymap.set("n", "<C-e>", "3<C-e>", opts)
 
-vim.keymap.set("n", "<C-n>", "<cmd>cn<cr>")
-vim.keymap.set("n", "<C-p>", "<cmd>cp<cr>")
+-- vim.keymap.set("n", "<C-n>", "<cmd>cn<cr>")
+-- vim.keymap.set("n", "<C-p>", "<cmd>cp<cr>")
 
 vim.keymap.set("n", "-", "<cmd>Ex<cr>")
 vim.keymap.set("v", "K", ":m '<-2<cr>gv=gv", { silent = true, noremap = true })
@@ -67,5 +67,3 @@ vim.keymap.set("n", "<C-Space>", function ()
     local current_path = vim.fn.expand("%:p:h")
     vim.cmd("silent !tmux neww tmux-yazi " .. current_path)
 end, { desc = "Yazi" })
-
-vim.cmd.packadd("termdebug")

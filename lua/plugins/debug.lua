@@ -1,4 +1,4 @@
-local M = { "rcarriga/nvim-dap-ui", cond = false }
+local M = { "rcarriga/nvim-dap-ui" }
 
 M.dependencies = {
     "mfussenegger/nvim-dap",
@@ -38,8 +38,8 @@ M.keys = function ()
         { "<leader>C", dap.run_to_cursor, desc = "[DAP] Run to Cursor" },
         { "<leader>b", dap.toggle_breakpoint, desc = "[DAP] Toggle Breakpoint" },
         { "<leader>B", dap.clear_breakpoints, desc = "[DAP] Clear All Breakpoints" },
-        { "<leader>N", dap.step_over, desc = "[DAP] Step Over" },
-        { "<leader>n", dap.step_into, desc = "[DAP] Step Into" },
+        { "<leader>n", dap.step_over, desc = "[DAP] Step Over" },
+        { "<leader>s", dap.step_into, desc = "[DAP] Step Into" },
         { "<leader>o", dap.step_out, desc = "[DAP] Step Out" },
     }
 end

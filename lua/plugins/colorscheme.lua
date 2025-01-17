@@ -16,14 +16,15 @@ function SetBg(color)
         hi DiagnosticSignInfo guibg=Normal
         hi StatusLine guibg=Normal
         hi Folded guibg=Normal
+
+        hi CursorLine guibg=#1e1e1e
+        hi StatusLine guibg=#1e1e1e
     ]])
 end
 
 rose.init = function()
     vim.cmd.colorscheme("rose-pine-main")
     SetBg("#0e0a00")
-    vim.cmd.hi("CursorLine guibg=#1e1e1e")
-    vim.cmd.hi("StatusLine guibg=#1e1e1e")
 end
 
 return rose
