@@ -16,10 +16,12 @@ function SetBg(color)
         hi DiagnosticSignInfo guibg=Normal
         hi StatusLine guibg=Normal
         hi Folded guibg=Normal
+        hi TroubleNormal guibg=Normal
 
         hi CursorLine guibg=#1e1e1e
         hi StatusLine guibg=#1e1e1e
     ]])
+    vim.cmd.hi("TroubleNormalNC guibg=" .. color)
 end
 
 rose.init = function()
