@@ -48,9 +48,7 @@ vim.keymap.set("n", "N", "Nzzzv")
 vim.keymap.set("n", "<C-y>", "3<C-y>", opts)
 vim.keymap.set("n", "<C-e>", "3<C-e>", opts)
 
--- vim.keymap.set("n", "<C-n>", "<cmd>cn<cr>")
--- vim.keymap.set("n", "<C-p>", "<cmd>cp<cr>")
-
+vim.keymap.set("n", "<leader><leader>", "<cmd>nohl<cr>")
 vim.keymap.set("n", "-", "<cmd>Ex<cr>")
 vim.keymap.set("v", "K", ":m '<-2<cr>gv=gv", { silent = true, noremap = true })
 vim.keymap.set("v", "J", ":m '>+1<cr>gv=gv", { silent = true, noremap = true })

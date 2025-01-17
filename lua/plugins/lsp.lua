@@ -108,8 +108,6 @@ function M.config()
             local opts = { buffer = event.buf }
             vim.keymap.set("n", "<C-S-]>", vim.lsp.buf.type_definition,
             { table.insert(opts, { desc = "vim.lsp.buf.type_definition()" }) })
-            -- vim.keymap.set("n", "grd", vim.diagnostic.setqflist,
-            -- { table.insert(opts, { desc = "vim.diagnostic.setqflist()" }) })
             vim.keymap.set("n", "]d", function() vim.diagnostic.jump({ count = 1, float = true }) end)
             vim.keymap.set("n", "[d", function() vim.diagnostic.jump({ count = -1, float = true }) end)
 
