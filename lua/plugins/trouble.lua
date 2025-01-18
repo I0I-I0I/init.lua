@@ -16,7 +16,7 @@ M.keys = function()
         },
         {
             "grs",
-            "<cmd>Trouble symbols toggle<cr>",
+            "<cmd>Trouble symbols toggle win={position=right, size=0.3}<cr>",
             desc = "LSP Symbols (Trouble)",
         },
         {
