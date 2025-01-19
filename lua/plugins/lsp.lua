@@ -5,6 +5,7 @@ M.event = { "BufRead", "BufNewFile" }
 M.dependencies = {
     "williamboman/mason.nvim",
     "artemave/workspace-diagnostics.nvim",
+    "j-hui/fidget.nvim",
 }
 
 local function setup_servers(servers)
@@ -26,6 +27,7 @@ end
 
 function M.config()
     require("mason").setup()
+    require("fidget").setup()
 
     setup_servers({
         ["html"] = {},
@@ -34,7 +36,16 @@ function M.config()
         ["emmet_ls"] = {},
         ["pyright"] = { populate_diagnostic = true },
         ["ts_ls"] = { populate_diagnostic = true },
-        ["clangd"] = { populate_diagnostic = true },
+        ["clangd"] = {
+            populate_diagnostic = true,
+            settings = {
+                clangd = {
+                    compilationDatabasePath = ".",
+                    fallbackFlags = { "-std=c++2a" },
+                    clangdExcludeArgs = { "--compile-commands-dir=libs" },
+                }
+            }
+        },
         ["lua_ls"] = {
             populate_diagnostic = true,
             settings = {
@@ -59,6 +70,8 @@ function M.config()
         underline = false,
         update_in_insert = false,
         severity_sort = true,
+        jump = { float = true },
+        float = { border = "rounded" }
     })
 
     vim.api.nvim_create_autocmd("LspAttach", {
@@ -66,8 +79,6 @@ function M.config()
             local opts = { buffer = event.buf }
             vim.keymap.set("n", "<leader><C-]>", vim.lsp.buf.type_definition,
                 { table.insert(opts, { desc = "vim.lsp.buf.type_definition()" }) })
-            vim.keymap.set("n", "]d", function() vim.diagnostic.jump({ count = 1, float = true }) end)
-            vim.keymap.set("n", "[d", function() vim.diagnostic.jump({ count = -1, float = true }) end)
 
             local client = vim.lsp.get_client_by_id(event.data.client_id)
             if not client then return end

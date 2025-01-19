@@ -3,16 +3,19 @@ local M = { "rcarriga/nvim-dap-ui" }
 M.dependencies = {
     "mfussenegger/nvim-dap",
     "nvim-neotest/nvim-nio",
-    "julianolf/nvim-dap-lldb"
+    "julianolf/nvim-dap-lldb",
+    "mfussenegger/nvim-dap-python",
 }
 
 M.config = function()
     local dap = require("dap")
     local ui = require("dapui")
     local lldb = require("dap-lldb")
+    local python = require("dap-python")
 
     ui.setup()
     lldb.setup({ codelldb_path = "/usr/bin/lldb-dap" })
+    python.setup("python3")
 
     dap.listeners.before.attach.dapui_config = function()
         ui.open()
