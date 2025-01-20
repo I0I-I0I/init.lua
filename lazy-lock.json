@@ -1,4 +1,5 @@
 {
+  "blink.cmp": { "branch": "main", "commit": "ef9f85c6ff87747655e8ef37c997ab808a2957c0" },
   "fidget.nvim": { "branch": "main", "commit": "a0abbf18084b77d28bc70e24752e4f4fd54aea17" },
   "harpoon": { "branch": "harpoon2", "commit": "a84ab829eaf3678b586609888ef52f7779102263" },
   "lazy.nvim": { "branch": "main", "commit": "d8f26efd456190241afd1b0f5235fe6fdba13d4a" },

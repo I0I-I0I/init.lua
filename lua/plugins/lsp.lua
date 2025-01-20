@@ -38,13 +38,12 @@ function M.config()
         ["ts_ls"] = { populate_diagnostic = true },
         ["clangd"] = {
             populate_diagnostic = true,
-            settings = {
-                clangd = {
-                    compilationDatabasePath = ".",
-                    fallbackFlags = { "-std=c++2a" },
-                    clangdExcludeArgs = { "--compile-commands-dir=libs" },
-                }
-            }
+            init_options = {
+                usePlaceholders = false,
+                completeUnimported = true,
+                clangdFileStatus = true,
+                fallbackFlags = { "-std=c++2a" },
+            },
         },
         ["lua_ls"] = {
             populate_diagnostic = true,
@@ -71,7 +70,10 @@ function M.config()
         update_in_insert = false,
         severity_sort = true,
         jump = { float = true },
-        float = { border = "rounded" }
+        float = {
+            border = "rounded",
+            source = "if_many",
+        }
     })
 
     vim.api.nvim_create_autocmd("LspAttach", {
