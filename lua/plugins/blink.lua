@@ -1,12 +1,24 @@
-local M = { "Saghen/blink.cmp" }
+local M = { "saghen/blink.cmp" }
 
-M.version = '*'
+M.version = "*"
+M.dependencies = "rafamadriz/friendly-snippets"
 
 M.opts = {
-    keymap = { preset = "default" },
-    sources = {
-        default = { 'lsp', 'path', 'snippets', 'buffer' },
+    signature = { enabled = true, window = { border = "rounded" } },
+    completion = {
+        menu = { auto_show = true, },
+        documentation = {
+            auto_show = true,
+            auto_show_delay_ms = 500,
+            window = { border = "rounded" }
+        },
     },
+    sources = { default = { "lsp", "snippets" }, },
+    keymap = {
+        cmdline = { preset = "super-tab" },
+        preset = "default",
+    },
+    snippets = { preset = "default" }
 }
 
 return M
