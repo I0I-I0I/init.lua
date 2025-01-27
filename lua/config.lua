@@ -13,7 +13,7 @@ vim.opt.smartindent = true
 vim.opt.expandtab = true -- false == tabs
 vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
-vim.opt.completeopt = { "menu", "menuone", "fuzzy", "noinsert", "popup" }
+-- vim.opt.completeopt = { "menu", "menuone", "fuzzy", "noinsert", "popup" }
 vim.opt.linebreak = true
 vim.opt.smartcase = true
 vim.opt.mouse = "a"
