@@ -63,12 +63,12 @@ function M.config()
     })
 
     vim.diagnostic.config({
-        virtual_lines = true,
+        virtual_lines = false,
         signs = true,
         underline = false,
         update_in_insert = false,
         severity_sort = true,
-        jump = { float = false },
+        jump = { float = true },
         float = {
             border = "rounded",
             source = "if_many",
@@ -82,6 +82,18 @@ function M.config()
                 { table.insert(opts, { desc = "vim.lsp.buf.type_definition()" }) })
             vim.keymap.set("n", "<leader>f", vim.lsp.buf.format,
                 { table.insert(opts, { desc = "vim.lsp.buf.format()" }) })
+
+            local client = vim.lsp.get_client_by_id(event.data.client_id)
+            if not client then return end
+
+            if client:supports_method("textDocument/completion") then
+                vim.lsp.completion.enable(true, client.id, event.buf, { autotrigger = false })
+            end
+
+            local triggers = { ".", "->", "::" }
+            for _, trigger in ipairs(triggers) do
+                vim.keymap.set("i", trigger, trigger .. "<C-x><C-o>", { buffer = event.buf })
+            end
         end
     })
 end

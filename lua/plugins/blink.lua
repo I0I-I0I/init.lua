@@ -1,4 +1,4 @@
-local M = { "saghen/blink.cmp" }
+local M = { "saghen/blink.cmp", enabled = false }
 
 M.version = "*"
 M.dependencies = "rafamadriz/friendly-snippets"

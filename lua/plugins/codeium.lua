@@ -1,6 +1,9 @@
 local M = { "monkoose/neocodeium" }
 
-M.opts = { enabled = false }
+M.opts = {
+    enabled = true,
+    manual = true
+}
 
 M.keys = function()
     local neocodeium = require("neocodeium")

@@ -2,7 +2,14 @@ local rose = { "rose-pine/neovim" }
 
 rose.name = "rose-pine"
 
-function SetBg(color)
+function SetBg(color, second_color)
+    if color == "NONE" then
+        vim.opt.cursorline = false
+    end
+    if not second_color then
+        second_color = "#1e1e1e"
+    end
+
     vim.cmd.hi("Normal guibg=" .. color)
     vim.cmd([[
         hi NormalNC guibg=Normal
@@ -18,15 +25,16 @@ function SetBg(color)
         hi Folded guibg=Normal
         hi TroubleNormal guibg=Normal
 
-        hi CursorLine guibg=#1e1e1e
-        hi StatusLine guibg=#1e1e1e
     ]])
     vim.cmd.hi("TroubleNormalNC guibg=" .. color)
+    vim.cmd.hi("StatusLine guibg=" .. second_color)
+    vim.cmd.hi("CursorLine guibg=" .. second_color)
 end
 
 rose.init = function()
     vim.cmd.colorscheme("rose-pine-main")
-    SetBg("#0e0a00")
+    -- SetBg("#000001")
+    SetBg("NONE")
 end
 
 return rose
