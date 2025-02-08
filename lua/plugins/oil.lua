@@ -12,6 +12,8 @@ M.config = function()
         use_default_keymaps = false,
         keymaps = {
             ["g?"] = { "actions.show_help", mode = "n" },
+            ["q"] = { "actions.close", mode = "n" },
+            ["<Esc>"] = { "actions.close", mode = "n" },
             ["<CR>"] = "actions.select",
             ["<C-p>"] = "actions.preview",
             ["<C-c>"] = { "actions.close", mode = "n" },
@@ -25,11 +27,15 @@ M.config = function()
             ["g."] = { "actions.toggle_hidden", mode = "n" },
             ["g\\"] = { "actions.toggle_trash", mode = "n" },
         },
+        float = { max_width = 0.3 },
     })
 end
 
-M.keys = {
-    { "-", "<cmd>Oil<cr>", desc = "Open file tree" }
-}
+M.keys = function()
+    local oil = require("oil")
+    return {
+        { "-", oil.open_float, desc = "Open file tree" }
+    }
+end
 
 return M

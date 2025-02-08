@@ -1,6 +1,25 @@
-local rose = { "rose-pine/neovim" }
+local function set_color(color)
+    if (color == "rose" and color == vim.g.colorscheme) then
+        vim.cmd.colorscheme("rose-pine-main")
+        SetBg("NONE")
+    elseif (color == "osaka" and color == vim.g.colorscheme) then
+        vim.cmd.colorscheme("solarized-osaka")
+    end
+end
 
-rose.name = "rose-pine"
+local osaka = {
+    "craftzdog/solarized-osaka.nvim",
+    lazy = false,
+    priority = 1000,
+    opts = { transparent = false },
+    init = function() set_color("osaka") end
+}
+
+local rose = {
+    "rose-pine/neovim",
+    name = "rose-pine",
+    init = function() set_color("rose") end
+}
 
 function SetBg(color, second_color)
     if color == "NONE" then
@@ -31,10 +50,4 @@ function SetBg(color, second_color)
     vim.cmd.hi("CursorLine guibg=" .. second_color)
 end
 
-rose.init = function()
-    vim.cmd.colorscheme("rose-pine-main")
-    -- SetBg("#000001")
-    SetBg("NONE")
-end
-
-return rose
+return { rose, osaka }
