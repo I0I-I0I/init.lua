@@ -33,7 +33,7 @@ function M.config()
         ["html"] = {},
         ["cssls"] = {},
         ["css_variables"] = {},
-        ["emmet_ls"] = { filetypes = { "css", "html", "less", "sass", "scss", "svelte", "pug" }, },
+        ["emmet_ls"] = { filetypes = { "css", "html", "less", "sass", "scss", "svelte", "pug" } },
         ["pyright"] = { populate_diagnostic = true },
         ["ts_ls"] = { populate_diagnostic = true },
         ["clangd"] = {
@@ -80,7 +80,7 @@ function M.config()
             local opts = { buffer = event.buf }
             vim.keymap.set("n", "<leader><C-]>", vim.lsp.buf.type_definition,
                 { table.insert(opts, { desc = "vim.lsp.buf.type_definition()" }) })
-            vim.keymap.set("n", "<leader>f", vim.lsp.buf.format,
+            vim.keymap.set("n", "grf", vim.lsp.buf.format,
                 { table.insert(opts, { desc = "vim.lsp.buf.format()" }) })
 
             local client = vim.lsp.get_client_by_id(event.data.client_id)

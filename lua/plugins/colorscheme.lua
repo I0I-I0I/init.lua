@@ -1,9 +1,9 @@
-local function set_color(color)
-    if (color == "rose" and color == vim.g.colorscheme) then
-        vim.cmd.colorscheme("rose-pine-main")
-        SetBg("NONE")
-    elseif (color == "osaka" and color == vim.g.colorscheme) then
-        vim.cmd.colorscheme("solarized-osaka")
+local function set_color(color, callback)
+    if (color == vim.g.colorscheme.theme) then
+        callback()
+        if (vim.g.colorscheme.bg ~= nil) then
+            SetBg(vim.g.colorscheme.bg)
+        end
     end
 end
 
@@ -12,13 +12,23 @@ local osaka = {
     lazy = false,
     priority = 1000,
     opts = { transparent = false },
-    init = function() set_color("osaka") end
+    init = function()
+        set_color("osaka", function()
+            vim.cmd.colorscheme("solarized-osaka")
+        end)
+    end
 }
 
 local rose = {
     "rose-pine/neovim",
+    lazy = false,
+    priority = 1000,
     name = "rose-pine",
-    init = function() set_color("rose") end
+    init = function()
+        set_color("rose", function()
+            vim.cmd.colorscheme("rose-pine-main")
+        end)
+    end
 }
 
 function SetBg(color, second_color)
@@ -43,7 +53,6 @@ function SetBg(color, second_color)
         hi StatusLine guibg=Normal
         hi Folded guibg=Normal
         hi TroubleNormal guibg=Normal
-
     ]])
     vim.cmd.hi("TroubleNormalNC guibg=" .. color)
     vim.cmd.hi("StatusLine guibg=" .. second_color)

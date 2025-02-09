@@ -34,7 +34,7 @@ end
 M.keys = function ()
     local dap = require("dap")
     return {
-        { "<leader>?", function() dap.eval(nil, { enter = true }) end, desc = "Eval" },
+        { "<leader>?", function() dap.eval(nil, { enter = true }) end, desc = "[DAP] Eval" },
         { "<leader>d", dap.disconnect, desc = "[DAP] Disconnect" },
         { "<leader>r", dap.restart, desc = "[DAP] Restart" },
         { "<leader>c", dap.continue, desc = "[DAP] Continue" },

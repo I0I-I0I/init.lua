@@ -11,7 +11,7 @@ M.keys = function()
         { "<C-p>", function() trouble.prev({skip_groups = true, jump = true}) end },
         {
             "grd",
-            "<cmd>Trouble diagnostics toggle<cr>",
+            "mZ<cmd>Trouble diagnostics toggle<cr>",
             desc = "Diagnostics (Trouble)",
         },
         {
@@ -21,12 +21,12 @@ M.keys = function()
         },
         {
             "grr",
-            "<cmd>Trouble lsp_references toggle win={position=right, size=0.5} auto_refresh=false<cr>",
+            "mZ<cmd>Trouble lsp_references toggle win={position=right, size=0.5} auto_refresh=false<cr>",
             desc = "LSP Definitions / references / ... (Trouble)",
         },
         {
             "<leader>q",
-            "<cmd>Trouble qflist toggle<cr>",
+            "mZ<cmd>Trouble qflist toggle<cr>",
             desc = "Quickfix List (Trouble)",
         },
     }
