@@ -47,7 +47,8 @@ local hack = {
     priority = 1000,
     init = function ()
         set_color("hack", function ()
-            vim.cmd.colorscheme("zenbones")
+            vim.cmd.colorscheme("zenwritten")
+            SetBg("#000001")
         end)
     end
 }

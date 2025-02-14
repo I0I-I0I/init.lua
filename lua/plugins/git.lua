@@ -1,6 +1,8 @@
-local M = { "NeogitOrg/neogit" }
+-- NeoGit
 
-M.opts = {
+local neogit = { "NeogitOrg/neogit" }
+
+neogit.opts = {
     commit_editor = { kind = "split" },
     commit_select_view = { kind = "vsplit" },
     commit_view = { kind = "vsplit" },
@@ -16,8 +18,16 @@ M.opts = {
     refs_view = { kind = "floating" },
 }
 
-M.keys = {
+neogit.keys = {
 	{ "<leader>g", "<cmd>Neogit<cr>", desc = "Open git", { silent = true } }
 }
 
-return M
+-- Diff view
+
+local diffview = { "sindrets/diffview.nvim" }
+
+diffview.version = "*"
+diffview.config = true
+
+
+return { neogit, diffview }
