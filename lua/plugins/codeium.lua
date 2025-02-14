@@ -2,7 +2,7 @@ local M = { "monkoose/neocodeium" }
 
 M.opts = {
     enabled = true,
-    manual = true
+    manual = false
 }
 
 M.keys = function()

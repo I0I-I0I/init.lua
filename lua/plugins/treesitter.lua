@@ -15,7 +15,8 @@ M.config = function ()
             "vimdoc",
             "vim",
             "html",
-            "css"
+            "css",
+            "http",
         },
         auto_install = true,
         highlight = { enable = true },
