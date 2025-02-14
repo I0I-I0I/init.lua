@@ -4,10 +4,14 @@ M.branch = "harpoon2"
 M.dependencies = { "nvim-lua/plenary.nvim" }
 
 M.config = function()
-    require("harpoon"):setup({
+    local harpoon = require("harpoon")
+    local harpoon_extensions = require("harpoon.extensions")
+
+    harpoon:setup({
         ["1"] = {},
         ["2"] = {},
     })
+    harpoon:extend(harpoon_extensions.builtins.highlight_current_file())
 end
 
 local currentList = nil
