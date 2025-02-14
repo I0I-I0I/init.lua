@@ -2,7 +2,7 @@ local M = { "mistweaverco/kulala.nvim" }
 
 M.opts = {}
 
-M.keys = function ()
+M.keys = function()
     local kulala = require("kulala")
     return {
         { "<leader>rr", kulala.run, desc = "Run http request" },
