@@ -42,7 +42,7 @@ function M.config()
                 usePlaceholders = false,
                 completeUnimported = true,
                 clangdFileStatus = true,
-                fallbackFlags = { "-std=c++2a" },
+                -- fallbackFlags = { "-std=c++2a" },
             }
         },
         ["lua_ls"] = {

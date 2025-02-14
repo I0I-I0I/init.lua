@@ -31,6 +31,27 @@ local rose = {
     end
 }
 
+local hack = {
+    -- "roflolilolmao/oceanic-next.nvim",
+    -- lazy = false,
+    -- priority = 1000,
+    -- init = function()
+    --     set_color("hack", function()
+    --         vim.cmd.colorscheme("OceanicNext")
+    --     end)
+    -- end
+
+    "zenbones-theme/zenbones.nvim",
+    dependencies = "rktjmp/lush.nvim",
+    lazy = false,
+    priority = 1000,
+    init = function ()
+        set_color("hack", function ()
+            vim.cmd.colorscheme("zenbones")
+        end)
+    end
+}
+
 function SetBg(color, second_color)
     if color == "NONE" then
         vim.opt.cursorline = false
@@ -59,4 +80,4 @@ function SetBg(color, second_color)
     vim.cmd.hi("CursorLine guibg=" .. second_color)
 end
 
-return { rose, osaka }
+return { rose, osaka, hack }
