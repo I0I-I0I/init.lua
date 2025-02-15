@@ -38,12 +38,20 @@ function M.config()
         ["ts_ls"] = { populate_diagnostic = true },
         ["clangd"] = {
             populate_diagnostic = true,
+            cmd = { "clangd", "--compile-commands-dir=." },
+            filetypes = { "c", "cpp", "objc", "objcpp" },
             init_options = {
                 usePlaceholders = false,
                 completeUnimported = true,
                 clangdFileStatus = true,
-                -- fallbackFlags = { "-std=c++2a" },
-            }
+                compilationDatabasePath = ".",
+
+                -- For windows in linux
+                fallbackFlags = {
+                    "-I/usr/x86_64-w64-mingw32/include",
+                    "-target", "x86_64-w64-mingw32-gcc"
+                },
+            },
         },
         ["lua_ls"] = {
             populate_diagnostic = true,
