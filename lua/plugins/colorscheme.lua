@@ -32,23 +32,14 @@ local rose = {
 }
 
 local hack = {
-    -- "roflolilolmao/oceanic-next.nvim",
-    -- lazy = false,
-    -- priority = 1000,
-    -- init = function()
-    --     set_color("hack", function()
-    --         vim.cmd.colorscheme("OceanicNext")
-    --     end)
-    -- end
-
-    "zenbones-theme/zenbones.nvim",
-    dependencies = "rktjmp/lush.nvim",
+    -- 'bettervim/yugen.nvim',
+    "aktersnurra/no-clown-fiesta.nvim",
     lazy = false,
     priority = 1000,
     init = function ()
         set_color("hack", function ()
-            vim.cmd.colorscheme("zenwritten")
-            SetBg("#000001")
+            -- vim.cmd.colorscheme('yugen')
+            vim.cmd.colorscheme('no-clown-fiesta')
         end)
     end
 }
@@ -77,7 +68,7 @@ function SetBg(color, second_color)
         hi TroubleNormal guibg=Normal
     ]])
     vim.cmd.hi("TroubleNormalNC guibg=" .. color)
-    vim.cmd.hi("StatusLine guibg=" .. second_color)
+    vim.cmd.hi("StatusLine guibg=" .. second_color .. " guifg=#636363")
     vim.cmd.hi("CursorLine guibg=" .. second_color)
 end
 
