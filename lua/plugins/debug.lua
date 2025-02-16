@@ -1,4 +1,4 @@
-local M = { "mfussenegger/nvim-dap"}
+local M = { "mfussenegger/nvim-dap" }
 
 M.dependencies = {
     "igorlfs/nvim-dap-view" ,
@@ -7,14 +7,9 @@ M.dependencies = {
 }
 
 M.config = function()
-    local ui = require("dap-view")
-    local lldb = require("dap-lldb")
-    local python = require("dap-python")
-
-    ui.setup()
-    lldb.setup({ codelldb_path = "/usr/bin/lldb-dap" })
-    python.setup("python3")
-
+    require("dap-view").setup()
+    require("dap-lldb").setup({ codelldb_path = "/usr/bin/lldb-dap" })
+    require("dap-python").setup("python3")
 end
 
 M.keys = function ()

@@ -46,7 +46,7 @@ function M.config()
                 clangdFileStatus = true,
                 compilationDatabasePath = ".",
 
-                -- For windows in linux
+                -- for coding on Linux for Windows
                 fallbackFlags = {
                     "-I/usr/x86_64-w64-mingw32/include",
                     "-target", "x86_64-w64-mingw32-gcc"
@@ -75,16 +75,10 @@ function M.config()
             current_line = true,
             virt_text_pos = "eol_right_align"
         },
-        virtual_lines = false,
-        signs = true,
         underline = false,
-        update_in_insert = false,
         severity_sort = true,
         jump = { float = false },
-        float = {
-            border = "rounded",
-            source = "if_many",
-        }
+        float = { border = "rounded", header = "" }
     })
 
     vim.api.nvim_create_autocmd("LspAttach", {

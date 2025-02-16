@@ -5,7 +5,7 @@ M.dependencies = {
 }
 
 M.config = {
-    layout = "left_bottom",
+    layout = "left_left_bottom",
     position = "right",
 }
 

@@ -31,15 +31,24 @@ local rose = {
     end
 }
 
+local hack_dark = {
+    "bettervim/yugen.nvim",
+    lazy = false,
+    priority = 1000,
+    init = function ()
+        set_color("hack_dark", function ()
+            vim.cmd.colorscheme("yugen")
+        end)
+    end
+}
+
 local hack = {
-    -- 'bettervim/yugen.nvim',
     "aktersnurra/no-clown-fiesta.nvim",
     lazy = false,
     priority = 1000,
     init = function ()
         set_color("hack", function ()
-            -- vim.cmd.colorscheme('yugen')
-            vim.cmd.colorscheme('no-clown-fiesta')
+            vim.cmd.colorscheme("no-clown-fiesta")
         end)
     end
 }
@@ -72,4 +81,4 @@ function SetBg(color, second_color)
     vim.cmd.hi("CursorLine guibg=" .. second_color)
 end
 
-return { rose, osaka, hack }
+return { rose, osaka, hack, hack_dark }

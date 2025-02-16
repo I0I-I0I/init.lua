@@ -13,7 +13,7 @@ vim.opt.smartindent = true
 vim.opt.expandtab = true -- false == tabs
 vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
-vim.opt.completeopt = { "menu", "menuone", "fuzzy", "noinsert", "popup" }
+vim.opt.completeopt = { "menu", "menuone", "noinsert", "popup", "fuzzy" }
 vim.opt.linebreak = true
 vim.opt.smartcase = true
 vim.opt.mouse = "a"
@@ -22,8 +22,8 @@ vim.opt.signcolumn = "yes"
 vim.opt.cursorline = true
 vim.opt.rnu = true
 vim.opt.nu = true
+vim.opt.wildignore:append("*/node_modules/*,*/dist/*,*/build/*,*/env/*,/usr/include/*,/usr/local/include/*")
 vim.opt.path = "**"
-vim.opt.wildignore:append("*/node_modules/*,*/dist/*,*/build/*,*/env/*")
 
 vim.api.nvim_create_autocmd("BufWritePre", {
     pattern = "*.*",
@@ -61,6 +61,7 @@ vim.keymap.set("n", "-", "<cmd>Ex<cr>")
 vim.keymap.set("v", "K", ":m '<-2<cr>gv=gv", { silent = true, noremap = true })
 vim.keymap.set("v", "J", ":m '>+1<cr>gv=gv", { silent = true, noremap = true })
 vim.keymap.set("x", "P", '"0P')
+vim.keymap.set("n", "<C-w>C", "<cmd>tabc<cr>")
 vim.keymap.set("n", "<C-t>", "<cmd>silent !tmux neww tmux-sessionizer<cr>", { desc = "Sessionizer" })
 vim.keymap.set("n", "<C-Space>", function ()
     local current_path = vim.fn.expand("%:p:h")

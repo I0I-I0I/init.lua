@@ -26,7 +26,9 @@ neogit.keys = {
 
 local diffview = { "sindrets/diffview.nvim" }
 
-diffview.config = true
+diffview.opts = {
+    use_icons = false
+}
 diffview.keys = {
     { "<leader>dd", "<cmd>DiffviewOpen<cr>", desc = "Open diffview", { silent = true } },
     { "<leader>dc", "<cmd>DiffviewClose<cr>", desc = "Close diffview", { silent = true } },
