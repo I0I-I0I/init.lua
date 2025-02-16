@@ -71,12 +71,16 @@ function M.config()
     })
 
     vim.diagnostic.config({
+        virtual_text = {
+            current_line = true,
+            virt_text_pos = "eol_right_align"
+        },
         virtual_lines = false,
         signs = true,
         underline = false,
         update_in_insert = false,
         severity_sort = true,
-        jump = { float = true },
+        jump = { float = false },
         float = {
             border = "rounded",
             source = "if_many",
@@ -88,7 +92,7 @@ function M.config()
             local opts = { buffer = event.buf }
             vim.keymap.set("n", "<leader><C-]>", vim.lsp.buf.type_definition,
                 { table.insert(opts, { desc = "vim.lsp.buf.type_definition()" }) })
-            vim.keymap.set("n", "grf", vim.lsp.buf.format,
+            vim.keymap.set({ "n", "v" }, "grf", vim.lsp.buf.format,
                 { table.insert(opts, { desc = "vim.lsp.buf.format()" }) })
 
             local client = vim.lsp.get_client_by_id(event.data.client_id)
