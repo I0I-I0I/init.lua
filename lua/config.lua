@@ -30,6 +30,13 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     command = [[%s/\s\+$//e]],
 })
 
+vim.api.nvim_create_autocmd("BufReadPost", {
+    pattern = "*.*",
+    callback = function()
+        vim.fn.execute("normal! '\"zz", "silent")
+    end,
+})
+
 vim.api.nvim_create_autocmd("TextYankPost", {
     pattern = "*",
     callback = function()

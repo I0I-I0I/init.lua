@@ -19,7 +19,7 @@ neogit.opts = {
 }
 
 neogit.keys = {
-	{ "<C-g><C-g>", "<cmd>Neogit<cr>", desc = "Open git", { silent = true } }
+	{ "<leader>g", "<cmd>Neogit<cr>", desc = "Open git", { silent = true } }
 }
 
 -- Diff view
@@ -28,10 +28,10 @@ local diffview = { "sindrets/diffview.nvim" }
 
 diffview.config = true
 diffview.keys = {
-    { "<leader>gd", "<cmd>DiffviewOpen<cr>", desc = "Open diffview", { silent = true } },
-    { "<leader>gc", "<cmd>DiffviewClose<cr>", desc = "Close diffview", { silent = true } },
-    { "<leader>gr", "<cmd>DiffviewRefresh<cr>", desc = "Refresh diffview", { silent = true } },
-    { "<leader>gl", "<cmd>DiffviewFileHistory<cr>", desc = "Open history", { silent = true } }
+    { "<leader>dd", "<cmd>DiffviewOpen<cr>", desc = "Open diffview", { silent = true } },
+    { "<leader>dc", "<cmd>DiffviewClose<cr>", desc = "Close diffview", { silent = true } },
+    { "<leader>dr", "<cmd>DiffviewRefresh<cr>", desc = "Refresh diffview", { silent = true } },
+    { "<leader>dl", "<cmd>DiffviewFileHistory<cr>", desc = "Open history", { silent = true } }
 }
 
 return { neogit, diffview }
