@@ -29,6 +29,26 @@ function M.config()
     require("mason").setup()
     require("fidget").setup()
 
+    local is_win = os.getenv("OS") == "win"
+    local clangd_config = {
+        populate_diagnostic = true,
+        cmd = { "clangd", "--compile-commands-dir=." },
+        filetypes = { "c", "cpp", "objc", "objcpp" },
+        init_options = {
+            usePlaceholders = false,
+            completeUnimported = true,
+            clangdFileStatus = true,
+            compilationDatabasePath = ".",
+        },
+    }
+
+    if is_win then
+        clangd_config.init_options.fallbackFlags = {
+            "-I/usr/x86_64-w64-mingw32/include",
+            "-target", "x86_64-w64-mingw32-gcc"
+        }
+    end
+
     setup_servers({
         ["html"] = {},
         ["cssls"] = {},
@@ -36,23 +56,7 @@ function M.config()
         ["emmet_ls"] = { filetypes = { "css", "html", "less", "sass", "scss", "svelte", "pug" } },
         ["pyright"] = { populate_diagnostic = true },
         ["ts_ls"] = { populate_diagnostic = true },
-        ["clangd"] = {
-            populate_diagnostic = true,
-            cmd = { "clangd", "--compile-commands-dir=." },
-            filetypes = { "c", "cpp", "objc", "objcpp" },
-            init_options = {
-                usePlaceholders = false,
-                completeUnimported = true,
-                clangdFileStatus = true,
-                compilationDatabasePath = ".",
-
-                -- for coding on Linux for Windows
-                fallbackFlags = {
-                    "-I/usr/x86_64-w64-mingw32/include",
-                    "-target", "x86_64-w64-mingw32-gcc"
-                },
-            },
-        },
+        ["clangd"] = clangd_config,
         ["lua_ls"] = {
             populate_diagnostic = true,
             settings = {
