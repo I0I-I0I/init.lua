@@ -38,6 +38,9 @@ local hack_dark = {
     init = function ()
         set_color("hack_dark", function ()
             vim.cmd.colorscheme("yugen")
+            vim.cmd.hi("DiffAdd guibg=#002e00")
+            vim.cmd.hi("DiffChange guibg=#434200")
+            vim.cmd.hi("DiffDelete guibg=#470000")
         end)
     end
 }
