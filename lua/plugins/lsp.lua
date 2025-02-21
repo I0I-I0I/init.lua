@@ -30,20 +30,10 @@ function M.config()
     require("fidget").setup()
 
     local is_win = os.getenv("OS") == "win"
-    local clangd_config = {
-        populate_diagnostic = true,
-        cmd = { "clangd", "--compile-commands-dir=." },
-        filetypes = { "c", "cpp", "objc", "objcpp" },
-        init_options = {
-            usePlaceholders = false,
-            completeUnimported = true,
-            clangdFileStatus = true,
-            compilationDatabasePath = ".",
-        },
-    }
 
+    local fallbackFlags = { "-std=c++2a" }
     if is_win then
-        clangd_config.init_options.fallbackFlags = {
+        fallbackFlags = {
             "-I/usr/x86_64-w64-mingw32/include",
             "-target", "x86_64-w64-mingw32-gcc"
         }
@@ -56,7 +46,18 @@ function M.config()
         ["emmet_ls"] = { filetypes = { "css", "html", "less", "sass", "scss", "svelte", "pug" } },
         ["pyright"] = { populate_diagnostic = true },
         ["ts_ls"] = { populate_diagnostic = true },
-        ["clangd"] = clangd_config,
+        ["clangd"] = {
+            populate_diagnostic = true,
+            cmd = { "clangd", "--compile-commands-dir=." },
+            filetypes = { "c", "cpp", "objc", "objcpp" },
+            init_options = {
+                usePlaceholders = false,
+                completeUnimported = true,
+                clangdFileStatus = true,
+                compilationDatabasePath = ".",
+                fallbackFlags = fallbackFlags
+            },
+        },
         ["lua_ls"] = {
             populate_diagnostic = true,
             settings = {
