@@ -67,6 +67,7 @@ function SetBg(color, second_color)
     vim.cmd.hi("Normal guibg=" .. color)
     vim.cmd([[
         hi NormalNC guibg=Normal
+        hi NormalFloat guibg=Normal
         hi EndOfBuffer guibg=Normal
         hi LineNr guibg=Normal
         hi SignColumn guibg=Normal
@@ -75,13 +76,8 @@ function SetBg(color, second_color)
         hi DiagnosticSignOk guibg=Normal
         hi DiagnosticSignHint guibg=Normal
         hi DiagnosticSignInfo guibg=Normal
-        hi StatusLine guibg=Normal
         hi Folded guibg=Normal
-        hi TroubleNormal guibg=Normal
     ]])
-    vim.cmd.hi("TroubleNormalNC guibg=" .. color)
-    vim.cmd.hi("StatusLine guibg=" .. second_color .. " guifg=#636363")
-    vim.cmd.hi("CursorLine guibg=" .. second_color)
 end
 
 return { rose, osaka, hack, hack_dark }
