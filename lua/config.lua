@@ -54,17 +54,13 @@ vim.g.mapleader = " "
 
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
+vim.keymap.set("n", "<leader>j", "<cmd>bn<cr>", opts)
+vim.keymap.set("n", "<leader>k", "<cmd>bp<cr>", opts)
 vim.keymap.set("n", "<C-y>", "3<C-y>", opts)
 vim.keymap.set("n", "<C-e>", "3<C-e>", opts)
 vim.keymap.set("n", "<leader><leader>", "<cmd>nohl<cr>")
 vim.keymap.set("n", "<C-w>C", "<cmd>tabc<cr>")
 vim.keymap.set("n", "<C-t>", "<cmd>silent !tmux neww tmux-sessionizer<cr>", { desc = "Sessionizer" })
-vim.keymap.set("n", "-", function ()
-    if (vim.bo.filetype ~= "netrw") then
-        vim.cmd.mark("B")
-        vim.cmd.Ex()
-    end
-end)
 vim.keymap.set("n", "<C-Space>", function ()
     local current_path = vim.fn.expand("%:p:h")
     current_path = string.gsub(current_path, "^oil://", "")
