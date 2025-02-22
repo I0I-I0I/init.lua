@@ -32,7 +32,7 @@ M.opts = {
 M.keys = function()
     local oil = require("oil")
     return {
-        { "-", oil.open_float, desc = "Open file tree" }
+        { "-", oil.open, desc = "Open file tree" }
     }
 end
 

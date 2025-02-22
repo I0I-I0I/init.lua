@@ -86,6 +86,13 @@ function M.config()
         float = { border = "rounded", header = "" }
     })
 
+    vim.api.nvim_create_autocmd("FileType", {
+        pattern = { "c", "cpp", "h", "hpp" },
+        callback = function ()
+            vim.keymap.set("n", "<leader>s", "<cmd>ClangdSwitchSourceHeader<cr>")
+        end
+    })
+
     vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(event)
             local opts = { buffer = event.buf }
@@ -98,12 +105,7 @@ function M.config()
             if not client then return end
 
             if client:supports_method("textDocument/completion") then
-                vim.lsp.completion.enable(true, client.id, event.buf, { autotrigger = false })
-            end
-
-            local triggers = { ".", "->", "::" }
-            for _, trigger in ipairs(triggers) do
-                vim.keymap.set("i", trigger, trigger .. "<C-x><C-o>", { buffer = event.buf })
+                vim.lsp.completion.enable(true, client.id, event.buf, { autotrigger = true })
             end
         end
     })

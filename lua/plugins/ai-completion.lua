@@ -5,8 +5,7 @@ M.cond = true
 M.lazy = false
 
 vim.g.augment_workspace_folders = {
-    "~/code/personal/real-time-chat/server/",
-    "~/code/personal/real-time-chat/frontend/",
+    "~/code/personal/real-time-chat/",
     "~/code/personal/track-mouse/"
 }
 
