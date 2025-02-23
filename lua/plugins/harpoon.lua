@@ -47,12 +47,12 @@ M.keys = function()
             desc = "Open (main) list of files (Harpoon)",
         },
         {
-            "<C-f>",
+            "<C-a>",
             function() currentList = "1" end,
             desc = "Open (additional) list of files (Harpoon)",
         },
         {
-            "<C-b>",
+            "<C-x>",
             function() currentList = "2" end,
             desc = "Open (additional) list of files (Harpoon)",
         },
