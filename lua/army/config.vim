@@ -58,6 +58,7 @@ augroup END
 " Mappings
 
 let g:mapleader=" "
+let g:maplocalleader=""
 
 cmap W! w !sudo tee > /dev/null %
 
@@ -84,19 +85,19 @@ nnoremap <silent> <C-n> <cmd>cnext<cr>zz
 nnoremap <silent> <C-p> <cmd>cprevious<cr>zz
 
 cnoremap <C-b> <Left>
-cnoremap b <C-Left>
+cnoremap <A-b> <C-Left>
 cnoremap <C-f> <Right>
-cnoremap f <C-Right>
+cnoremap <A-f> <C-Right>
 cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
 cnoremap <C-d> <Del>
-cnoremap d <C-Del>
+cnoremap <A-d> <C-Del>
 
 nnoremap <silent> <C-Space> <cmd>execute '!tmux neww tmux-yazi ' . expand("%:p:h")<cr>
 nnoremap <silent> <C-t> <cmd>!tmux neww tmux-sessionizer<cr>
 
 function! FindWord()
-    let input = input('Enter word: ')
+    let input = input('Grep -> ')
     if input == ''
         return
     endif
@@ -111,15 +112,18 @@ nnoremap  :call FindWord()<cr>
 let g:ez_terminal_key = '<Nop>'
 let g:resize_start_key = '<C-w><C-r>'
 
-nnoremap <silent> <C-g>g :Git<cr>
-nnoremap <silent> <C-g><C-g>l :GlLog<cr>
-nnoremap <silent> <C-g>d :tabnew<cr>:DBUIToggle<cr>
-nnoremap <silent> <C-g>u :UndotreeToggle<cr><cmd>UndotreeFocus<cr>
-vnoremap <C-g><C-a>c :Augment chat<cr>
-nnoremap <C-g><C-a>c <cmd>Augment chat<cr>
-nnoremap <silent> <C-g><C-a>t <cmd>Augment chat-toggle<cr>
-nnoremap <silent> <C-g><C-a>n <cmd>Augment chat-new<cr>
-nnoremap <silent> <C-g><C-a>s <cmd>Augment status<cr>
+nnoremap <silent> <localleader>g :Git<cr>
+nnoremap <silent> <localleader><C-g>l :GlLog<cr>
+
+nnoremap <silent> <localleader>d :tabnew<cr>:DBUIToggle<cr>
+
+nnoremap <silent> <localleader>u :UndotreeToggle<cr><cmd>UndotreeFocus<cr>
+
+vnoremap <localleader><C-a>c :Augment chat<cr>
+nnoremap <localleader><C-a>c <cmd>Augment chat<cr>
+nnoremap <silent> <localleader><C-a>t <cmd>Augment chat-toggle<cr>
+nnoremap <silent> <localleader><C-a>n <cmd>Augment chat-new<cr>
+nnoremap <silent> <localleader><C-a>s <cmd>Augment status<cr>
 
 nnoremap <silent> Rm :copen \| wincmd p<cr><cmd>AsyncRun make<cr>
 nnoremap RM :copen \| wincmd p<cr>:AsyncRun make

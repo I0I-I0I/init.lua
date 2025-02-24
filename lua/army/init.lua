@@ -47,3 +47,10 @@ require("army.nvim_ml")
 require("army.nvim_kulala")
 require("army.nvim_telescope")
 require("army.nvim_sessions")
+
+vim.api.nvim_create_autocmd("TextYankPost", {
+    pattern = "*",
+    callback = function()
+        vim.highlight.on_yank({ higroup = "IncSearch", timeout = 100 })
+    end,
+})

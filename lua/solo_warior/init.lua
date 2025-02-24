@@ -9,7 +9,7 @@ vim.opt.undolevels = 10000000
 vim.opt.undoreload = 10000000
 vim.opt.swapfile = false
 vim.opt.lazyredraw = true
-vim.opt.grepprg = "rg --vimgrep --hidden --smart-case --no-heading --trim --follow --glob '!libs'"
+vim.opt.grepprg = "rg --vimgrep --smart-case --no-heading --follow --glob '!libs'"
 vim.opt.spelllang = "en_us"
 vim.opt.spell = true
 vim.opt.smartindent = true
@@ -95,3 +95,5 @@ vim.keymap.set("c", "<A-d>", "<C-Del>", { noremap = true })
 
 vim.keymap.set("n", "<C-t>", "<cmd>silent !tmux neww tmux-sessionizer<cr>", { desc = "Sessionizer" })
 vim.keymap.set("n", "<C-Space>", function () vim.cmd("silent !tmux neww tmux-yazi " .. vim.fn.expand("%:p:h")) end, { desc = "Yazi" })
+
+require("solo_warior.lazy_init")

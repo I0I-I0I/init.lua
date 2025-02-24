@@ -84,7 +84,7 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(event)
         local opts = { buffer = event.buf }
-        vim.keymap.set("n", "<C-x><C-]>", vim.lsp.buf.type_definition,
+        vim.keymap.set("n", "<localleader><C-]>", vim.lsp.buf.type_definition,
             { table.insert(opts, { desc = "vim.lsp.buf.type_definition()" }) })
         vim.keymap.set({ "n", "v" }, "grf", vim.lsp.buf.format,
             { table.insert(opts, { desc = "vim.lsp.buf.format()" }) })
