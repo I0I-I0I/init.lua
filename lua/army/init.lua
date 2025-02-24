@@ -10,27 +10,25 @@ Plug('mhartington/oceanic-next')
 Plug('mfussenegger/nvim-dap')
 Plug('igorlfs/nvim-dap-view')
 Plug('julianolf/nvim-dap-lldb')
-Plug('mfussenegger/nvim-dap-python')
 
 -- UI Enhancements
 Plug('AnotherProksY/ez-window')
 Plug('mbbill/undotree')
+
 Plug('i0i-i0i/sessions.nvim')
+Plug('nvim-telescope/telescope.nvim')
+Plug('nvim-lua/plenary.nvim')
 
 -- IDE features
+Plug('augmentcode/augment.vim')
 Plug('neovim/nvim-lspconfig')
 Plug("williamboman/mason.nvim")
 Plug("artemave/workspace-diagnostics.nvim")
 Plug("jake-stewart/multicursor.nvim")
-Plug('augmentcode/augment.vim')
-
--- Finder
-Plug('nvim-telescope/telescope.nvim')
-Plug('nvim-lua/plenary.nvim')
 
 -- Database
-Plug('kristijanhusak/vim-dadbod-ui')
 Plug('tpope/vim-dadbod')
+Plug('kristijanhusak/vim-dadbod-ui')
 Plug('kristijanhusak/vim-dadbod-completion')
 
 -- Dev tools
@@ -45,12 +43,4 @@ require("army.nvim_lsp")
 require("army.nvim_dap")
 require("army.nvim_ml")
 require("army.nvim_kulala")
-require("army.nvim_telescope")
 require("army.nvim_sessions")
-
-vim.api.nvim_create_autocmd("TextYankPost", {
-    pattern = "*",
-    callback = function()
-        vim.highlight.on_yank({ higroup = "IncSearch", timeout = 100 })
-    end,
-})

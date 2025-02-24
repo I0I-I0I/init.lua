@@ -1,6 +1,5 @@
 require("dap-view").setup()
 require("dap-lldb").setup({ codelldb_path = "/usr/bin/lldb-dap" })
-require("dap-python").setup("python3")
 
 local dap = require("dap")
 local ui = require("dap-view")
@@ -21,4 +20,3 @@ vim.keymap.set("n", "<leader>B", dap.clear_breakpoints, { desc = "[DAP] Clear Al
 vim.keymap.set("n", "<leader>n", dap.step_over, { desc = "[DAP] Step Over" })
 vim.keymap.set("n", "<leader>s", dap.step_into, { desc = "[DAP] Step Into" })
 vim.keymap.set("n", "<leader>o", dap.step_out, { desc = "[DAP] Step Out" })
-
