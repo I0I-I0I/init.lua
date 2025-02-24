@@ -16,7 +16,8 @@ vim.opt.smartindent = true
 vim.opt.expandtab = true -- false == tabs
 vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
-vim.opt.completeopt = { "menu", "menuone", "noinsert", "popup", "fuzzy" }
+-- vim.opt.completeopt = { "menu", "menuone", "noinsert", "popup", "fuzzy" }
+vim.opt.completeopt = { "menu", "menuone", "noinsert", "popup", "nosort" }
 vim.opt.linebreak = true
 vim.opt.smartcase = true
 vim.opt.mouse = "a"
@@ -56,10 +57,9 @@ vim.cmd([[
 local opts = { noremap = true, silent = true }
 
 vim.g.mapleader = " "
+vim.g.maplocalleader = ""
 
 vim.keymap.set("c", "W!","w !sudo tee > /dev/null %")
-vim.keymap.set("v", "y","myy`y")
-vim.keymap.set("v", "Y","myY`y")
 vim.keymap.set("n", "-", "<cmd>Ex<cr>")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
@@ -71,8 +71,18 @@ vim.keymap.set("v", "K", ":m '<-2<cr>gv=gv", { silent = true, noremap = true })
 vim.keymap.set("v", "J", ":m '>+1<cr>gv=gv", { silent = true, noremap = true })
 vim.keymap.set("n", "<C-y>", "3<C-y>", opts)
 vim.keymap.set("n", "<C-e>", "3<C-e>", opts)
-vim.keymap.set("n", "<C-w>C", "<cmd>tabc<cr>")
-vim.keymap.set("n", "<leader><leader>", "<cmd>nohl<cr>")
+vim.keymap.set("n", "<C-w>C", "<cmd>tabc<cr>", { silent = true })
+vim.keymap.set("n", "<C-z>", "<cmd>bd<cr>", { silent = true })
+vim.keymap.set("n", "<leader><C-z>", "<cmd>bd!<cr>", { silent = true })
+vim.keymap.set("n", "<leader><leader>", "<cmd>nohl<cr>", { silent = true })
+vim.keymap.set("n", "<A-o>", "<cmd>tabn<cr>", { silent = true })
+vim.keymap.set("n", "<A-i>", "<cmd>tabp<cr>", { silent = true })
+vim.keymap.set("n", "<A-O>", "<cmd>tabmove +<cr>", { silent = true })
+vim.keymap.set("n", "<A-I>", "<cmd>tabmove -<cr>", { silent = true })
+
+vim.keymap.set("n", "<leader>q", "<cmd>copen | wincmd p<cr>", { silent = true })
+vim.keymap.set("n", "<C-n>", "<cmd>cn<cr>zz", { silent = true })
+vim.keymap.set("n", "<C-p>", "<cmd>cp<cr>zz", { silent = true })
 
 vim.keymap.set("c", "<C-b>", "<Left>", { noremap = true })
 vim.keymap.set("c", "<A-b>", "<C-Left>", { noremap = true })

@@ -31,7 +31,7 @@ function M.config()
 
     local is_win = os.getenv("OS") == "win"
 
-    local fallbackFlags = { "-std=c++2a" }
+    local fallbackFlags
     if is_win then
         fallbackFlags = {
             "-I/usr/x86_64-w64-mingw32/include",
@@ -89,14 +89,14 @@ function M.config()
     vim.api.nvim_create_autocmd("FileType", {
         pattern = { "c", "cpp", "h", "hpp" },
         callback = function ()
-            vim.keymap.set("n", "<leader>s", "<cmd>ClangdSwitchSourceHeader<cr>")
+            vim.keymap.set("n", "<A-s>", "<cmd>ClangdSwitchSourceHeader<cr>")
         end
     })
 
     vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(event)
             local opts = { buffer = event.buf }
-            vim.keymap.set("n", "<leader><C-]>", vim.lsp.buf.type_definition,
+            vim.keymap.set("n", "<C-x><C-]>", vim.lsp.buf.type_definition,
                 { table.insert(opts, { desc = "vim.lsp.buf.type_definition()" }) })
             vim.keymap.set({ "n", "v" }, "grf", vim.lsp.buf.format,
                 { table.insert(opts, { desc = "vim.lsp.buf.format()" }) })
@@ -105,7 +105,7 @@ function M.config()
             if not client then return end
 
             if client:supports_method("textDocument/completion") then
-                vim.lsp.completion.enable(true, client.id, event.buf, { autotrigger = true })
+                vim.lsp.completion.enable(true, client.id, event.buf, { autotrigger = false })
             end
         end
     })

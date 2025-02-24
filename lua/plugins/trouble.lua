@@ -1,4 +1,4 @@
-local M = { "folke/trouble.nvim" }
+local M = { "folke/trouble.nvim", cond = false }
 
 M.opts = {}
 

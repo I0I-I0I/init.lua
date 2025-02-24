@@ -17,7 +17,7 @@ M.init = function()
 end
 
 M.keys = {
-	{ "<leader>D", "<cmd>tabnew<cr><cmd>DBUIToggle<cr>", desc = "Open DataBase UI", silent = true }
+	{ "<localleader>d", "<cmd>tabnew<cr><cmd>DBUIToggle<cr>", desc = "Open DataBase UI", silent = true }
 }
 
 return M

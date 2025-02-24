@@ -19,7 +19,7 @@ neogit.opts = {
 }
 
 neogit.keys = {
-	{ "<leader>g", "<cmd>Neogit<cr>", desc = "Open git", { silent = true } }
+	{ "<localleader>g", "<cmd>Neogit<cr>", desc = "Open git", { silent = true } }
 }
 
 -- Diff view
@@ -30,10 +30,10 @@ diffview.opts = {
     use_icons = false
 }
 diffview.keys = {
-    { "<leader>dd", "<cmd>DiffviewOpen<cr>", desc = "Open diffview", { silent = true } },
-    { "<leader>dc", "<cmd>DiffviewClose<cr>", desc = "Close diffview", { silent = true } },
-    { "<leader>dr", "<cmd>DiffviewRefresh<cr>", desc = "Refresh diffview", { silent = true } },
-    { "<leader>dl", "<cmd>DiffviewFileHistory<cr>", desc = "Open history", { silent = true } }
+    { "<localleader><C-g>d", "<cmd>DiffviewOpen<cr>", desc = "Open diffview", { silent = true } },
+    { "<localleader><C-g>c", "<cmd>DiffviewClose<cr>", desc = "Close diffview", { silent = true } },
+    { "<localleader><C-g>r", "<cmd>DiffviewRefresh<cr>", desc = "Refresh diffview", { silent = true } },
+    { "<localleader><C-g>l", "<cmd>DiffviewFileHistory<cr>", desc = "Open history", { silent = true } }
 }
 
 return { neogit, diffview }

@@ -1,5 +1,7 @@
 local M = { "jiaoshijie/undotree" }
 
+M.lazy = true
+
 M.dependencies = {
     "nvim-lua/plenary.nvim"
 }
@@ -12,7 +14,7 @@ M.config = {
 M.keys = function()
     local undotree = require('undotree')
     return {
-        { "<leader>u", undotree.toggle },
+        { "<localleader>u", undotree.toggle },
     }
 end
 

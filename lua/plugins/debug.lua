@@ -17,7 +17,7 @@ M.keys = function ()
     local ui = require("dap-view")
     return {
         { "<leader>?", function() dap.eval(nil, { enter = true }) end, desc = "[DAP] Eval" },
-        { "<leader>R", dap.restart, desc = "[DAP] Restart" },
+        { "<leader>r", dap.restart, desc = "[DAP] Restart" },
         { "<leader>c", function ()
             dap.continue()
             require("dap-view").open()
