@@ -13,8 +13,8 @@ M.keys = {
     { "<C-f><C-k>", "<cmd>Telescope keymaps theme=ivy<cr>", desc = "Find keymaps" },
     { "<C-f><C-r>", "<cmd>Telescope registers theme=ivy<cr>", desc = "Find registers" },
     { "<C-f>m", "<cmd>Telescope man_pages theme=ivy<cr>", desc = "Find man pages" },
-    { "grr", "<cmd>Telescope lsp_references theme=ivy<cr>", desc = "Find man pages" },
-    { "grd", "<cmd>Telescope diagnostics theme=ivy<cr>", desc = "Find man pages" },
+    { "grr", "<cmd>Telescope lsp_references theme=ivy<cr>", desc = "Find lsp references" },
+    { "grd", "<cmd>Telescope diagnostics theme=ivy<cr>", desc = "Find diagnostics" },
 }
 
 return M
