@@ -19,4 +19,4 @@ vim.g.colorscheme = {
     bg = "#000001"
 }
 
-require("lazy").setup({ spec = "solo_warior.plugins", change_detection = { notify = false } })
+require("lazy").setup({ spec = "one-man-army.plugins", change_detection = { notify = false } })
