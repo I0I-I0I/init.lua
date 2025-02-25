@@ -1,4 +1,7 @@
-local mc = require("multicursor-nvim")
+local ok, mc = pcall(require, "multicursor-nvim")
+if not ok then
+    print("multicursor-nvim not found")
+end
 
 mc.setup()
 
@@ -51,4 +54,3 @@ set("v", "M", mc.matchCursors)
 
 set({"v", "n"}, "<c-i>", mc.jumpForward)
 set({"v", "n"}, "<c-o>", mc.jumpBackward)
-

@@ -1,8 +1,23 @@
-require("dap-view").setup()
-require("dap-lldb").setup({ codelldb_path = "/usr/bin/lldb-dap" })
+local ok, dap = pcall(require, "dap")
+if not ok then
+    print("DAP not found")
+    return
+end
 
-local dap = require("dap")
-local ui = require("dap-view")
+local ok, ui = pcall(require, "dap-view")
+if not ok then
+    print("DAP-UI not found")
+    return
+end
+
+local ok, lldb = pcall(require, "dap-lldb")
+if not ok then
+    print("DAP-LLDB not found")
+    return
+end
+
+ui.setup()
+lldb.setup({ codelldb_path = "/usr/bin/lldb-dap" })
 
 vim.keymap.set("n", "<leader>?", function() dap.eval(nil, { enter = true }) end, { desc = "[DAP] Eval" })
 vim.keymap.set("n", "<leader>r", dap.restart, { desc = "[DAP] Restart" })

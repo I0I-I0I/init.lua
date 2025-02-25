@@ -1,10 +1,10 @@
 vim.loader.enable()
 
-local solo = false
+local solo = os.getenv("CONF")
 
 vim.cmd.source(vim.fn.stdpath("config") .. "/lua/config.vim")
 
-if solo then
+if solo == "t" then
     require("one-man-army")
 else
     require("army")

@@ -1,3 +1,7 @@
+" =============================================================================
+" GENERAL SETTINGS
+" =============================================================================
+
 " Colorscheme and background tweaks
 colorscheme OceanicNext
 
@@ -8,7 +12,7 @@ for group in ['Normal', 'LineNr', 'SignColumn', 'EndOfBuffer', 'Folded']
 endfor
 
 " =============================================================================
-" WORKSPACE FOLDERS (Custom)
+" WORKSPACE FOLDERS FOR AI
 " =============================================================================
 
 let g:augment_workspace_folders = [
@@ -16,7 +20,10 @@ let g:augment_workspace_folders = [
             \ "~/code/personal/track-mouse/"
             \]
 
-" -- Plugin Mappings --
+" =============================================================================
+" PLUGIN MAPPINGS
+" =============================================================================
+
 let g:ez_terminal_key = '<Nop>'
 let g:resize_start_key = '<C-w><C-r>'
 
@@ -37,6 +44,9 @@ nnoremap <silent> <localleader><C-a>t :Augment chat-toggle<CR>
 nnoremap <silent> <localleader><C-a>n :Augment chat-new<CR>
 nnoremap <silent> <localleader><C-a>s :Augment status<CR>
 
+" =============================================================================
+" CUSTOM FUNCTIONS
+" =============================================================================
 
 " Function to search for a word using ripgrep and populate the quickfix list
 function! FindWord()
@@ -87,12 +97,16 @@ nnoremap <C-f><C-f> :find<space><C-d>
 nnoremap  :call FindWord()<CR>
 
 " Jump to tag under cursor in a vertical split
-function! JumpToTag()
+function! JumpToTag(is_split)
     let l:word = expand('<cword>')
-    if !empty(l:word)
+    if a:is_split
         vsplit
-        execute 'tag ' . l:word
+    endif
+    if !empty(l:word)
+        execute 'ltag ' . l:word
+        execute 'lopen | wincmd p'
     endif
 endfunction
 
-nnoremap <C-w><C-]> :call JumpToTag()<CR>
+nnoremap <C-w><C-]> :call JumpToTag(1)<CR>
+nnoremap <silent> <C-]> :call JumpToTag(0)<CR>

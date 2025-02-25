@@ -125,21 +125,21 @@ augroup END
 
 " Leader keys
 let mapleader = " "
-let maplocalleader = ""
+let maplocalleader = "" " <C-g>
 
 " -- Normal Mode Mappings --
 
 " Duplicate line and keep cursor in the same column
 nnoremap <C-b> yympp`pj
-vnoremap <C-b> y`]mpp`pj
+vnoremap <C-b> mpy`]p`pj
 
 nnoremap Q <nop>
 nnoremap n nzzzv
 nnoremap N Nzzzv
 nnoremap * *zzzv
 nnoremap # #zzzv
-nnoremap <C-y> 3<C-y>
-nnoremap <C-e> 3<C-e>
+noremap <C-y> 3<C-y>
+noremap <C-e> 3<C-e>
 nnoremap <silent> <leader><leader> :nohlsearch<CR>
 nnoremap <silent> - :Ex<CR>
 vnoremap <silent> K :m '<-2<CR>gv=gv
@@ -153,9 +153,12 @@ nnoremap <silent> <C-z> :bd<CR>
 nnoremap <silent> <leader><C-z> :bd!<CR>
 nnoremap <silent> <C-n> :cnext<CR>zz
 nnoremap <silent> <C-p> :cprevious<CR>zz
+nnoremap <silent> <M-]> :lnext<cr>zz
+nnoremap <silent> <M-[> :lprevious<cr>zz
 
 " -- Command-Line Mode Mappings --
 cmap W! w !sudo tee > /dev/null %
+cnoremap <C-j> <C-z><C-d>
 cnoremap <C-b> <Left>
 cnoremap <A-b> <C-Left>
 cnoremap <C-f> <Right>
@@ -166,11 +169,11 @@ cnoremap <C-d> <Del>
 cnoremap <A-d> <C-Del>
 
 " -- TMUX & External Tools --
-nnoremap <silent> <C-Space> :execute '!tmux neww tmux-yazi ' . expand("%:p:h")<CR>
-nnoremap <silent> <C-t> :!tmux neww tmux-sessionizer<CR>
+nnoremap <silent> <leader><C-Space> :execute '!tmux neww tmux-yazi ' . expand("%:p:h")<CR>
+nnoremap <silent> <leader><C-t> :!tmux neww tmux-sessionizer<CR>
 
 " =============================================================================
-" WORKSPACE FOLDERS (Custom)
+" Plugin Mappings
 " =============================================================================
 
 " -- AsyncRun Mappings --
@@ -195,19 +198,20 @@ command! -bang -bar -nargs=* Gfetch execute 'AsyncRun<bang> -cwd=' .
 " CUSTOM FUNCTIONS
 " =============================================================================
 
-function! ToggleQF()
+function! ToggleList(list_open, list_close)
     for winnr in range(1, winnr('$'))
         if getwinvar(winnr, '&syntax') == 'qf'
-            cclose
+            execute a:list_close
             return
         endif
     endfor
-    copen | wincmd p
+    execute a:list_open . ' | wincmd p'
 endfunction
 
-nnoremap <silent> <leader>q :call ToggleQF()<CR>
+nnoremap <silent> <leader>q :call ToggleList('copen', 'cclose')<CR>
+nnoremap <silent> <leader>l :call ToggleList('lopen', 'lclose')<CR>
 
-nnoremap <C-g><C-e> :e <C-r>=expand("%:p:h")<CR>/<C-d>
-nnoremap <C-g><C-v> :vs <C-r>=expand("%:p:h")<CR>/<C-d>
-nnoremap <C-g><C-t> :tabnew <C-r>=expand("%:p:h")<CR>/<C-d>
-nnoremap <C-g><C-h> :tabnew ~/<C-d>
+nnoremap <localleader><C-e> :e <C-r>=expand("%:p:h")<CR>/<C-d>
+nnoremap <localleader><C-v> :vs <C-r>=expand("%:p:h")<CR>/<C-d>
+nnoremap <localleader><C-t> :tabnew <C-r>=expand("%:p:h")<CR>/<C-d>
+nnoremap <localleader><C-h> :tabnew ~/<C-d>

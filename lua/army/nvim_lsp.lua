@@ -1,9 +1,26 @@
-local function setup_servers(servers)
-    local lsp = require("lspconfig")
-    local diagnostics = require("workspace-diagnostics")
-    local capabilities = vim.lsp.protocol.make_client_capabilities()
-    capabilities.textDocument.completion.completionItem.snippetSupport = true
+local ok, lsp = pcall(require, "lspconfig")
+if not ok then
+    print("lspconfig not found")
+    return
+end
 
+local ok, diagnostics = pcall(require, "workspace-diagnostics")
+if not ok then
+    print("workspace-diagnostics not found")
+    return
+end
+
+local ok, mason = pcall(require, "mason")
+if not ok then
+    print("mason not found")
+    return
+end
+
+mason.setup()
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+local function setup_servers(servers)
     for name, config in pairs(servers) do
         if config.populate_diagnostic then
             config.on_attach = function(client, bufnr)
@@ -14,8 +31,6 @@ local function setup_servers(servers)
         lsp[name].setup(config)
     end
 end
-
-require("mason").setup()
 
 local is_win = os.getenv("OS") == "win"
 
