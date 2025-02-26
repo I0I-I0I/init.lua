@@ -1,4 +1,4 @@
-local ok, sessions = pcall(require, "sessions")
+local ok, sessions = pcall(require, "sessions.nvim")
 if not ok then
     print("sessions.nvim not found")
     return
