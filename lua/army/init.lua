@@ -14,16 +14,14 @@ Plug('mistweaverco/kulala.nvim')
 -- IDE features
 Plug('jake-stewart/multicursor.nvim')
 Plug('augmentcode/augment.vim')
-Plug('i0i-i0i/sessions.nvim')
-Plug('nvim-telescope/telescope.nvim')
-Plug('nvim-lua/plenary.nvim')
 -- Plug('neovim/nvim-lspconfig')
 -- Plug("williamboman/mason.nvim")
 -- Plug("artemave/workspace-diagnostics.nvim")
 
--- UI Enhancements
+-- Utils
 Plug('AnotherProksY/ez-window')
 Plug('mbbill/undotree')
+Plug('i0i-i0i/sessions.nvim')
 
 -- Debug
 Plug('mfussenegger/nvim-dap')

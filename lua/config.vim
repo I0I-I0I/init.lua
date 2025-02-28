@@ -183,7 +183,7 @@ nnoremap <silent> Rm :copen \| wincmd p<CR>:Make<CR>
 nnoremap <silent> Rd :copen \| wincmd p<CR>:Make debug<CR>
 nnoremap <silent> Rs :cclose<CR>:AsyncStop<CR>
 nnoremap <silent> Rr :copen \| wincmd p<CR>:AsyncReset<CR>
-nnoremap <silent> Rc :Ctags . /usr/include<CR>
+nnoremap <silent> Rc :Ctags .<CR>
 
 command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
 command! -bang -nargs=* -complete=file Ctags AsyncRun ctags -R <args>

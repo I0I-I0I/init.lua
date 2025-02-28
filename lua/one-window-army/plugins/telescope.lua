@@ -1,5 +1,7 @@
 local M = { "nvim-telescope/telescope.nvim" }
 
+M.lazy = false
+
 M.tag = "0.1.8"
 
 M.dependencies = {

@@ -7,6 +7,17 @@ local function set_color(color, callback)
     end
 end
 
+local kanagawa = {
+    "rebelot/kanagawa.nvim",
+    lazy = false,
+    priority = 1000,
+    init = function()
+        set_color("kanagawa", function()
+            vim.cmd.colorscheme("kanagawa-dragon")
+        end)
+    end
+}
+
 local osaka = {
     "craftzdog/solarized-osaka.nvim",
     lazy = false,
@@ -80,4 +91,4 @@ function SetBg(color, second_color)
     ]])
 end
 
-return { rose, osaka, hack, hack_dark }
+return { rose, osaka, hack, hack_dark, kanagawa }
