@@ -132,6 +132,7 @@ let maplocalleader = "" " <C-g>
 " Duplicate line and keep cursor in the same column
 nnoremap <C-b> yympp`pj
 vnoremap <C-b> mpy`]p`pj
+inoremap <C-b> <esc>yympp`pja
 
 nnoremap Q <nop>
 nnoremap n nzzzv
@@ -153,8 +154,8 @@ nnoremap <silent> <C-z> :bd<CR>
 nnoremap <silent> <leader><C-z> :bd!<CR>
 nnoremap <silent> <C-n> :cnext<CR>zz
 nnoremap <silent> <C-p> :cprevious<CR>zz
-nnoremap <silent> <M-]> :lnext<cr>zz
-nnoremap <silent> <M-[> :lprevious<cr>zz
+nnoremap <silent> <A-]> :lnext<cr>zz
+nnoremap <silent> <A-[> :lprevious<cr>zz
 
 " -- Command-Line Mode Mappings --
 cmap W! w !sudo tee > /dev/null %

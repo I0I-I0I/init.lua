@@ -3,13 +3,14 @@
 " =============================================================================
 
 " Colorscheme and background tweaks
-colorscheme OceanicNext
+colorscheme rose-pine
 
 " Set a uniform background for UI elements
-let s:color_bg = '#000001'
-for group in ['Normal', 'LineNr', 'SignColumn', 'EndOfBuffer', 'Folded']
+let s:color_bg = '#0e0a00'
+for group in ['Normal', 'NormalNC', 'LineNr', 'SignColumn', 'EndOfBuffer', 'Folded']
     execute 'highlight ' . group . ' guibg=' . s:color_bg
 endfor
+execute 'highlight StatusLine guibg=#1e1e1e'
 
 " =============================================================================
 " WORKSPACE FOLDERS FOR AI
@@ -17,15 +18,14 @@ endfor
 
 let g:augment_workspace_folders = [
             \ "~/code/personal/real-time-chat/",
-            \ "~/code/personal/track-mouse/"
+            \ "~/code/personal/sessions.nvim/",
+            \ "~/code/personal/track-mouse/",
+            \ "~/.config/nvim/"
             \]
 
 " =============================================================================
 " PLUGIN MAPPINGS
 " =============================================================================
-
-let g:ez_terminal_key = '<Nop>'
-let g:resize_start_key = '<C-w><C-r>'
 
 nnoremap <silent> <localleader>g :Git<CR>
 nnoremap <silent> <localleader><C-g>l :tabnew<cr>:GlLog<CR>
@@ -104,9 +104,18 @@ function! JumpToTag(is_split)
     endif
     if !empty(l:word)
         execute 'ltag ' . l:word
-        execute 'lopen | wincmd p'
     endif
 endfunction
 
 nnoremap <C-w><C-]> :call JumpToTag(1)<CR>
 nnoremap <silent> <C-]> :call JumpToTag(0)<CR>
+
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+nnoremap <M-C-L> <C-w>>
+nnoremap <M-C-K> <C-w>-
+nnoremap <M-NL> <C-w>+
+nnoremap <M-C-H> <C-w><
