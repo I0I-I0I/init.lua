@@ -10,18 +10,8 @@ let s:color_bg = '#0e0a00'
 for group in ['Normal', 'NormalNC', 'LineNr', 'SignColumn', 'EndOfBuffer', 'Folded']
     execute 'highlight ' . group . ' guibg=' . s:color_bg
 endfor
+execute 'hi AugmentSuggestionHighlight guifg=#' . s:color_bg
 execute 'highlight StatusLine guibg=#1e1e1e'
-
-" =============================================================================
-" WORKSPACE FOLDERS FOR AI
-" =============================================================================
-
-let g:augment_workspace_folders = [
-            \ "~/code/personal/real-time-chat/",
-            \ "~/code/personal/sessions.nvim/",
-            \ "~/code/personal/track-mouse/",
-            \ "~/.config/nvim/"
-            \]
 
 " =============================================================================
 " PLUGIN MAPPINGS
@@ -29,20 +19,14 @@ let g:augment_workspace_folders = [
 
 nnoremap <silent> <localleader>g :Git<CR>
 nnoremap <silent> <localleader><C-g>l :tabnew<cr>:GlLog<CR>
-nnoremap <silent> <localleader><C-g>p :Gpush<CR>
-nnoremap <silent> <localleader><C-g>P :Gpush --force<CR>
-nnoremap <silent> <localleader><C-g>f :Gfetch<CR>
+nnoremap <silent> <localleader><C-g>p <cmd>copen \| wincmd p<cr>:Gpush<cr>
+nnoremap <silent> <localleader><C-g>P <cmd>copen \| wincmd p<cr>:Gpush --force<CR>
+nnoremap <silent> <localleader><C-g>f <cmd>copen \| wincmd p<cr>:Gfetch<CR>
 nnoremap <silent> <localleader><C-g>d :Git diff<CR>
 nnoremap <silent> <localleader><C-g>D :Git difftool<CR>
 nnoremap <silent> <localleader><C-g>M :Git mergetool<CR>
-nnoremap <silent> <localleader>d :tabnew<CR>:DBUIToggle<CR>
-nnoremap <silent> <localleader>u :UndotreeToggle<CR>:UndotreeFocus<CR>
 
-vnoremap <localleader><C-a>c :Augment chat<CR>
-nnoremap <localleader><C-a>c :Augment chat<CR>
-nnoremap <silent> <localleader><C-a>t :Augment chat-toggle<CR>
-nnoremap <silent> <localleader><C-a>n :Augment chat-new<CR>
-nnoremap <silent> <localleader><C-a>s :Augment status<CR>
+nnoremap <silent> <localleader>d :tabnew<CR>:DBUIToggle<CR>
 
 " =============================================================================
 " CUSTOM FUNCTIONS
@@ -89,12 +73,11 @@ function! FindFiles()
     endif
 endfunction
 
-nnoremap <C-f> <Nop>
-nnoremap <C-f>f :call FindFiles()<CR>
-nnoremap <C-f><C-t> :tabnew<cr>:find<space><C-d>
-nnoremap <C-f><C-v> :vs<cr>:find<space><C-d>
-nnoremap <C-f><C-f> :find<space><C-d>
+nnoremap <C-f> :find<space><C-d>
 nnoremap  :call FindWord()<CR>
+nnoremap tf :call FindFiles()<CR>
+nnoremap tt :tabnew<cr>:find<space><C-d>
+nnoremap tv :vs<cr>:find<space><C-d>
 
 " Jump to tag under cursor in a vertical split
 function! JumpToTag(is_split)
@@ -115,7 +98,7 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
-nnoremap <M-C-L> <C-w>>
-nnoremap <M-C-K> <C-w>-
-nnoremap <M-NL> <C-w>+
-nnoremap <M-C-H> <C-w><
+nnoremap <M-C-L> 5<C-w>>
+nnoremap <M-C-K> 5<C-w>-
+nnoremap <M-NL> 5<C-w>+
+nnoremap <M-C-H> 5<C-w><

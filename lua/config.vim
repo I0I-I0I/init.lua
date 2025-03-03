@@ -44,6 +44,7 @@ set wildmode=list,full
 set wildmenu
 set splitright            " Split windows to the right by default
 set signcolumn=yes        " Always show the sign column
+set shortmess=aoOtTI
 
 " Global statusline (Neovim 0.7+ supports)
 set laststatus=3
@@ -69,7 +70,7 @@ set completeopt=menu,menuone,fuzzy,noinsert,popup
 " FOLDING
 " =============================================================================
 
-set foldmethod=syntax
+"set foldmethod=syntax
 set foldlevel=0
 set foldnestmax=1
 
@@ -120,6 +121,17 @@ augroup vimrc_autocmds
 augroup END
 
 " =============================================================================
+" WORKSPACE FOLDERS FOR AI
+" =============================================================================
+
+let g:augment_workspace_folders = [
+            \ "~/code/personal/real-time-chat/",
+            \ "~/code/personal/sessions.nvim/",
+            \ "~/code/personal/track-mouse/",
+            \ "~/.config/nvim/"
+            \]
+
+" =============================================================================
 " KEY MAPPINGS
 " =============================================================================
 
@@ -130,9 +142,9 @@ let maplocalleader = "" " <C-g>
 " -- Normal Mode Mappings --
 
 " Duplicate line and keep cursor in the same column
-nnoremap <C-b> yympp`pj
-vnoremap <C-b> mpy`]p`pj
-inoremap <C-b> <esc>yympp`pja
+nnoremap <A-v> yympp`pj
+vnoremap <A-v> mpy`]p`pj
+inoremap <A-v> <esc>yympp`pja
 
 nnoremap Q <nop>
 nnoremap n nzzzv
@@ -159,6 +171,7 @@ nnoremap <silent> <A-[> :lprevious<cr>zz
 
 " -- Command-Line Mode Mappings --
 cmap W! w !sudo tee > /dev/null %
+cnoremap <C-w> <backspace><C-w>
 cnoremap <C-j> <C-z><C-d>
 cnoremap <C-b> <Left>
 cnoremap <A-b> <C-Left>
@@ -168,6 +181,15 @@ cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
 cnoremap <C-d> <Del>
 cnoremap <A-d> <C-Del>
+
+inoremap <C-b> <Left>
+inoremap <A-b> <C-Left>
+inoremap <C-f> <Right>
+inoremap <A-f> <C-Right>
+inoremap <C-a> <Home>
+inoremap <C-d> <Del>
+inoremap <silent> <C-k> <cmd>norm Da<cr><right>
+inoremap <silent> <A-d> <cmd>norm de<cr>
 
 " -- TMUX & External Tools --
 nnoremap <silent> <leader><C-Space> :execute '!tmux neww tmux-yazi ' . expand("%:p:h")<CR>

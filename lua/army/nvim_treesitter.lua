@@ -4,6 +4,9 @@ if not ok then
     return
 end
 
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+
 configs.setup({
     ensure_installed = {
         "c",

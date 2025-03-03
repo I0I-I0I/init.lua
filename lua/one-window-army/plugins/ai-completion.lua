@@ -1,13 +1,8 @@
-local M = { "augmentcode/augment.vim" }
+local M = { "augmentcode/augment.vim", cond = false }
 
 M.cond = true
 
 M.lazy = false
-
-vim.g.augment_workspace_folders = {
-    "~/code/personal/real-time-chat/",
-    "~/code/personal/track-mouse/"
-}
 
 M.keys = {
     { "<localleader><C-a>c", "<cmd>Augment chat<cr>", mode = { "n", "v" } },

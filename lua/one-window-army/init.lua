@@ -15,8 +15,8 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 vim.g.colorscheme = {
-    theme = "hack_dark",
-    bg = "#000001"
+    theme = "rose",
+    bg = "#0e0a00"
 }
 
 require("lazy").setup({ spec = "one-window-army.plugins", change_detection = { notify = false } })

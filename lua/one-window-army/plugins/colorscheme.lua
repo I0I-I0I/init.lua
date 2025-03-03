@@ -57,12 +57,13 @@ local hack_dark = {
 }
 
 local hack = {
-    "aktersnurra/no-clown-fiesta.nvim",
+    "rose-pine/neovim",
     lazy = false,
     priority = 1000,
-    init = function ()
-        set_color("hack", function ()
-            vim.cmd.colorscheme("no-clown-fiesta")
+    name = "rose-pine",
+    init = function()
+        set_color("rose", function()
+            vim.cmd.colorscheme("rose-pine-main")
         end)
     end
 }
@@ -88,7 +89,20 @@ function SetBg(color, second_color)
         hi DiagnosticSignHint guibg=Normal
         hi DiagnosticSignInfo guibg=Normal
         hi Folded guibg=Normal
+        hi TelescopeBorder guibg=Normal
+        hi TelescopePromptBorder guibg=Normal
+        hi TelescopeResultsBorder guibg=Normal
+        hi TelescopePreviewBorder guibg=Normal
+        hi TelescopePromptNormal guibg=Normal
+        hi TelescopeResultsNormal guibg=Normal
+        hi TelescopePreviewNormal guibg=Normal
+        hi TelescopePromptPrefix guibg=Normal
+        hi TelescopeResultsTitle guibg=Normal
     ]])
+    vim.cmd.hi("StatusLine guibg=#1e1e1e")
+    vim.cmd.hi("TabLine guibg=#1e1e1e")
+    vim.cmd.hi("TabLineSel guibg=#1e1e1e")
+    vim.cmd.hi("TabLineFill guibg=#1e1e1e")
 end
 
 return { rose, osaka, hack, hack_dark, kanagawa }

@@ -26,6 +26,7 @@ M.config = function()
     end
 
     vim.keymap.set("n", "<leader><C-^>", function()
+        builtins.save()
         goto_prev(prev)
     end)
 
@@ -37,8 +38,7 @@ M.config = function()
     vim.api.nvim_create_autocmd("VimEnter", {
         callback = function()
             vim.schedule(function()
-                builtins.attach()
-                prev = builtins.get_current()
+                vim.cmd("CustomSessionAttach")
             end)
         end
     })
