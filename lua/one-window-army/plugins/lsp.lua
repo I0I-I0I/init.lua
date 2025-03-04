@@ -105,7 +105,7 @@ function M.config()
             if not client then return end
 
             if client:supports_method("textDocument/completion") then
-                vim.lsp.completion.enable(true, client.id, event.buf, { autotrigger = false })
+                vim.lsp.completion.enable(true, client.id, event.buf, { autotrigger = true })
             end
         end
     })

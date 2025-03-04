@@ -33,22 +33,22 @@ M.keys = function()
     end
 
     return {
-        { "zf",  function()
+        { "<leader>zf",  function()
             vim.cmd("ZenmodeOpenAll 15")
             setOpts(on_open)
         end, { silent = true } },
 
-        { "zo",  function()
+        { "<leader>zo",  function()
             setOpts(defaults)
             o.fillchars = "eob:\\u00A0,vert:\\u00A0"
             vim.cmd("ZenmodeOpenAll 10")
         end, { silent = true } },
 
-        { "zc", function()
+        { "<leader>zc", function()
             vim.cmd("ZenmodeCloseAll")
             setOpts(defaults)
         end, { silent = true } }
     }
 end
 
-return {}
+return M

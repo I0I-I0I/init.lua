@@ -2,16 +2,19 @@
 " GENERAL SETTINGS
 " =============================================================================
 
-" Colorscheme and background tweaks
-colorscheme rose-pine
-
 " Set a uniform background for UI elements
-let s:color_bg = '#0e0a00'
-for group in ['Normal', 'NormalNC', 'LineNr', 'SignColumn', 'EndOfBuffer', 'Folded']
+let s:color_bg = '#000001'
+for group in ['Normal', 'NormalNC', 'LineNr', 'SignColumn', 'EndOfBuffer', 'Folded', 'CursorLine']
     execute 'highlight ' . group . ' guibg=' . s:color_bg
 endfor
-execute 'hi AugmentSuggestionHighlight guifg=#' . s:color_bg
+execute 'highlight EndOfBuffer guifg=' . s:color_bg
 execute 'highlight StatusLine guibg=#1e1e1e'
+execute 'highlight Folded guifg=#cae1f4'
+
+set cul
+autocmd InsertEnter * set nocul
+autocmd InsertLeave * set cul
+execute 'highlight CursorLine gui=underline term=underline'
 
 " =============================================================================
 " PLUGIN MAPPINGS

@@ -22,7 +22,7 @@ M.keys = function ()
         { "<C-f>", function()
             local l_conf = themes.get_ivy({
                 previewer = false,
-                layout_config = { height = 0.3, },
+                layout_config = { height = 0.3 },
             })
             builtin.find_files(l_conf)
         end, desc = "Find files" },
