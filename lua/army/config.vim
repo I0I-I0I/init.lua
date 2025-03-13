@@ -3,13 +3,12 @@
 " =============================================================================
 
 " Set a uniform background for UI elements
-let s:color_bg = '#000001'
-for group in ['Normal', 'NormalNC', 'LineNr', 'SignColumn', 'EndOfBuffer', 'Folded', 'CursorLine']
+let s:color_bg = 'NONE'
+for group in ['Normal', 'NormalNC', 'LineNr', 'SignColumn','Folded', 'CursorLine']
     execute 'highlight ' . group . ' guibg=' . s:color_bg
 endfor
-execute 'highlight EndOfBuffer guifg=' . s:color_bg
 execute 'highlight StatusLine guibg=#1e1e1e'
-execute 'highlight Folded guifg=#cae1f4'
+execute 'highlight Folded guifg=#d3c6aa'
 
 set cul
 autocmd InsertEnter * set nocul
@@ -21,7 +20,8 @@ execute 'highlight CursorLine gui=underline term=underline'
 " =============================================================================
 
 nnoremap <silent> <localleader>g :Git<CR>
-nnoremap <silent> <localleader><C-g>l :tabnew<cr>:GlLog<CR>
+nnoremap <silent> <localleader><C-g>l :GcLog %<CR>
+nnoremap <silent> <localleader><C-g>L <cmd>tabnew<cr>:GcLog<CR>
 nnoremap <silent> <localleader><C-g>p <cmd>copen \| wincmd p<cr>:Gpush<cr>
 nnoremap <silent> <localleader><C-g>P <cmd>copen \| wincmd p<cr>:Gpush --force<CR>
 nnoremap <silent> <localleader><C-g>f <cmd>copen \| wincmd p<cr>:Gfetch<CR>

@@ -7,17 +7,6 @@ local function set_color(color, callback)
     end
 end
 
-local kanagawa = {
-    "rebelot/kanagawa.nvim",
-    lazy = false,
-    priority = 1000,
-    init = function()
-        set_color("kanagawa", function()
-            vim.cmd.colorscheme("kanagawa-dragon")
-        end)
-    end
-}
-
 local osaka = {
     "craftzdog/solarized-osaka.nvim",
     lazy = false,
@@ -79,30 +68,15 @@ function SetBg(color, second_color)
     vim.cmd.hi("Normal guibg=" .. color)
     vim.cmd([[
         hi NormalNC guibg=Normal
-        hi NormalFloat guibg=Normal
         hi EndOfBuffer guibg=Normal
         hi LineNr guibg=Normal
         hi SignColumn guibg=Normal
-        hi DiagnosticSignError guibg=Normal
-        hi DiagnosticSignWarn guibg=Normal
-        hi DiagnosticSignOk guibg=Normal
-        hi DiagnosticSignHint guibg=Normal
-        hi DiagnosticSignInfo guibg=Normal
         hi Folded guibg=Normal
-        hi TelescopeBorder guibg=Normal
-        hi TelescopePromptBorder guibg=Normal
-        hi TelescopeResultsBorder guibg=Normal
-        hi TelescopePreviewBorder guibg=Normal
-        hi TelescopePromptNormal guibg=Normal
-        hi TelescopeResultsNormal guibg=Normal
-        hi TelescopePreviewNormal guibg=Normal
-        hi TelescopePromptPrefix guibg=Normal
-        hi TelescopeResultsTitle guibg=Normal
     ]])
-    vim.cmd.hi("StatusLine guibg=#1e1e1e")
-    vim.cmd.hi("TabLine guibg=#1e1e1e")
-    vim.cmd.hi("TabLineSel guibg=#1e1e1e")
-    vim.cmd.hi("TabLineFill guibg=#1e1e1e")
+    vim.cmd.hi("StatusLine guibg=" .. second_color)
+    vim.cmd.hi("TabLine guibg=" .. second_color)
+    vim.cmd.hi("TabLineSel guibg=" .. second_color)
+    vim.cmd.hi("TabLineFill guibg=" .. second_color)
 end
 
-return { rose, osaka, hack, hack_dark, kanagawa }
+return { rose, osaka, hack, hack_dark }

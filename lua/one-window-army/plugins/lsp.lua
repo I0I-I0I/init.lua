@@ -6,6 +6,7 @@ M.dependencies = {
     "williamboman/mason.nvim",
     "artemave/workspace-diagnostics.nvim",
     "j-hui/fidget.nvim",
+    "saghen/blink.cmp",
 }
 
 local function setup_servers(servers)
@@ -20,7 +21,7 @@ local function setup_servers(servers)
                 diagnostics.populate_workspace_diagnostics(client, bufnr)
             end
         end
-        config.capabilities = capabilities
+        config.capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
         lsp[name].setup(config)
     end
 end
@@ -28,7 +29,6 @@ end
 function M.config()
     require("mason").setup()
     require("fidget").setup()
-
     local is_win = os.getenv("OS") == "win"
 
     local fallbackFlags
@@ -100,14 +100,33 @@ function M.config()
                 { table.insert(opts, { desc = "vim.lsp.buf.type_definition()" }) })
             vim.keymap.set({ "n", "v" }, "grf", vim.lsp.buf.format,
                 { table.insert(opts, { desc = "vim.lsp.buf.format()" }) })
-
-            local client = vim.lsp.get_client_by_id(event.data.client_id)
-            if not client then return end
-
-            if client:supports_method("textDocument/completion") then
-                vim.lsp.completion.enable(true, client.id, event.buf, { autotrigger = true })
-            end
         end
+    })
+
+    require("blink.cmp").setup({
+        cmdline = { enabled = false },
+        keymap = { preset = "default" },
+        sources = {
+            default = { "lsp", "path", "buffer" },
+            providers = {
+                dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
+            },
+            per_filetype = {
+                sql = { "dadbod", "buffer" },
+            },
+        },
+        fuzzy = { implementation = "lua" },
+        completion = {
+            menu = { auto_show = true },
+            documentation = { auto_show = true, auto_show_delay_ms = 10 },
+            trigger = {
+                show_on_keyword = true,
+                -- show_on_trigger_character = true,
+                -- show_on_blocked_trigger_characters = { ' ', '\n', '\t' }
+            },
+            ghost_text = { enabled = true }
+        },
+        signature = { enabled = true },
     })
 end
 

@@ -64,7 +64,7 @@ set linebreak
 set smartcase incsearch hlsearch
 
 " Completion options
-set completeopt=menu,menuone,fuzzy,noinsert,popup
+"set completeopt=menu,menuone,fuzzy,noinsert,popup
 
 " =============================================================================
 " FOLDING
@@ -200,13 +200,14 @@ nnoremap <silent> <leader><C-t> :!tmux neww tmux-sessionizer<CR>
 " =============================================================================
 
 " -- AsyncRun Mappings --
-nnoremap RR :copen \| wincmd p<CR>:AsyncRun<space>
-nnoremap RM :copen \| wincmd p<CR>:Make<space>
-nnoremap <silent> Rm :copen \| wincmd p<CR>:Make<CR>
-nnoremap <silent> Rd :copen \| wincmd p<CR>:Make debug<CR>
-nnoremap <silent> Rs :cclose<CR>:AsyncStop<CR>
-nnoremap <silent> Rr :copen \| wincmd p<CR>:AsyncReset<CR>
-nnoremap <silent> Rc :Ctags .<CR>
+nnoremap <M-;> :copen \| wincmd p<CR>:AsyncRun<space>
+nnoremap mM :copen \| wincmd p<CR>:Make<space>
+nnoremap <silent> mm :copen \| wincmd p<CR>:Make<CR>
+nnoremap <silent> md :copen \| wincmd p<CR>:Make debug<CR>
+nnoremap <silent> ms :cclose<CR>:AsyncStop<CR>
+nnoremap <silent> mr :copen \| wincmd p<CR>:AsyncReset<CR>
+nnoremap <silent> mcc :Ctags .<CR>
+nnoremap <silent> mcf :Ctags --langmap=TypeScript:.ts.tsx --langmap=JavaScript:.js.jsx src/<CR>
 
 command! -bang -nargs=* -complete=file Make AsyncRun -program=make @ <args>
 command! -bang -nargs=* -complete=file Ctags AsyncRun ctags -R <args>
@@ -238,3 +239,10 @@ nnoremap <localleader><C-e> :e <C-r>=expand("%:p:h")<CR>/<C-d>
 nnoremap <localleader><C-v> :vs <C-r>=expand("%:p:h")<CR>/<C-d>
 nnoremap <localleader><C-t> :tabnew <C-r>=expand("%:p:h")<CR>/<C-d>
 nnoremap <localleader><C-h> :tabnew ~/<C-d>
+
+function MyFoldText()
+    return ' ' . getline(v:foldstart) . '•••'
+endfunction
+set foldtext=MyFoldText()
+
+set fillchars+=eob:\ ,fold:\  "
