@@ -43,6 +43,8 @@ M.keys = function ()
         { "<leader>fk", function() builtin.keymaps(conf) end, desc = "Find keymaps" },
         { "<leader>fr", function() builtin.registers(conf) end, desc = "Find registers" },
         { "<leader>fm", function() builtin.man_pages(conf) end, desc = "Find man pages" },
+        { "grd", function() builtin.diagnostics(conf) end, desc = "Show all LSP diagnostics" },
+        { "grr", function() builtin.lsp_references(conf) end, desc = "Show all LSP diagnostics" },
     }
 end
 

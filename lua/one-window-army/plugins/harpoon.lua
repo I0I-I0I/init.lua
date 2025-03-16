@@ -30,6 +30,13 @@ end
 
 M.keys = function()
     local harpoon = require("harpoon")
+
+    vim.api.nvim_create_autocmd("FileType", {
+        pattern = "netrw",
+        callback = function()
+            vim.keymap.set("n", "<C-l>", function() select_from_list(4) end, { desc = "Select 4 (Harpoon)", buffer = true })
+        end
+    })
     return {
         {
             "<leader>a",
@@ -62,22 +69,22 @@ M.keys = function()
             desc = "Open list of files (Harpoon)",
         },
         {
-            "<C-h>",
+            "<leader>h",
             function() select_from_list(harpoon, 1) end,
             desc = "Select 1 (Harpoon)",
         },
         {
-            "<C-j>",
+            "<leader>j",
             function() select_from_list(harpoon, 2) end,
             desc = "Select 2 (Harpoon)",
         },
         {
-            "<C-k>",
+            "<leader>k",
             function() select_from_list(harpoon, 3) end,
             desc = "Select 3 (Harpoon)",
         },
         {
-            "<C-l>",
+            "<leader>l",
             function() select_from_list(harpoon, 4) end,
             desc = "Select 4 (Harpoon)",
         }

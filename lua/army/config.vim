@@ -16,22 +16,6 @@ autocmd InsertLeave * set cul
 execute 'highlight CursorLine gui=underline term=underline'
 
 " =============================================================================
-" PLUGIN MAPPINGS
-" =============================================================================
-
-nnoremap <silent> <localleader>g :Git<CR>
-nnoremap <silent> <localleader><C-g>l :GcLog %<CR>
-nnoremap <silent> <localleader><C-g>L <cmd>tabnew<cr>:GcLog<CR>
-nnoremap <silent> <localleader><C-g>p <cmd>copen \| wincmd p<cr>:Gpush<cr>
-nnoremap <silent> <localleader><C-g>P <cmd>copen \| wincmd p<cr>:Gpush --force<CR>
-nnoremap <silent> <localleader><C-g>f <cmd>copen \| wincmd p<cr>:Gfetch<CR>
-nnoremap <silent> <localleader><C-g>d :Git diff<CR>
-nnoremap <silent> <localleader><C-g>D :Git difftool<CR>
-nnoremap <silent> <localleader><C-g>M :Git mergetool<CR>
-
-nnoremap <silent> <localleader>d :tabnew<CR>:DBUIToggle<CR>
-
-" =============================================================================
 " CUSTOM FUNCTIONS
 " =============================================================================
 
@@ -95,13 +79,3 @@ endfunction
 
 nnoremap <C-w><C-]> :call JumpToTag(1)<CR>
 nnoremap <silent> <C-]> :call JumpToTag(0)<CR>
-
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
-
-nnoremap <M-C-L> 5<C-w>>
-nnoremap <M-C-K> 5<C-w>-
-nnoremap <M-NL> 5<C-w>+
-nnoremap <M-C-H> 5<C-w><

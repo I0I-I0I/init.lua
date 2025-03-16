@@ -116,8 +116,8 @@ augroup vimrc_autocmds
     autocmd FileType netrw setlocal bufhidden=wipe
 
     " C/C++: Toggle between header and source file
-    autocmd FileType c,cpp nnoremap <silent> <C-g>h :e %:p:s,.h$,.X123X,:s,.c$,.h,:s,.X123X$,.c,<cr>
-    "autocmd FileType cpp nnoremap <silent> <C-g>h :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<cr>
+    autocmd FileType c,cpp nnoremap <silent> <A-s> :e %:p:s,.h$,.X123X,:s,.c$,.h,:s,.X123X$,.c,<cr>
+    "autocmd FileType cpp nnoremap <silent> <A-s> :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<cr>
 augroup END
 
 " =============================================================================
@@ -169,6 +169,15 @@ nnoremap <silent> <C-p> :cprevious<CR>zz
 nnoremap <silent> <A-]> :lnext<cr>zz
 nnoremap <silent> <A-[> :lprevious<cr>zz
 
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+nnoremap <M-C-L> 5<C-w>>
+nnoremap <M-C-K> 5<C-w>-
+nnoremap <M-NL> 5<C-w>+
+nnoremap <M-C-H> 5<C-w><
+
 function! GetVisualSelection()
     let [line_start, column_start] = getpos("'<")[1:2]
     let [line_end, column_end] = getpos("'>")[1:2]
@@ -218,6 +227,20 @@ nnoremap <silent> <leader><C-t> :!tmux neww tmux-sessionizer<CR>
 " Plugin Mappings
 " =============================================================================
 
+" Fugitive
+nnoremap <silent> <localleader>g :Git<CR>
+nnoremap <silent> <localleader><C-g>l :GcLog %<CR>
+nnoremap <silent> <localleader><C-g>L <cmd>tabnew<cr>:GcLog<CR>
+nnoremap <silent> <localleader><C-g>p <cmd>copen \| wincmd p<cr>:Gpush<cr>
+nnoremap <silent> <localleader><C-g>P <cmd>copen \| wincmd p<cr>:Gpush --force<CR>
+nnoremap <silent> <localleader><C-g>f <cmd>copen \| wincmd p<cr>:Gfetch<CR>
+nnoremap <silent> <localleader><C-g>d :Git diff<CR>
+nnoremap <silent> <localleader><C-g>D :Git difftool<CR>
+nnoremap <silent> <localleader><C-g>M :Git mergetool<CR>
+
+" Dadbod
+nnoremap <silent> <localleader>d :tabnew<CR>:DBUIToggle<CR>
+
 " -- AsyncRun Mappings --
 nnoremap <M-;> :copen \| wincmd p<CR>:AsyncRun<space>
 nnoremap mM :copen \| wincmd p<CR>:Make<space>
@@ -252,7 +275,7 @@ function! ToggleList(list_open, list_close)
 endfunction
 
 nnoremap <silent> <leader>q :call ToggleList('copen', 'cclose')<CR>
-nnoremap <silent> <leader>l :call ToggleList('lopen', 'lclose')<CR>
+nnoremap <silent> <leader>L :call ToggleList('lopen', 'lclose')<CR>
 
 nnoremap <localleader><C-e> :e <C-r>=expand("%:p:h")<CR>/<C-d>
 nnoremap <localleader><C-v> :vs <C-r>=expand("%:p:h")<CR>/<C-d>
