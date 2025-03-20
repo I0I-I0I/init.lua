@@ -64,7 +64,7 @@ set linebreak
 set smartcase incsearch hlsearch
 
 " Completion options
-"set completeopt=menu,menuone,fuzzy,noinsert,popup
+set completeopt=menu,menuone,fuzzy,noinsert,popup
 
 " =============================================================================
 " FOLDING

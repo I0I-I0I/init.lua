@@ -1,37 +1,16 @@
 local M = { "neovim/nvim-lspconfig" }
 
-M.event = { "BufRead", "BufNewFile" }
-
 M.dependencies = {
     "williamboman/mason.nvim",
+    "williamboman/mason-lspconfig.nvim",
     "artemave/workspace-diagnostics.nvim",
     "j-hui/fidget.nvim",
     "saghen/blink.cmp",
 }
 
-local function setup_servers(servers)
-    local lsp = require("lspconfig")
-    local diagnostics = require("workspace-diagnostics")
-    local capabilities = vim.lsp.protocol.make_client_capabilities()
-    capabilities.textDocument.completion.completionItem.snippetSupport = true
-
-    for name, config in pairs(servers) do
-        if config.populate_diagnostic then
-            config.on_attach = function(client, bufnr)
-                diagnostics.populate_workspace_diagnostics(client, bufnr)
-            end
-        end
-        config.capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
-        lsp[name].setup(config)
-    end
-end
-
 function M.config()
-    require("mason").setup()
-    require("fidget").setup()
-    local is_win = os.getenv("OS") == "win"
-
     local fallbackFlags
+    local is_win = os.getenv("OS") == "win"
     if is_win then
         fallbackFlags = {
             "-I/usr/x86_64-w64-mingw32/include",
@@ -39,15 +18,12 @@ function M.config()
         }
     end
 
-    setup_servers({
-        ["html"] = {},
-        ["cssls"] = {},
-        ["css_variables"] = {},
-        ["emmet_ls"] = { filetypes = { "css", "html", "less", "sass", "scss", "svelte", "pug" } },
-        ["pyright"] = { populate_diagnostic = true },
-        ["ts_ls"] = { populate_diagnostic = true },
-        ["clangd"] = {
-            populate_diagnostic = true,
+    local servers = {
+        emmet_ls = { filetypes = { "css", "html", "less", "sass", "scss", "svelte", "pug" } },
+        ts_ls = { populate_diagnostics = true },
+        pyright = { populate_diagnostics = true },
+        clangd = {
+            populate_diagnostics = true,
             cmd = { "clangd", "--compile-commands-dir=." },
             filetypes = { "c", "cpp", "objc", "objcpp" },
             init_options = {
@@ -58,8 +34,8 @@ function M.config()
                 fallbackFlags = fallbackFlags
             },
         },
-        ["lua_ls"] = {
-            populate_diagnostic = true,
+        lua_ls = {
+            populate_diagnostics = true,
             settings = {
                 Lua = {
                     runtime = { version = "LuaJIT" },
@@ -73,16 +49,37 @@ function M.config()
                 },
             },
         }
+    }
+
+    require("fidget").setup()
+    require("mason").setup()
+    require("mason-lspconfig").setup({
+        ensure_installed = { "lua_ls", "clangd", "ts_ls", "pyright", "html", "cssls", "css_variables", "emmet_ls", "jsonls" },
+        handlers = {
+            function(server_name)
+                local lsp = require("lspconfig")
+                local diagnostics = require("workspace-diagnostics")
+                local capabilities = vim.lsp.protocol.make_client_capabilities()
+                capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+                local config = servers[server_name] or {}
+                if servers[server_name] and servers[server_name].populate_diagnostics then
+                    config.on_attach = function(client, bufnr)
+                        diagnostics.populate_workspace_diagnostics(client, bufnr)
+                    end
+                end
+
+                config.capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
+                lsp[server_name].setup(config)
+            end,
+        }
     })
 
     vim.diagnostic.config({
-        virtual_text = {
-            current_line = true,
-            virt_text_pos = "eol_right_align"
-        },
+        virtual_text = false,
         underline = false,
         severity_sort = true,
-        jump = { float = false },
+        jump = { float = true },
         float = { border = "rounded", header = "" }
     })
 
@@ -131,7 +128,10 @@ function M.config()
         vim.cmd("cc 1")
     end
 
-    vim.keymap.set("n", "grd", set_diagnostics_to_quickfix, { noremap = true, silent = true })
+    vim.keymap.set("n", "grd", function()
+        vim.cmd("mark B")
+        set_diagnostics_to_quickfix()
+    end, { noremap = true, silent = true })
 
     vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(event)
@@ -159,12 +159,10 @@ function M.config()
         completion = {
             menu = { auto_show = true },
             documentation = { auto_show = true, auto_show_delay_ms = 10 },
-            trigger = {
-                show_on_keyword = true,
-                -- show_on_trigger_character = true,
-                -- show_on_blocked_trigger_characters = { ' ', '\n', '\t' }
-            },
-            -- ghost_text = { enabled = true }
+            ghost_text = {
+                enabled = true,
+                show_with_menu = false
+            }
         },
         signature = { enabled = true },
     })
