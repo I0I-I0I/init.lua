@@ -93,6 +93,46 @@ function M.config()
         end
     })
 
+    local function set_diagnostics_to_quickfix()
+        local qflist = {}
+        local line_errors = {}
+
+        for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+            local diagnostics = vim.diagnostic.get(buf)
+            for _, diagnostic in ipairs(diagnostics) do
+                local key = diagnostic.bufnr .. ":" .. diagnostic.lnum
+                if not line_errors[key] then
+                    line_errors[key] = {
+                        bufnr = diagnostic.bufnr,
+                        lnum = diagnostic.lnum + 1,
+                        col = diagnostic.col + 1,
+                        text = diagnostic.message,
+                    }
+                else
+                    line_errors[key].text = line_errors[key].text .. " | " .. diagnostic.message
+                end
+            end
+        end
+
+        for _, error in pairs(line_errors) do
+            table.insert(qflist, error)
+        end
+
+        vim.fn.setqflist(qflist, "r")
+
+        vim.cmd.sleep("100m")
+        if #qflist == 0 then
+            return
+        end
+        vim.cmd([[
+        mark B
+        copen | wincmd p
+        ]])
+        vim.cmd("cc 1")
+    end
+
+    vim.keymap.set("n", "grd", set_diagnostics_to_quickfix, { noremap = true, silent = true })
+
     vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(event)
             local opts = { buffer = event.buf }
