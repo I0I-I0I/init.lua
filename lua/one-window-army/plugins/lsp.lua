@@ -124,7 +124,7 @@ function M.config()
                 -- show_on_trigger_character = true,
                 -- show_on_blocked_trigger_characters = { ' ', '\n', '\t' }
             },
-            ghost_text = { enabled = true }
+            -- ghost_text = { enabled = true }
         },
         signature = { enabled = true },
     })

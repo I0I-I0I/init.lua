@@ -2,16 +2,14 @@ local M = { "nvim-telescope/telescope.nvim" }
 
 M.lazy = false
 
-M.tag = "0.1.8"
+M.branch = "0.1.x"
 
 M.dependencies = {
     "nvim-lua/plenary.nvim"
 }
 
 M.opts = {
-    defaults = {
-        sorting_strategy = "descending",
-    }
+    defaults = { sorting_strategy = "descending" }
 }
 
 M.keys = function ()

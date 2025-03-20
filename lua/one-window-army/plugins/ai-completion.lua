@@ -1,4 +1,4 @@
-local M = { "augmentcode/augment.vim", cond = false }
+local M = { "augmentcode/augment.vim" }
 
 M.cond = true
 

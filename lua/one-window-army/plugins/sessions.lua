@@ -2,6 +2,16 @@ local M = { dir = "/home/i0i/code/personal/sessions.nvim" }
 
 M.lazy = false
 
+vim.api.nvim_create_user_command("RemoveHiddenBuffers", function ()
+    local bufinfos = vim.fn.getbufinfo({buflisted = 1})
+    vim.tbl_map(function (bufinfo)
+        if bufinfo.changed == 0 and (not bufinfo.windows or #bufinfo.windows == 0) then
+            print(("Deleting buffer %d : %s"):format(bufinfo.bufnr, bufinfo.name))
+            vim.api.nvim_buf_delete(bufinfo.bufnr, {force = false, unload = false})
+        end
+    end, bufinfos)
+end, { desc = "Wipeout all hidden buffers"})
+
 M.dependencies = {
     "nvim-telescope/telescope.nvim",
     "nvim-lua/plenary.nvim"
@@ -27,6 +37,8 @@ M.config = function()
 
     vim.keymap.set("n", "<leader><C-^>", function()
         builtins.save()
+        vim.cmd("wa")
+        vim.cmd("silent! bufdo bd")
         goto_prev(prev)
     end)
 

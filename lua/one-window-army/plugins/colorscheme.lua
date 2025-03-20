@@ -51,7 +51,7 @@ local hack = {
     priority = 1000,
     name = "rose-pine",
     init = function()
-        set_color("rose", function()
+        set_color("hack", function()
             vim.cmd.colorscheme("rose-pine-main")
         end)
     end
