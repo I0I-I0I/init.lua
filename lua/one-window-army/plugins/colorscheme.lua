@@ -75,7 +75,7 @@ function SetBg(color, second_color)
     ]])
     vim.cmd.hi("StatusLine guibg=" .. second_color)
     vim.cmd.hi("TabLine guibg=" .. second_color)
-    vim.cmd.hi("TabLineSel guibg=" .. second_color)
+    vim.cmd.hi("TabLineSel guibg=Normal")
     vim.cmd.hi("TabLineFill guibg=" .. second_color)
 end
 
