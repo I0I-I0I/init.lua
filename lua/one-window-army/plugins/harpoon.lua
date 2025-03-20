@@ -28,6 +28,7 @@ M.config = function()
         ["9"] = {},
     })
 
+    ---@param mode "add" | "prepend"
     local function add_to_list(mode)
         local current_tab = get_current_tab()
         if current_tab == "1" then
@@ -40,6 +41,7 @@ M.config = function()
         end
     end
 
+    ---@param idx integer
     local function select_from_list(idx)
         local current_tab = get_current_tab()
         if current_tab == "1" then
