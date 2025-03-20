@@ -1,6 +1,6 @@
 local local_plugins = vim.fn.stdpath("config") .. "/plugins/"
 
-local M = { dir = local_plugins .. "zenmode" }
+local M = { dir = local_plugins .. "zenmode", cond = false }
 
 M.cmd = {
     "ZenmodeToggle",
@@ -11,12 +11,12 @@ M.cmd = {
 }
 
 M.keys = function()
-    local o = vim.opt
+    local opt = vim.opt
     local defaults = {
-        rnu = o.rnu,
-        nu = o.nu,
-        laststatus = o.laststatus,
-        fillchars = o.fillchars,
+        rnu = opt.rnu,
+        nu = opt.nu,
+        laststatus = opt.laststatus,
+        fillchars = opt.fillchars,
     }
 
     local on_open = {
@@ -28,7 +28,7 @@ M.keys = function()
 
     local function setOpts(arr)
         for key, value in pairs(arr) do
-            o[key] = value
+            opt[key] = value
         end
     end
 
@@ -40,7 +40,7 @@ M.keys = function()
 
         { "<leader>zo",  function()
             setOpts(defaults)
-            o.fillchars = "eob:\\u00A0,vert:\\u00A0"
+            opt.fillchars = "eob:\\u00A0,vert:\\u00A0"
             vim.cmd("ZenmodeOpenAll 10")
         end, { silent = true } },
 
