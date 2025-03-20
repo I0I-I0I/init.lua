@@ -125,8 +125,8 @@ function M.config()
             return
         end
         vim.cmd([[
-        mark B
-        copen | wincmd p
+            mark B
+            copen | wincmd p
         ]])
         vim.cmd("cc 1")
     end
