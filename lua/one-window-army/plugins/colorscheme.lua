@@ -15,6 +15,7 @@ local function set_bg(color, second_color)
         hi LineNr guibg=Normal
         hi SignColumn guibg=Normal
         hi Folded guibg=Normal
+
         hi BlinkCmpSignatureHelpActiveParameter guibg=#D4D4D4 guifg=#000001
     ]])
     vim.cmd.hi("StatusLine guibg=" .. second_color)
@@ -82,6 +83,9 @@ local hack_dark = {
                 hi DiffAdd guibg=#002e00
                 hi DiffChange guibg=#434200
                 hi DiffDelete guibg=#470000
+                hi LspReferenceRead guibg=#222222
+                hi LspReferenceText guibg=#222222
+                hi LspReferenceWrite guibg=#222222
             ]])
         end)
     end

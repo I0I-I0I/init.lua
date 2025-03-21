@@ -9,6 +9,19 @@ M.dependencies = {
 }
 
 function M.config()
+    vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+        pattern = "*.*",
+        callback = function()
+            vim.lsp.buf.document_highlight()
+        end
+    })
+    vim.api.nvim_create_autocmd("CursorMoved", {
+        pattern = "*.*",
+        callback = function()
+            vim.lsp.buf.clear_references()
+        end
+    })
+
     local fallbackFlags
     local is_win = os.getenv("OS") == "win"
     if is_win then
@@ -51,6 +64,16 @@ function M.config()
         }
     }
 
+    vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(event)
+            local opts = { buffer = event.buf }
+            vim.keymap.set("n", "<C-g><C-]>", vim.lsp.buf.type_definition,
+                { table.insert(opts, { desc = "vim.lsp.buf.type_definition()" }) })
+            vim.keymap.set({ "n", "v" }, "grf", vim.lsp.buf.format,
+                { table.insert(opts, { desc = "vim.lsp.buf.format()" }) })
+        end
+    })
+
     require("fidget").setup()
     require("mason").setup()
     require("mason-lspconfig").setup({
@@ -59,17 +82,31 @@ function M.config()
             function(server_name)
                 local lsp = require("lspconfig")
                 local diagnostics = require("workspace-diagnostics")
-                local capabilities = vim.lsp.protocol.make_client_capabilities()
-                capabilities.textDocument.completion.completionItem.snippetSupport = true
+                local capabilities = {
+                    textDocument = {
+                        completion = {
+                            completionItem = {
+                                snippetSupport = true
+                            }
+                        },
+                        semanticTokens = {
+                            multilineTokenSupport = true,
+                        },
+                        foldingRange = {
+                            dynamicRegistration = true,
+                            lineFoldingOnly = true
+                        }
+                    }
+                }
 
                 local config = servers[server_name] or {}
+                config.capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
+
                 if servers[server_name] and servers[server_name].populate_diagnostics then
                     config.on_attach = function(client, bufnr)
                         diagnostics.populate_workspace_diagnostics(client, bufnr)
                     end
                 end
-
-                config.capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
                 lsp[server_name].setup(config)
             end,
         }
@@ -133,16 +170,6 @@ function M.config()
         set_diagnostics_to_quickfix()
     end, { noremap = true, silent = true })
 
-    vim.api.nvim_create_autocmd("LspAttach", {
-        callback = function(event)
-            local opts = { buffer = event.buf }
-            vim.keymap.set("n", "<C-g><C-]>", vim.lsp.buf.type_definition,
-                { table.insert(opts, { desc = "vim.lsp.buf.type_definition()" }) })
-            vim.keymap.set({ "n", "v" }, "grf", vim.lsp.buf.format,
-                { table.insert(opts, { desc = "vim.lsp.buf.format()" }) })
-        end
-    })
-
     require("blink.cmp").setup({
         cmdline = { enabled = false },
         keymap = { preset = "default" },
@@ -155,9 +182,24 @@ function M.config()
                 sql = { "dadbod", "buffer" },
             },
         },
-        fuzzy = { implementation = "lua" },
+        fuzzy = {
+            implementation = "prefer_rust",
+            prebuilt_binaries = { force_version = 'v1.0.0' },
+        },
         completion = {
-            menu = { auto_show = true },
+            menu = {
+                auto_show = true,
+                draw = {
+                    treesitter = { 'lsp' },
+                    columns = { { "kind_icon", gap = 1 }, { "label", "label_description", gap = 1 }, { "kind" } },
+                }
+            },
+            trigger = {
+                show_on_keyword = true,
+            },
+            list = {
+                selection = { preselect = true, auto_insert = false },
+            },
             documentation = { auto_show = true, auto_show_delay_ms = 10 },
             ghost_text = {
                 enabled = true,
