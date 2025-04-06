@@ -1,4 +1,4 @@
-local M = { "nvim-telescope/telescope.nvim", cond = false }
+local M = { "nvim-telescope/telescope.nvim" }
 
 M.lazy = false
 

@@ -63,6 +63,10 @@ set linebreak
 " Search settings
 set smartcase incsearch hlsearch
 
+set cul
+autocmd InsertEnter * set nocul
+autocmd InsertLeave * set cul
+
 " Completion options
 set completeopt=menu,menuone,fuzzy,noinsert,popup
 
@@ -101,7 +105,7 @@ augroup vimrc_autocmds
     autocmd FileType fugitive,git setlocal foldlevel=99
 
     " Highlight yanked text
-    autocmd TextYankPost * silent! lua vim.highlight.on_yank({higroup="IncSearch", timeout=100})
+    autocmd TextYankPost * silent! lua vim.hl.on_yank({higroup="IncSearch", timeout=100})
 
     " Create missing directories on save
     autocmd BufWritePre * call mkdir(expand("<afile>:p:h"), "p")

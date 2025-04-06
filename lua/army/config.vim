@@ -10,10 +10,6 @@ endfor
 execute 'highlight StatusLine guibg=#1e1e1e'
 execute 'highlight Folded guifg=#d3c6aa'
 
-set cul
-autocmd InsertEnter * set nocul
-autocmd InsertLeave * set cul
-execute 'highlight CursorLine gui=underline term=underline'
 
 " =============================================================================
 " CUSTOM FUNCTIONS
