@@ -9,19 +9,6 @@ M.dependencies = {
 }
 
 function M.config()
-    vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-        pattern = "*.*",
-        callback = function()
-            vim.lsp.buf.document_highlight()
-        end
-    })
-    vim.api.nvim_create_autocmd("CursorMoved", {
-        pattern = "*.*",
-        callback = function()
-            vim.lsp.buf.clear_references()
-        end
-    })
-
     local fallbackFlags
     local is_win = os.getenv("OS") == "win"
     if is_win then
@@ -71,6 +58,25 @@ function M.config()
                 { table.insert(opts, { desc = "vim.lsp.buf.type_definition()" }) })
             vim.keymap.set({ "n", "v" }, "grf", vim.lsp.buf.format,
                 { table.insert(opts, { desc = "vim.lsp.buf.format()" }) })
+
+            local client = vim.lsp.get_client_by_id(event.data.client_id)
+            if not client then return end
+
+            vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+                pattern = "*.*",
+                callback = function()
+                    if client:supports_method("textDocument/documentHighlight") then
+                        vim.lsp.buf.document_highlight()
+                    end
+                end
+            })
+            vim.api.nvim_create_autocmd("CursorMoved", {
+                pattern = "*.*",
+                callback = function()
+                    vim.lsp.buf.clear_references()
+                end
+            })
+
         end
     })
 
