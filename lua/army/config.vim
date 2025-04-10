@@ -4,7 +4,7 @@
 
 " Set a uniform background for UI elements
 let s:color_bg = 'NONE'
-for group in ['Normal', 'NormalNC', 'LineNr', 'SignColumn','Folded', 'CursorLine']
+for group in ['Normal', 'NormalNC', 'LineNr', 'SignColumn','Folded']
     execute 'highlight ' . group . ' guibg=' . s:color_bg
 endfor
 execute 'highlight StatusLine guibg=#1e1e1e'

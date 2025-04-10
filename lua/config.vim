@@ -7,6 +7,8 @@ if has("termguicolors")
     set termguicolors
 endif
 
+hi CursorLine gui=underline term=underline guibg=Normal
+
 " =============================================================================
 " FILE SEARCH, WILDMENU, & PATHS
 " =============================================================================
@@ -77,6 +79,7 @@ set completeopt=menu,menuone,fuzzy,noinsert,popup
 "set foldmethod=syntax
 set foldlevel=0
 set foldnestmax=1
+autocmd FileType * set nofoldenable
 
 " =============================================================================
 " GREP / EXTERNAL TOOLS
@@ -122,6 +125,10 @@ augroup vimrc_autocmds
     " C/C++: Toggle between header and source file
     autocmd FileType c,cpp nnoremap <silent> <A-s> :e %:p:s,.h$,.X123X,:s,.c$,.h,:s,.X123X$,.c,<cr>
     "autocmd FileType cpp nnoremap <silent> <A-s> :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<cr>
+
+    " Formatting for Markdown files
+    autocmd FileType markdown vnoremap grf :!pandoc -t commonmark_x<cr>
+    autocmd FileType markdown nnoremap grf mf:%!pandoc -t commonmark_x<cr>`f
 augroup END
 
 " =============================================================================
@@ -246,8 +253,17 @@ nnoremap <silent> <localleader><C-g>M :Git mergetool<CR>
 nnoremap <silent> <localleader>d :tabnew<CR>:DBUIToggle<CR>
 
 " -- AsyncRun Mappings --
-nnoremap <M-;> :copen \| wincmd p<CR>:AsyncRun<space>
-nnoremap mM :copen \| wincmd p<CR>:Make<space>
+
+function! RunShellCommnand()
+    let l:command = input('Run -> ', '', 'shellcmd')
+    if len(l:command) == 0
+        return
+    endif
+    execute 'AsyncRun ' . l:command
+    copen | wincmd p
+endfunction
+
+nnoremap <M-;> :call RunShellCommnand()<CR>
 nnoremap <silent> mm :copen \| wincmd p<CR>:Make<CR>
 nnoremap <silent> md :copen \| wincmd p<CR>:Make debug<CR>
 nnoremap <silent> ms :cclose<CR>:AsyncStop<CR>

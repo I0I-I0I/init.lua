@@ -16,7 +16,6 @@ local function set_bg(color, second_color)
         hi SignColumn guibg=Normal
         hi Folded guibg=Normal
 
-        hi CursorLine gui=underline term=underline guibg=Normal
         hi BlinkCmpSignatureHelpActiveParameter guibg=#D4D4D4 guifg=#000001
     ]])
     vim.cmd.hi("StatusLine guibg=" .. second_color)
