@@ -255,7 +255,7 @@ nnoremap <silent> <localleader>d :tabnew<CR>:DBUIToggle<CR>
 " -- AsyncRun Mappings --
 
 function! RunShellCommnand()
-    let l:command = input('Run -> ', '', 'shellcmd')
+    let l:command = input('->', '', 'shellcmd')
     if len(l:command) == 0
         return
     endif
