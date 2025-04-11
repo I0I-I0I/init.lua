@@ -19,8 +19,6 @@ local function set_bg(color, second_color)
         hi BlinkCmpSignatureHelpActiveParameter guibg=#D4D4D4 guifg=#000001
     ]])
     vim.cmd.hi("StatusLine guibg=" .. second_color)
-    vim.cmd.hi("TabLine guibg=" .. second_color)
-    vim.cmd.hi("TabLineSel guibg=Normal")
     vim.cmd.hi("TabLineFill guibg=" .. second_color)
 end
 
@@ -92,14 +90,15 @@ local hack_dark = {
 }
 
 local hack = {
-    "rose-pine/neovim",
+    "ntk148v/komau.vim",
     lazy = false,
     priority = 1000,
-    name = "rose-pine",
+    name = "komau",
     init = function()
         set_theme("hack", function()
-            vim.cmd.colorscheme("rose-pine-main")
+            vim.cmd.colorscheme("komau")
         end)
+        vim.cmd.hi("TabLineFill guibg=NONE")
     end
 }
 

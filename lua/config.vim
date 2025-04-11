@@ -169,6 +169,7 @@ nnoremap <silent> - :Ex<CR>
 vnoremap <silent> K :m '<-2<CR>gv=gv
 vnoremap <silent> J :m '>+1<CR>gv=gv
 nnoremap <silent> <C-w>C :tabc<CR>
+nnoremap <silent> <C-w>t :tabnew<CR>
 nnoremap <silent> <A-o> :tabn<CR>
 nnoremap <silent> <A-i> :tabp<CR>
 nnoremap <silent> <A-O> :tabmove +<CR>
@@ -356,3 +357,31 @@ nnoremap  :call FindWord()<CR>
 nnoremap tf :call FindFiles()<CR>
 nnoremap tt :tabnew<cr>:find<space><C-d>
 nnoremap tv :vs<cr>:find<space><C-d>
+
+" TabLine
+
+function MyTabLabel(n)
+    let buflist = tabpagebuflist(a:n)
+    let winnr = tabpagewinnr(a:n)
+    return bufname(buflist[winnr - 1])
+endfunction
+
+function MyTabLine()
+    let s = ''
+    for i in range(tabpagenr('$'))
+        if i + 1 == tabpagenr()
+            let s ..= '%#TabLineSel#'
+        else
+            let s ..= '%#TabLine#'
+        endif
+
+        let s ..= '%' .. (i + 1) .. 'T'
+        let s ..= ' %{MyTabLabel(' .. (i + 1) .. ')} '
+    endfor
+
+    let s ..= '%#TabLineFill#%T'
+
+    return s
+endfunction
+
+set tabline=%!MyTabLine()
