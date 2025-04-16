@@ -42,7 +42,7 @@ M.keys = function ()
         { "<leader>b", dap.toggle_breakpoint, desc = "[DAP] Toggle Breakpoint" },
         { "<leader>B", dap.clear_breakpoints, desc = "[DAP] Clear All Breakpoints" },
         { "<leader>n", dap.step_over, desc = "[DAP] Step Over" },
-        { "<leader>s", dap.step_into, desc = "[DAP] Step Into" },
+        { "<leader>i", dap.step_into, desc = "[DAP] Step Into" },
         { "<leader>o", dap.step_out, desc = "[DAP] Step Out" },
     }
 end

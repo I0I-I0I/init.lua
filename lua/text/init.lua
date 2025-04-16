@@ -13,9 +13,6 @@ Plug('tpope/vim-fugitive')
 Plug('jake-stewart/multicursor.nvim')
 Plug('i0i-i0i/sessions.nvim')
 
--- HTTP
-Plug('mistweaverco/kulala.nvim')
-
 -- Debug
 Plug('mfussenegger/nvim-dap')
 Plug('igorlfs/nvim-dap-view')
@@ -39,5 +36,4 @@ vim.cmd.source(vim.fn.stdpath("config") .. "/lua/text/config.vim")
 require("text.nvim_ml")
 require("text.nvim_sessions")
 require("text.nvim_dap")
-require("text.nvim_kulala")
 require("text.nvim_treesitter")

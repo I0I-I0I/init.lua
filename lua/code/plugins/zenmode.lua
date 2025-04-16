@@ -1,6 +1,6 @@
 local local_plugins = vim.fn.stdpath("config") .. "/plugins/"
 
-local M = { dir = local_plugins .. "zenmode", cond = false }
+local M = { dir = local_plugins .. "zenmode" }
 
 M.cmd = {
     "ZenmodeToggle",

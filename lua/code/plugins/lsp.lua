@@ -69,16 +69,18 @@ function M.config()
             local client = vim.lsp.get_client_by_id(event.data.client_id)
             if not client then return end
 
+            if not client:supports_method("textDocument/documentHighlight") then
+                return
+            end
+
             vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-                pattern = "*.*",
+                buffer = event.buf,
                 callback = function()
-                    if client:supports_method("textDocument/documentHighlight") then
-                        vim.lsp.buf.document_highlight()
-                    end
+                    vim.lsp.buf.document_highlight()
                 end
             })
             vim.api.nvim_create_autocmd("CursorMoved", {
-                pattern = "*.*",
+                buffer = event.buf,
                 callback = function()
                     vim.lsp.buf.clear_references()
                 end
