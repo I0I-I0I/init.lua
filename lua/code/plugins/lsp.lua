@@ -7,6 +7,9 @@ M.dependencies = {
     "j-hui/fidget.nvim",
     "saghen/blink.cmp",
 
+    -- Other tools
+    "mfussenegger/nvim-lint",
+
     -- TypeScript
     "dmmulroy/tsc.nvim",
     "pmizio/typescript-tools.nvim"
@@ -28,7 +31,7 @@ function M.config()
         css_variables = {},
         jsonls = {},
         emmet_ls = { filetypes = { "css", "html", "less", "sass", "scss", "svelte", "pug" } },
-        pyright = { populate_diagnostics = true },
+        basedpyright = { populate_diagnostics = true },
         clangd = {
             populate_diagnostics = true,
             cmd = { "clangd", "--compile-commands-dir=." },
@@ -135,7 +138,7 @@ function M.config()
         underline = false,
         severity_sort = true,
         jump = { float = true },
-        float = { border = "rounded", header = "" }
+        float = { border = "rounded", header = "", source = true }
     })
 
     vim.api.nvim_create_autocmd("FileType", {
@@ -302,6 +305,11 @@ function M.config()
             }
         },
     })
+
+    require('lint').linters_by_ft = {
+        markdown = {'vale'},
+        python = {'ruff'},
+    }
 end
 
 return M

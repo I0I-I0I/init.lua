@@ -4,19 +4,30 @@ local Plug = vim.fn['plug#']
 vim.call('plug#begin')
 
 -- Theme
-Plug('neanias/everforest-nvim')
-Plug('nvim-treesitter/nvim-treesitter', { ['do'] = ':TSUpdate' })
+Plug('mhartington/oceanic-next')
 
 -- Utils
 Plug('skywind3000/asyncrun.vim')
-Plug('tpope/vim-fugitive')
 Plug('jake-stewart/multicursor.nvim')
 Plug('i0i-i0i/sessions.nvim')
 
+-- Git
+Plug('NeogitOrg/neogit')
+Plug('sindrets/diffview.nvim')
+Plug('nvim-lua/plenary.nvim')
+
+
+-- LSP/Lint
+Plug('neovim/nvim-lspconfig')
+Plug('williamboman/mason.nvim')
+Plug('mfussenegger/nvim-lint')
+
 -- Debug
 Plug('mfussenegger/nvim-dap')
-Plug('igorlfs/nvim-dap-view')
+Plug('rcarriga/nvim-dap-ui')
+Plug('nvim-neotest/nvim-nio')
 Plug('julianolf/nvim-dap-lldb')
+Plug('mfussenegger/nvim-dap-python')
 
 -- Database
 Plug('tpope/vim-dadbod')
@@ -25,15 +36,13 @@ Plug('kristijanhusak/vim-dadbod-completion')
 
 vim.call('plug#end')
 
-require("everforest").setup({
-    background = "hard",
-    italics = true,
-    spell_foreground = true,
-})
-require("everforest").load()
-
 vim.cmd.source(vim.fn.stdpath("config") .. "/lua/text/config.vim")
-require("text.nvim_ml")
-require("text.nvim_sessions")
-require("text.nvim_dap")
-require("text.nvim_treesitter")
+
+vim.cmd("colo OceanicNext")
+vim.cmd.Setbg("#000001")
+
+require("text.ml")
+require("text.sessions")
+require("text.dap")
+require("text.lsp")
+require("text.git")

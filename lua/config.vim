@@ -102,7 +102,7 @@ augroup vimrc_autocmds
                 \ endif
 
     " Close fugitive window with q
-    autocmd FileType fugitive,qf,git nmap <buffer> q <cmd>bd<cr>
+    autocmd FileType fugitive,qf,git,help nmap <buffer> q <cmd>bd<cr>
 
     " Disable auto folding in fugitive
     autocmd FileType fugitive,git setlocal foldlevel=99
@@ -243,12 +243,8 @@ nnoremap <silent> <leader><C-t> :!tmux neww tmux-sessionizer<CR>
 nnoremap <silent> <localleader>g :Git<CR>
 nnoremap <silent> <localleader><C-g>l :GcLog %<CR>
 nnoremap <silent> <localleader><C-g>L <cmd>tabnew<cr>:GcLog<CR>
-nnoremap <silent> <localleader><C-g>p <cmd>copen \| wincmd p<cr>:Gpush<cr>
-nnoremap <silent> <localleader><C-g>P <cmd>copen \| wincmd p<cr>:Gpush --force<CR>
-nnoremap <silent> <localleader><C-g>f <cmd>copen \| wincmd p<cr>:Gfetch<CR>
-nnoremap <silent> <localleader><C-g>d :Git diff<CR>
-nnoremap <silent> <localleader><C-g>D :Git difftool<CR>
-nnoremap <silent> <localleader><C-g>M :Git mergetool<CR>
+nnoremap <silent> <localleader><C-g>p <cmd>copen \| wincmd p<cr>:AsyncRun git push<cr>
+nnoremap <silent> <localleader><C-g>P <cmd>copen \| wincmd p<cr>:AsyncRun git push --force<CR>
 
 " Dadbod
 nnoremap <silent> <localleader>d :tabnew<CR>:DBUIToggle<CR>
@@ -303,14 +299,6 @@ nnoremap <localleader><C-v> :vs <C-r>=expand("%:p:h")<CR>/<C-d>
 nnoremap <localleader><C-t> :tabnew <C-r>=expand("%:p:h")<CR>/<C-d>
 nnoremap <localleader><C-h> :tabnew ~/<C-d>
 
-function MyFoldText()
-    return ' ' . getline(v:foldstart) . '•••'
-endfunction
-set foldtext=MyFoldText()
-
-set fillchars+=eob:\ ,fold:\  "
-
-
 " Function to search for a word using ripgrep and populate the quickfix list
 function! FindWord()
     let l:input = input('Grep -> ')
@@ -352,11 +340,11 @@ function! FindFiles()
     endif
 endfunction
 
-nnoremap <C-f> :find<space><C-d>
+nnoremap <C-f> :find<space>
 nnoremap  :call FindWord()<CR>
-nnoremap tf :call FindFiles()<CR>
-nnoremap tt :tabnew<cr>:find<space><C-d>
-nnoremap tv :vs<cr>:find<space><C-d>
+nnoremap <leader><C-f> :call FindFiles()<CR>
+nnoremap tt :tabnew<cr>:find<space>
+nnoremap tv :vs<cr>:find<space>
 
 " TabLine
 
@@ -385,3 +373,49 @@ function MyTabLine()
 endfunction
 
 set tabline=%!MyTabLine()
+
+" Remove hidden buffers
+
+command! -nargs=0 RemoveHiddenBuffers call RemoveHiddenBuffers()
+
+function! RemoveHiddenBuffers()
+    let bufinfos = getbufinfo({'buflisted': 1})
+    let count = 0
+    for bufinfo in bufinfos
+        if bufinfo.changed == 0
+            if exists('bufinfo.windows') && type(bufinfo.windows) == type([]) && len(bufinfo.windows) == 0
+                execute 'bdelete' bufinfo.bufnr
+                let count += 1
+            elseif !exists('bufinfo.windows')
+                execute 'bdelete' bufinfo.bufnr
+                let count += 1
+            endif
+        endif
+    endfor
+    echo 'Removed ' .. count .. ' hidden buffers'
+endfunction
+
+" Colors
+
+function! SetBG(color, second_color = '')
+    if a:color ==# 'NONE'
+        set cursorline!
+    endif
+    if empty(a:second_color)
+        let l:second_color = '#1e1e1e'
+    else
+        let l:second_color = a:second_color
+    endif
+
+    execute 'highlight Normal guibg=' . a:color
+    execute 'highlight NormalNC guibg=Normal'
+    execute 'highlight EndOfBuffer guibg=Normal'
+    execute 'highlight LineNr guibg=Normal'
+    execute 'highlight SignColumn guibg=Normal'
+    execute 'highlight Folded guibg=Normal'
+    execute 'highlight BlinkCmpSignatureHelpActiveParameter guibg=#D4D4D4 guifg=#000001'
+    execute 'highlight StatusLine guibg=' . l:second_color
+    execute 'highlight TabLineFill guibg=' . l:second_color
+endfunction
+
+command! -nargs=* Setbg call SetBG(<f-args>)

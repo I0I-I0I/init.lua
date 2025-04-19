@@ -1,48 +1,13 @@
----@param color string
----@param second_color string | nil
-local function set_bg(color, second_color)
-    if color == "NONE" then
-        vim.opt.cursorline = false
-    end
-    if not second_color then
-        second_color = "#1e1e1e"
-    end
-
-    vim.cmd.hi("Normal guibg=" .. color)
-    vim.cmd([[
-        hi NormalNC guibg=Normal
-        hi EndOfBuffer guibg=Normal
-        hi LineNr guibg=Normal
-        hi SignColumn guibg=Normal
-        hi Folded guibg=Normal
-
-        hi BlinkCmpSignatureHelpActiveParameter guibg=#D4D4D4 guifg=#000001
-    ]])
-    vim.cmd.hi("StatusLine guibg=" .. second_color)
-    vim.cmd.hi("TabLineFill guibg=" .. second_color)
-end
-
 ---@param theme string
 ---@param callback fun()
 local function set_theme(theme, callback)
     if (theme == vim.g.colorscheme.theme) then
         callback()
         if (vim.g.colorscheme.bg ~= nil) then
-            set_bg(vim.g.colorscheme.bg)
+            vim.cmd.Setbg(vim.g.colorscheme.bg)
         end
     end
 end
-
-vim.api.nvim_create_user_command("Setbg", function(args)
-    local color = args.fargs[1]
-    if color == nil then
-        return
-    end
-    local second_color = args.fargs[2]
-    set_bg(color, second_color)
-end, {
-    nargs = "*"
-})
 
 -- Colors
 
