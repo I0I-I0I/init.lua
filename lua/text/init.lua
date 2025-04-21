@@ -16,7 +16,6 @@ Plug('NeogitOrg/neogit')
 Plug('sindrets/diffview.nvim')
 Plug('nvim-lua/plenary.nvim')
 
-
 -- LSP/Lint
 Plug('neovim/nvim-lspconfig')
 Plug('williamboman/mason.nvim')
@@ -28,11 +27,6 @@ Plug('rcarriga/nvim-dap-ui')
 Plug('nvim-neotest/nvim-nio')
 Plug('julianolf/nvim-dap-lldb')
 Plug('mfussenegger/nvim-dap-python')
-
--- Database
-Plug('tpope/vim-dadbod')
-Plug('kristijanhusak/vim-dadbod-ui')
-Plug('kristijanhusak/vim-dadbod-completion')
 
 vim.call('plug#end')
 

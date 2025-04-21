@@ -309,6 +309,8 @@ function M.config()
     require('lint').linters_by_ft = {
         markdown = {'vale'},
         python = {'ruff'},
+        typescript = {'eslint_d'},
+        typescriptreact = {'eslint_d'},
     }
 end
 

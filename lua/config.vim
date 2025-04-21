@@ -239,15 +239,9 @@ nnoremap <silent> <leader><C-t> :!tmux neww tmux-sessionizer<CR>
 " Plugin Mappings
 " =============================================================================
 
-" Fugitive
-nnoremap <silent> <localleader>g :Git<CR>
-nnoremap <silent> <localleader><C-g>l :GcLog %<CR>
-nnoremap <silent> <localleader><C-g>L <cmd>tabnew<cr>:GcLog<CR>
+" Git
 nnoremap <silent> <localleader><C-g>p <cmd>copen \| wincmd p<cr>:AsyncRun git push<cr>
 nnoremap <silent> <localleader><C-g>P <cmd>copen \| wincmd p<cr>:AsyncRun git push --force<CR>
-
-" Dadbod
-nnoremap <silent> <localleader>d :tabnew<CR>:DBUIToggle<CR>
 
 " -- AsyncRun Mappings --
 
