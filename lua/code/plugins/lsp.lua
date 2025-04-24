@@ -1,11 +1,16 @@
 local M = { "neovim/nvim-lspconfig" }
 
+
 M.dependencies = {
     "williamboman/mason.nvim",
     "williamboman/mason-lspconfig.nvim",
     "artemave/workspace-diagnostics.nvim",
     "j-hui/fidget.nvim",
-    "saghen/blink.cmp",
+    {
+        "saghen/blink.cmp",
+        version = "*",
+        build = "cargo build --release"
+    },
 
     -- Other tools
     "mfussenegger/nvim-lint",
@@ -148,59 +153,13 @@ function M.config()
         end
     })
 
-    -- local function set_diagnostics_to_quickfix()
-    --     local qflist = {}
-    --     local line_errors = {}
-    --
-    --     for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-    --         local diagnostics = vim.diagnostic.get(buf)
-    --         for _, diagnostic in ipairs(diagnostics) do
-    --             local key = diagnostic.bufnr .. ":" .. diagnostic.lnum
-    --             if not line_errors[key] then
-    --                 line_errors[key] = {
-    --                     bufnr = diagnostic.bufnr,
-    --                     lnum = diagnostic.lnum + 1,
-    --                     col = diagnostic.col + 1,
-    --                     text = diagnostic.message,
-    --                 }
-    --             else
-    --                 line_errors[key].text = line_errors[key].text .. " | " .. diagnostic.message
-    --             end
-    --         end
-    --     end
-    --
-    --     for _, error in pairs(line_errors) do
-    --         table.insert(qflist, error)
-    --     end
-    --
-    --     vim.fn.setqflist(qflist, "r")
-    --
-    --     vim.cmd.sleep("100m")
-    --     if #qflist == 0 then
-    --         return
-    --     end
-    --     vim.cmd([[
-    --         mark B
-    --         copen | wincmd p
-    --     ]])
-    --     vim.cmd("cc 1")
-    -- end
-
-    vim.keymap.set("n", "grd", function()
-        vim.cmd("mark B")
-        set_diagnostics_to_quickfix()
-    end, { silent = true })
-
     require("blink.cmp").setup({
         cmdline = { enabled = false },
         keymap = { preset = "default" },
         sources = {
             default = { "lsp", "path", "buffer" },
         },
-        fuzzy = {
-            implementation = "prefer_rust",
-            prebuilt_binaries = { force_version = 'v1.0.0' },
-        },
+        fuzzy = { implementation = "rust" },
         completion = {
             menu = {
                 auto_show = true,
@@ -237,14 +196,11 @@ function M.config()
         hide_progress_notifications_from_history = true,
         pretty_errors = true,
     })
+
     vim.api.nvim_create_autocmd("FileType", {
         pattern = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
         callback = function()
-            vim.keymap.set("n", "grd", vim.cmd.TSC, { buffer = true, noremap = true, silent = true })
-            vim.keymap.set("n", "grD", function()
-                vim.cmd("mark B")
-                set_diagnostics_to_quickfix()
-            end, { noremap = true, silent = true, buffer = true })
+            vim.keymap.set("n", "grD", vim.cmd.TSC, { buffer = true, noremap = true, silent = true })
         end
     })
 
@@ -303,10 +259,10 @@ function M.config()
     require('lint').linters_by_ft = {
         markdown = {'vale'},
         python = {'ruff'},
-        -- typescript = {'eslint_d'},
-        -- typescriptreact = {'eslint_d'},
-        -- javascript = {'eslint_d'},
-        -- javascriptreact = {'eslint_d'},
+        typescript = {'eslint_d'},
+        typescriptreact = {'eslint_d'},
+        javascript = {'eslint_d'},
+        javascriptreact = {'eslint_d'},
     }
 
     vim.api.nvim_create_autocmd({ "BufWritePost" }, {

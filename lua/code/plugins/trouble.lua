@@ -1,4 +1,4 @@
-local M = { "folke/trouble.nvim", cond = false }
+local M = { "folke/trouble.nvim" }
 
 M.opts = {}
 
@@ -11,7 +11,7 @@ M.keys = function()
         { "<C-p>", function() trouble.prev({skip_groups = true, jump = true}) end },
         {
             "grd",
-            "mZ<cmd>Trouble diagnostics toggle<cr>",
+            "mZBcmd>Trouble diagnostics toggle<cr>",
             desc = "Diagnostics (Trouble)",
         },
         {
@@ -21,12 +21,12 @@ M.keys = function()
         },
         {
             "grr",
-            "mZ<cmd>Trouble lsp_references toggle win={position=right, size=0.5} auto_refresh=false<cr>",
+            "mB<cmd>Trouble lsp_references toggle win={position=right, size=0.5} auto_refresh=false<cr>",
             desc = "LSP Definitions / references / ... (Trouble)",
         },
         {
             "<leader>q",
-            "mZ<cmd>Trouble qflist toggle<cr>",
+            "mB<cmd>Trouble qflist toggle<cr>",
             desc = "Quickfix List (Trouble)",
         },
     }
