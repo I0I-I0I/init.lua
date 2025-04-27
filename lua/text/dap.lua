@@ -10,12 +10,6 @@ if not ok then
     return
 end
 
-local ok, lldb = pcall(require, "dap-lldb")
-if not ok then
-    print("DAP-LLDB not found")
-    return
-end
-
 local ok, python = pcall(require, "dap-python")
 if not ok then
     print("DAP-Python not found")
@@ -23,7 +17,6 @@ if not ok then
 end
 
 ui.setup()
-lldb.setup({ codelldb_path = "/usr/bin/lldb-dap" })
 python.setup("python3")
 
 dap.listeners.before.attach.dapui_config = function()

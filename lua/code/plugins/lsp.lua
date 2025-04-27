@@ -35,7 +35,7 @@ function M.config()
         cssls = {},
         css_variables = {},
         jsonls = {},
-        emmet_ls = { filetypes = { "css", "html", "less", "sass", "scss", "svelte", "pug" } },
+        emmet_ls = { filetypes = { "css", "html", "less", "sass", "scss", "svelte", "pug", "typescriptreact", "javascriptreact" } },
         basedpyright = { populate_diagnostics = true },
         clangd = {
             populate_diagnostics = true,
@@ -188,8 +188,8 @@ function M.config()
     --
     require("tsc").setup({
         auto_open_qflist = true,
-        use_trouble_qflist = false,
-        use_diagnostics = false,
+        use_trouble_qflist = true,
+        use_diagnostics = true,
         run_as_monorepo = false,
         enable_progress_notifications = true,
         enable_error_notifications = true,

@@ -7,14 +7,8 @@ vim.call('plug#begin')
 Plug('mhartington/oceanic-next')
 
 -- Utils
-Plug('skywind3000/asyncrun.vim')
 Plug('jake-stewart/multicursor.nvim')
 Plug('i0i-i0i/sessions.nvim')
-
--- Git
-Plug('NeogitOrg/neogit')
-Plug('sindrets/diffview.nvim')
-Plug('nvim-lua/plenary.nvim')
 
 -- LSP/Lint
 Plug('neovim/nvim-lspconfig')
@@ -25,7 +19,6 @@ Plug('mfussenegger/nvim-lint')
 Plug('mfussenegger/nvim-dap')
 Plug('rcarriga/nvim-dap-ui')
 Plug('nvim-neotest/nvim-nio')
-Plug('julianolf/nvim-dap-lldb')
 Plug('mfussenegger/nvim-dap-python')
 
 vim.call('plug#end')
@@ -37,6 +30,5 @@ vim.cmd.Setbg("#000001")
 
 require("text.ml")
 require("text.sessions")
-require("text.dap")
 require("text.lsp")
-require("text.git")
+require("text.dap")

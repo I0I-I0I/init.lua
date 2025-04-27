@@ -11,5 +11,4 @@ return {
             code_font_family = "Maple Mono",
         }
     },
-    { "skywind3000/asyncrun.vim" },
 }

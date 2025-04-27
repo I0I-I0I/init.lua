@@ -11,7 +11,7 @@ M.keys = function()
         { "<C-p>", function() trouble.prev({skip_groups = true, jump = true}) end },
         {
             "grd",
-            "mZBcmd>Trouble diagnostics toggle<cr>",
+            "mZ<cmd>Trouble diagnostics toggle<cr>",
             desc = "Diagnostics (Trouble)",
         },
         {
