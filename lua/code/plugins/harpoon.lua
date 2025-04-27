@@ -68,22 +68,31 @@ M.config = function()
         end,
         { desc = "Open list of files (Harpoon)" }
     )
-    vim.keymap.set("n", "<leader>h",
+    vim.keymap.set("n", "<C-h>",
         function() select_from_list(1) end,
         { desc = "Select 1 (Harpoon)" }
     )
-    vim.keymap.set("n", "<leader>j",
+    vim.keymap.set("n", "<C-j>",
         function() select_from_list(2) end,
         { desc = "Select 2 (Harpoon)" }
     )
-    vim.keymap.set("n", "<leader>k",
+    vim.keymap.set("n", "<C-k>",
         function() select_from_list(3) end,
         { desc = "Select 3 (Harpoon)" }
     )
-    vim.keymap.set("n", "<leader>l",
+    vim.keymap.set("n", "<C-l>",
         function() select_from_list(4) end,
         { desc = "Select 4 (Harpoon)" }
     )
+    vim.api.nvim_create_autocmd("FileType", {
+        pattern = "netrw",
+        callback = function()
+            vim.keymap.set("n", "<C-l>",
+                function() select_from_list(4) end,
+                { desc = "Select 4 (Harpoon)", noremap = true, buffer = true }
+            )
+        end
+    })
 end
 
 return M

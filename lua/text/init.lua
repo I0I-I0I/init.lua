@@ -10,6 +10,9 @@ Plug('mhartington/oceanic-next')
 Plug('jake-stewart/multicursor.nvim')
 Plug('i0i-i0i/sessions.nvim')
 
+Plug('ThePrimeagen/harpoon', { branch = "harpoon2" })
+Plug('nvim-lua/plenary.nvim')
+
 -- LSP/Lint
 Plug('neovim/nvim-lspconfig')
 Plug('williamboman/mason.nvim')
@@ -32,3 +35,4 @@ require("text.ml")
 require("text.sessions")
 require("text.lsp")
 require("text.dap")
+require("text.harpoon")
