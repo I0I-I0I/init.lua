@@ -14,12 +14,10 @@ let g:netrw_fastbrowse = 0
 
 set lazyredraw            " Redraw only when needed for speed
 set updatetime=300        " Faster completion and CursorHold events
-
 set noswapfile            " Disable swap files
 set undofile              " Enable persistent undo
 set undolevels=10000000
 set undoreload=10000000
-
 set synmaxcol=200         " Avoid slow syntax in very long lines
 set mouse=a               " Enable mouse in all modes
 set hidden                " Allow hidden buffers
@@ -29,16 +27,13 @@ set wildmenu
 set splitright            " Split windows to the right by default
 set signcolumn=yes        " Always show the sign column
 set shortmess=aoOtTI
-
 set laststatus=3          " Global statusline (Neovim 0.7+ supports)
-
 " Indentation & whitespace
 set smartindent
 set expandtab
 set shiftwidth=4
 set tabstop=4
 set linebreak
-
 set smartcase incsearch hlsearch " Search settings
 
 set cul
@@ -117,6 +112,8 @@ nnoremap <silent> <C-p> :cprevious<CR>zz
 nnoremap <silent> <A-]> :lnext<cr>zz
 nnoremap <silent> <A-[> :lprevious<cr>zz
 cnoremap <C-w> <backspace><C-w>
+nnoremap <silent> <M-c> :let @+=expand("%")<cr>
+nnoremap <silent> <leader><M-c> :let @+=expand("%") . ':' . line(".")<cr>
 
 nnoremap <M-C-L> 5<C-w>>
 nnoremap <M-C-K> 5<C-w>-
@@ -127,9 +124,7 @@ nnoremap <M-C-H> 5<C-w><
 nnoremap <silent> <leader><C-Space> :execute '!tmux neww tmux-yazi ' . expand("%:p:h")<CR>
 nnoremap <silent> <leader><C-t> :!tmux neww tmux-sessionizer<CR>
 
-" =============================================================================
-" CUSTOM FUNCTIONS
-" =============================================================================
+" Custom functions
 
 function! ToggleList(list_open, list_close)
     for winnr in range(1, winnr('$'))
@@ -168,7 +163,7 @@ command! -nargs=1 Find call FindFiles(<q-args>)
 
 nnoremap <C-f> :find<space>
 nnoremap  :grep<space>
-nnoremap <M-;> :Find<space>
+nnoremap <M-f> :Find<space>
 nnoremap tt :tabnew<cr>:find<space>
 nnoremap tv :vs<cr>:find<space>
 
