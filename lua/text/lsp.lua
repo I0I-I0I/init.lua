@@ -126,3 +126,24 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 lsp.basedpyright.setup({ capabilities = capabilities })
+
+local fallbackFlags
+local is_win = os.getenv("OS") == "win"
+if is_win then
+    fallbackFlags = {
+        "-I/usr/x86_64-w64-mingw32/include",
+        "-target", "x86_64-w64-mingw32-gcc"
+    }
+end
+lsp.clangd.setup({
+    populate_diagnostics = true,
+    cmd = { "clangd", "--compile-commands-dir=." },
+    filetypes = { "c", "cpp", "objc", "objcpp" },
+    init_options = {
+        usePlaceholders = false,
+        completeUnimported = true,
+        clangdFileStatus = true,
+        compilationDatabasePath = ".",
+        fallbackFlags = fallbackFlags
+    },
+})
