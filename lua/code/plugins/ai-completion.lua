@@ -3,10 +3,18 @@ local M = { "monkoose/neocodeium" }
 M.opts = {
     enabled = true,
     manual = false,
+    show_label = false,
+    silent = false,
     filetypes = {
         TelescopePrompt = false,
         ["dap-repl"] = false,
     },
+    filter = function(bufnr)
+        if vim.endswith(vim.api.nvim_buf_get_name(bufnr), ".env") then
+            return false
+        end
+        return true
+    end
 }
 
 M.keys = function()

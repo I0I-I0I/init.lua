@@ -2,13 +2,19 @@ local ok, lsp = pcall(require, 'lspconfig')
 if not ok then
     print("lsp-config is not installed")
     return
- end
+end
+
+local ok, diagnostics = pcall(require, 'workspace-diagnostics')
+if not ok then
+    print("workspace-diagnostics is not installed")
+    return
+end
 
 local ok, lint = pcall(require, 'lint')
 if not ok then
     print("Lint is not installed")
     return
- end
+end
 
 local ok, mason = pcall(require, 'mason')
 if not ok then
@@ -19,24 +25,17 @@ end
 mason.setup()
 
 lint.linters_by_ft = {
-    markdown = {'vale'},
     python = {'ruff'},
-    python = {'ruff'},
-    typescript = {'eslint_d'},
-    typescriptreact = {'eslint_d'},
-    javascript = {'eslint_d'},
-    javascriptreact = {'eslint_d'},
+    cpp = {'cpplint'},
+    c = {'cpplint'},
     markdown = {'cspell'},
     text = {'cspell'},
-    c = {'cpplint'},
-    cpp = {'cpplint'}
 }
 
 vim.api.nvim_create_autocmd({ "BufWritePost" }, {
-  callback = function()
-    require("lint").try_lint()
-    require("lint").try_lint("cspell")
-  end,
+    callback = function()
+        require("lint").try_lint()
+    end,
 })
 
 vim.diagnostic.config({
@@ -77,8 +76,8 @@ local function set_diagnostics_to_quickfix()
         return
     end
     vim.cmd([[
-    mark B
-    copen | wincmd p
+        mark B
+        copen | wincmd p
     ]])
     vim.cmd("cc 1")
 end
@@ -92,9 +91,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(event)
         local opts = { buffer = event.buf }
         vim.keymap.set("n", "<C-g><C-]>", vim.lsp.buf.type_definition,
-        { table.insert(opts, { desc = "vim.lsp.buf.type_definition()" }) })
+            { table.insert(opts, { desc = "vim.lsp.buf.type_definition()" }) })
         vim.keymap.set({ "n", "v" }, "grf", vim.lsp.buf.format,
-        { table.insert(opts, { desc = "vim.lsp.buf.format()" }) })
+            { table.insert(opts, { desc = "vim.lsp.buf.format()" }) })
 
         local client = vim.lsp.get_client_by_id(event.data.client_id)
         if not client then return end
@@ -125,7 +124,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-lsp.basedpyright.setup({ capabilities = capabilities })
+lsp.basedpyright.setup({
+    capabilities = capabilities,
+    on_attach = function(client, bufnr)
+        diagnostics.populate_workspace_diagnostics(client, bufnr)
+    end
+})
 
 local fallbackFlags
 local is_win = os.getenv("OS") == "win"
@@ -135,8 +139,9 @@ if is_win then
         "-target", "x86_64-w64-mingw32-gcc"
     }
 end
+
 lsp.clangd.setup({
-    populate_diagnostics = true,
+    capabilities = capabilities,
     cmd = { "clangd", "--compile-commands-dir=." },
     filetypes = { "c", "cpp", "objc", "objcpp" },
     init_options = {
@@ -146,4 +151,7 @@ lsp.clangd.setup({
         compilationDatabasePath = ".",
         fallbackFlags = fallbackFlags
     },
+    on_attach = function(client, bufnr)
+        diagnostics.populate_workspace_diagnostics(client, bufnr)
+    end
 })

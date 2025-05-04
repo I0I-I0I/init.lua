@@ -9,12 +9,13 @@ Plug('mhartington/oceanic-next')
 -- Utils
 Plug('jake-stewart/multicursor.nvim')
 Plug('i0i-i0i/sessions.nvim')
-Plug('kkoomen/vim-doge', { ["do"] = ':call doge#install()' })
-Plug('ThePrimeagen/harpoon', { branch = "harpoon2" })
+Plug('kkoomen/vim-doge', { ['do'] = ':call doge#install()' })
+Plug('ThePrimeagen/harpoon', { branch = 'harpoon2' })
 Plug('nvim-lua/plenary.nvim')
 
 -- LSP/Lint
 Plug('neovim/nvim-lspconfig')
+Plug('artemave/workspace-diagnostics.nvim')
 Plug('williamboman/mason.nvim')
 Plug('mfussenegger/nvim-lint')
 
