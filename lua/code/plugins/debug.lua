@@ -12,7 +12,7 @@ M.config = function()
     local python = require("dap-python")
 
     ui.setup()
-    python.setup("python3")
+    python.setup("/sbin/python3")
 
     dap.listeners.before.attach.dapui_config = function()
         ui.open()
@@ -28,20 +28,16 @@ M.config = function()
     end
 end
 
-M.keys = function ()
-    local dap = require("dap")
-    return {
-        { "<leader>?", function() dap.eval(nil, { enter = true }) end, desc = "[DAP] Eval" },
-        { "<leader>d", dap.disconnect, desc = "[DAP] Disconnect" },
-        { "<leader>r", dap.restart, desc = "[DAP] Restart" },
-        { "<leader>c", dap.continue, desc = "[DAP] Continue" },
-        { "<leader>C", dap.run_to_cursor, desc = "[DAP] Run to Cursor" },
-        { "<leader>b", dap.toggle_breakpoint, desc = "[DAP] Toggle Breakpoint" },
-        { "<leader>B", dap.clear_breakpoints, desc = "[DAP] Clear All Breakpoints" },
-        { "<leader>n", dap.step_over, desc = "[DAP] Step Over" },
-        { "<leader>i", dap.step_into, desc = "[DAP] Step Into" },
-        { "<leader>o", dap.step_out, desc = "[DAP] Step Out" },
-    }
-end
+M.keys = {
+    { "<leader>?", "<cmd>DapEval<cr>", desc = "[DAP] Eval" },
+    { "<leader>d", "<cmd>DapTerminate<cr>", desc = "[DAP] Disconnect" },
+    { "<leader>r", "<cmd>DapRestartFrame<cr>", desc = "[DAP] Restart" },
+    { "<leader>c", "<cmd>DapContinue<cr>", desc = "[DAP] Continue" },
+    { "<leader>n", "<cmd>DapStepOver<cr>", desc = "[DAP] Step Over" },
+    { "<leader>i", "<cmd>DapStepInto<cr>", desc = "[DAP] Step Into" },
+    { "<leader>o", "<cmd>DapStepOut<cr>", desc = "[DAP] Step Out" },
+    { "<leader>b", "<cmd>DapToggleBreakpoint<cmd>", desc = "[DAP] Toggle Breakpoint" },
+    { "<leader>B", "<cmd>DapClearBreakpoints<cmd>", desc = "[DAP] Clear All Breakpoints" },
+}
 
 return M

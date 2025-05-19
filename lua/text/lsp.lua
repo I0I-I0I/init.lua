@@ -22,6 +22,14 @@ if not ok then
     return
 end
 
+local ok, format = pcall(require, 'conform')
+if not ok then
+    print("conform.nvim is not installed")
+    return
+end
+
+-- Config --
+
 mason.setup()
 
 lint.linters_by_ft = {
@@ -31,6 +39,24 @@ lint.linters_by_ft = {
     markdown = {'cspell'},
     text = {'cspell'},
 }
+
+format.setup({
+    format_on_save = {
+        timeout_ms = 500,
+        lsp_format = "fallback",
+    },
+    log_level = vim.log.levels.WARN,
+})
+
+format.formatters_by_ft = {
+    python = { "ruff_format" },
+    javascript = { "prettierd" },
+    typescript = { "prettierd" },
+    javascriptreact = { "prettierd" },
+    typescriptreact = { "prettierd" },
+}
+
+vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
 
 vim.api.nvim_create_autocmd({ "BufWritePost" }, {
     callback = function()
@@ -126,7 +152,17 @@ vim.api.nvim_create_autocmd("LspAttach", {
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 lsp.basedpyright.setup({
     capabilities = capabilities,
+    settings = {
+        basedpyright = {
+            typeCheckingMode = "standard",
+            reportOptionalMemberAccess = false,
+            reportUnusedVariable = "warning",
+            reportUnusedImport = "warning",
+            inlayHints = { callArgumentNames = true },
+        }
+    },
     on_attach = function(client, bufnr)
+        client.server_capabilities.semanticTokensProvider = nil
         diagnostics.populate_workspace_diagnostics(client, bufnr)
     end
 })
@@ -152,6 +188,16 @@ lsp.clangd.setup({
         fallbackFlags = fallbackFlags
     },
     on_attach = function(client, bufnr)
+        client.server_capabilities.semanticTokensProvider = nil
+        diagnostics.populate_workspace_diagnostics(client, bufnr)
+    end
+})
+
+lsp.ts_ls.setup({
+    capabilities = capabilities,
+    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "typescript.tsx" },
+    on_attach = function(client, bufnr)
+        client.server_capabilities.semanticTokensProvider = nil
         diagnostics.populate_workspace_diagnostics(client, bufnr)
     end
 })

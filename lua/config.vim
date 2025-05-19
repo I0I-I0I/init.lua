@@ -2,8 +2,6 @@ if has("termguicolors")
     set termguicolors
 endif
 
-hi CursorLine gui=underline term=underline guibg=Normal
-
 set wildignore=*/node_modules/*,*/build/*,*/dist/*,*/env/*,/usr/local/include/*,/usr/include/*
 set path+=**
 
@@ -115,10 +113,14 @@ cnoremap <C-w> <backspace><C-w>
 nnoremap <silent> <M-c> :let @+=expand("%")<cr>
 nnoremap <silent> <leader><M-c> :let @+=expand("%") . ':' . line(".")<cr>
 
-nnoremap <M-C-L> 5<C-w>>
-nnoremap <M-C-K> 5<C-w>-
-nnoremap <M-NL> 5<C-w>+
-nnoremap <M-C-H> 5<C-w><
+nnoremap <M-C-K> <C-w>k
+nnoremap <M-C-J> <C-w>j
+nnoremap <M-C-H> <C-w>h
+nnoremap <M-C-L> <C-w>l
+nnoremap <C-Up> 5<C-w>-
+nnoremap <C-Down> 5<C-w>+
+nnoremap <C-Left> 5<C-w><
+nnoremap <C-Right> 5<C-w>>
 
 " -- TMUX & External Tools --
 nnoremap <silent> <leader><C-Space> :execute '!tmux neww tmux-yazi ' . expand("%:p:h")<CR>
@@ -193,24 +195,24 @@ nnoremap <silent> <leader>R <cmd>RemoveHiddenBuffers<cr>
 " Colors
 
 function! SetBG(color, second_color = '')
-    if a:color ==# 'NONE'
-        set cursorline!
-    endif
     if empty(a:second_color)
         let l:second_color = '#1e1e1e'
     else
         let l:second_color = a:second_color
     endif
 
-    execute 'highlight Normal guibg=' . a:color
-    execute 'highlight NormalNC guibg=Normal'
-    execute 'highlight EndOfBuffer guibg=Normal'
-    execute 'highlight LineNr guibg=Normal'
-    execute 'highlight SignColumn guibg=Normal'
-    execute 'highlight Folded guibg=Normal'
-    execute 'highlight BlinkCmpSignatureHelpActiveParameter guibg=#D4D4D4 guifg=#000001'
-    execute 'highlight StatusLine guibg=' . l:second_color
-    execute 'highlight TabLineFill guibg=' . l:second_color
+    set cursorline
+    hi CursorLine gui=underline term=underline guibg=Normal
+    hi CursorLineNr guibg=Normal
+    hi Normal guibg=a:color
+    hi NormalNC guibg=Normal
+    hi EndOfBuffer guibg=Normal
+    hi LineNr guibg=Normal
+    hi SignColumn guibg=Normal
+    hi Folded guibg=Normal
+    hi StatusLine guibg=l:second_color
+    hi TabLineFill guibg=l:second_color
+    hi BlinkCmpSignatureHelpActiveParameter guibg=#D4D4D4 guifg=#000001
 endfunction
 
 command! -nargs=* Setbg call SetBG(<f-args>)

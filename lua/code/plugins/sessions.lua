@@ -5,7 +5,7 @@ M.dependencies = {
     "nvim-lua/plenary.nvim"
 }
 
-M.lazy = false
+M.lazy = true
 
 vim.api.nvim_create_user_command("RemoveHiddenBuffers", function ()
     local bufinfos = vim.fn.getbufinfo({buflisted = 1})

@@ -1,4 +1,91 @@
 local M = { "neovim/nvim-lspconfig" }
+local front = {
+    {
+        "dmmulroy/tsc.nvim",
+        ft = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
+        config = function()
+            --
+            -- TypeScript --
+            --
+            require("tsc").setup({
+                auto_open_qflist = true,
+                use_trouble_qflist = true,
+                use_diagnostics = true,
+                run_as_monorepo = false,
+                enable_progress_notifications = true,
+                enable_error_notifications = true,
+                hide_progress_notifications_from_history = true,
+                pretty_errors = true,
+            })
+
+            vim.api.nvim_create_autocmd("FileType", {
+                pattern = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
+                callback = function()
+                    vim.keymap.set("n", "grD", vim.cmd.TSC, { buffer = true, noremap = true, silent = true })
+                end
+            })
+
+        end
+    },
+    {
+        "pmizio/typescript-tools.nvim",
+        ft = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
+        config = function()
+            require("typescript-tools").setup({
+                settings = {
+                    -- spawn additional tsserver instance to calculate diagnostics on it
+                    separate_diagnostic_server = true,
+                    -- "change"|"insert_leave" determine when the client asks the server about diagnostic
+                    publish_diagnostic_on = "insert_leave",
+                    -- array of strings("fix_all"|"add_missing_imports"|"remove_unused"|
+                    -- "remove_unused_imports"|"organize_imports") -- or string "all"
+                    -- to include all supported code actions
+                    -- specify commands exposed as code_actions
+                    expose_as_code_action = "all",
+                    -- string|nil - specify a custom path to `tsserver.js` file, if this is nil or file under path
+                    -- not exists then standard path resolution strategy is applied
+                    tsserver_path = nil,
+                    -- specify a list of plugins to load by tsserver, e.g., for support `styled-components`
+                    -- (see 💅 `styled-components` support section)
+                    tsserver_plugins = {},
+                    -- this value is passed to: https://nodejs.org/api/cli.html#--max-old-space-sizesize-in-megabytes
+                    -- memory limit in megabytes or "auto"(basically no limit)
+                    tsserver_max_memory = "auto",
+                    -- locale of all tsserver messages, supported locales you can find here:
+                    -- https://github.com/microsoft/TypeScript/blob/3c221fc086be52b19801f6e8d82596d04607ede6/src/compiler/utilitiesPublic.ts#L620
+                    tsserver_locale = "en",
+                    -- mirror of VSCode's `typescript.suggest.completeFunctionCalls`
+                    complete_function_calls = false,
+                    include_completions_with_insert_text = true,
+                    -- CodeLens
+                    -- WARNING: Experimental feature also in VSCode, because it might hit performance of server.
+                    -- possible values: ("off"|"all"|"implementations_only"|"references_only")
+                    code_lens = "references_only",
+                    -- by default code lenses are displayed on all referencable values and for some of you it can
+                    -- be too much this option reduce count of them by removing member references from lenses
+                    disable_member_code_lens = true,
+                    -- JSXCloseTag
+                    -- WARNING: it is disabled by default (maybe you configuration or distro already uses nvim-ts-autotag,
+                    -- that maybe have a conflict if enable this feature. )
+                    jsx_close_tag = {
+                        enable = true,
+                        filetypes = { "javascriptreact", "typescriptreact" },
+                    },
+                    tsserver_file_preferences = {
+                        includeInlayParameterNameHints = "all",
+                        includeCompletionsForModuleExports = true,
+                        quotePreference = "auto",
+                    },
+                    tsserver_format_options = {
+                        allowIncompleteCompletions = false,
+                        allowRenameOfImportPath = false,
+                    }
+                },
+            })
+
+        end
+    }
+}
 
 
 M.dependencies = {
@@ -14,10 +101,7 @@ M.dependencies = {
 
     -- Other tools
     "mfussenegger/nvim-lint",
-
-    -- TypeScript
-    "dmmulroy/tsc.nvim",
-    "pmizio/typescript-tools.nvim"
+    "stevearc/conform.nvim",
 }
 
 function M.config()
@@ -36,7 +120,14 @@ function M.config()
         css_variables = {},
         jsonls = {},
         emmet_ls = { filetypes = { "css", "html", "less", "sass", "scss", "svelte", "pug", "typescriptreact", "javascriptreact" } },
-        basedpyright = { populate_diagnostics = true },
+        basedpyright = {
+            populate_diagnostics = true,
+            settings = {
+                basedpyright = {
+                    typeCheckingMode = "standard",
+                },
+            },
+        },
         clangd = {
             populate_diagnostics = true,
             cmd = { "clangd", "--compile-commands-dir=." },
@@ -70,9 +161,9 @@ function M.config()
         callback = function(event)
             local opts = { buffer = event.buf }
             vim.keymap.set("n", "<C-g><C-]>", vim.lsp.buf.type_definition,
-                { table.insert(opts, { desc = "vim.lsp.buf.type_definition()" }) })
+            { table.insert(opts, { desc = "vim.lsp.buf.type_definition()" }) })
             vim.keymap.set({ "n", "v" }, "grf", vim.lsp.buf.format,
-                { table.insert(opts, { desc = "vim.lsp.buf.format()" }) })
+            { table.insert(opts, { desc = "vim.lsp.buf.format()" }) })
 
             local client = vim.lsp.get_client_by_id(event.data.client_id)
             if not client then return end
@@ -106,6 +197,8 @@ function M.config()
         ensure_installed = ensure_installed,
         handlers = {
             function(server_name)
+                if server_name == "ts_ls" then return end
+
                 local lsp = require("lspconfig")
                 local diagnostics = require("workspace-diagnostics")
                 local capabilities = {
@@ -183,79 +276,6 @@ function M.config()
         signature = { enabled = true },
     })
 
-    --
-    -- TypeScript --
-    --
-    require("tsc").setup({
-        auto_open_qflist = true,
-        use_trouble_qflist = true,
-        use_diagnostics = true,
-        run_as_monorepo = false,
-        enable_progress_notifications = true,
-        enable_error_notifications = true,
-        hide_progress_notifications_from_history = true,
-        pretty_errors = true,
-    })
-
-    vim.api.nvim_create_autocmd("FileType", {
-        pattern = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
-        callback = function()
-            vim.keymap.set("n", "grD", vim.cmd.TSC, { buffer = true, noremap = true, silent = true })
-        end
-    })
-
-    require("typescript-tools").setup({
-        settings = {
-            -- spawn additional tsserver instance to calculate diagnostics on it
-            separate_diagnostic_server = true,
-            -- "change"|"insert_leave" determine when the client asks the server about diagnostic
-            publish_diagnostic_on = "insert_leave",
-            -- array of strings("fix_all"|"add_missing_imports"|"remove_unused"|
-            -- "remove_unused_imports"|"organize_imports") -- or string "all"
-            -- to include all supported code actions
-            -- specify commands exposed as code_actions
-            expose_as_code_action = "all",
-            -- string|nil - specify a custom path to `tsserver.js` file, if this is nil or file under path
-            -- not exists then standard path resolution strategy is applied
-            tsserver_path = nil,
-            -- specify a list of plugins to load by tsserver, e.g., for support `styled-components`
-            -- (see 💅 `styled-components` support section)
-            tsserver_plugins = {},
-            -- this value is passed to: https://nodejs.org/api/cli.html#--max-old-space-sizesize-in-megabytes
-            -- memory limit in megabytes or "auto"(basically no limit)
-            tsserver_max_memory = "auto",
-            -- locale of all tsserver messages, supported locales you can find here:
-            -- https://github.com/microsoft/TypeScript/blob/3c221fc086be52b19801f6e8d82596d04607ede6/src/compiler/utilitiesPublic.ts#L620
-            tsserver_locale = "en",
-            -- mirror of VSCode's `typescript.suggest.completeFunctionCalls`
-            complete_function_calls = false,
-            include_completions_with_insert_text = true,
-            -- CodeLens
-            -- WARNING: Experimental feature also in VSCode, because it might hit performance of server.
-            -- possible values: ("off"|"all"|"implementations_only"|"references_only")
-            code_lens = "references_only",
-            -- by default code lenses are displayed on all referencable values and for some of you it can
-            -- be too much this option reduce count of them by removing member references from lenses
-            disable_member_code_lens = true,
-            -- JSXCloseTag
-            -- WARNING: it is disabled by default (maybe you configuration or distro already uses nvim-ts-autotag,
-            -- that maybe have a conflict if enable this feature. )
-            jsx_close_tag = {
-                enable = true,
-                filetypes = { "javascriptreact", "typescriptreact" },
-            },
-            tsserver_file_preferences = {
-                includeInlayParameterNameHints = "all",
-                includeCompletionsForModuleExports = true,
-                quotePreference = "auto",
-            },
-            tsserver_format_options = {
-                allowIncompleteCompletions = false,
-                allowRenameOfImportPath = false,
-            }
-        },
-    })
-
     require('lint').linters_by_ft = {
         markdown = {'vale'},
         python = {'ruff'},
@@ -265,6 +285,20 @@ function M.config()
         javascriptreact = {'eslint_d'},
     }
 
+    require('conform').setup({
+        formatters_by_ft = {
+            python = { "ruff_format" },
+            javascript = { "prettierd" },
+            typescript = { "prettierd" },
+            javascriptreact = { "prettierd" },
+            typescriptreact = { "prettierd" },
+        },
+        format_on_save = {
+            timeout_ms = 500,
+            lsp_format = "fallback",
+        },
+    })
+
     vim.api.nvim_create_autocmd({ "BufWritePost" }, {
         callback = function()
             require("lint").try_lint()
@@ -272,4 +306,4 @@ function M.config()
     })
 end
 
-return M
+return { M, front }

@@ -18,11 +18,12 @@ Plug('neovim/nvim-lspconfig')
 Plug('artemave/workspace-diagnostics.nvim')
 Plug('williamboman/mason.nvim')
 Plug('mfussenegger/nvim-lint')
+Plug('stevearc/conform.nvim')
 
 vim.call('plug#end')
 
 vim.cmd("colo OceanicNext")
-vim.cmd.Setbg("#000001")
+vim.cmd.Setbg("NONE")
 
 require("text.ml")
 require("text.sessions")

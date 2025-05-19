@@ -2,6 +2,7 @@ return {
     {
         "mistricky/codesnap.nvim",
         build = "make build_generator",
+        cmd = { "CodeSnap", "CodeSnapSave" },
         opts = {
             save_path = os.getenv("HOME") .. "/Pictures",
             has_breadcrumbs = true,
@@ -10,5 +11,5 @@ return {
             watermark = "",
             code_font_family = "Maple Mono",
         }
-    },
+    }
 }
