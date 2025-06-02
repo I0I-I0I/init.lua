@@ -1,34 +1,31 @@
-local M = { "neovim/nvim-lspconfig" }
+local M = { "junnplus/lsp-setup.nvim" }
 local front = {
     {
         "dmmulroy/tsc.nvim",
+        lazy = true,
         ft = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
+        opts = {
+            auto_open_qflist = true,
+            use_trouble_qflist = true,
+            use_diagnostics = true,
+            run_as_monorepo = false,
+            enable_progress_notifications = true,
+            enable_error_notifications = true,
+            hide_progress_notifications_from_history = true,
+            pretty_errors = true,
+        },
         config = function()
-            --
-            -- TypeScript --
-            --
-            require("tsc").setup({
-                auto_open_qflist = true,
-                use_trouble_qflist = true,
-                use_diagnostics = true,
-                run_as_monorepo = false,
-                enable_progress_notifications = true,
-                enable_error_notifications = true,
-                hide_progress_notifications_from_history = true,
-                pretty_errors = true,
-            })
-
             vim.api.nvim_create_autocmd("FileType", {
                 pattern = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
                 callback = function()
                     vim.keymap.set("n", "grD", vim.cmd.TSC, { buffer = true, noremap = true, silent = true })
                 end
             })
-
         end
     },
     {
         "pmizio/typescript-tools.nvim",
+        lazy = true,
         ft = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
         config = function()
             require("typescript-tools").setup({
@@ -82,17 +79,16 @@ local front = {
                     }
                 },
             })
-
         end
     }
 }
 
 
 M.dependencies = {
-    "williamboman/mason.nvim",
-    "williamboman/mason-lspconfig.nvim",
+    "neovim/nvim-lspconfig",
+    "mason-org/mason.nvim",
+    "mason-org/mason-lspconfig.nvim",
     "artemave/workspace-diagnostics.nvim",
-    "j-hui/fidget.nvim",
     {
         "saghen/blink.cmp",
         version = "*",
@@ -114,121 +110,116 @@ function M.config()
         }
     end
 
-    local servers = {
-        html = {},
-        cssls = {},
-        css_variables = {},
-        jsonls = {},
-        emmet_ls = { filetypes = { "css", "html", "less", "sass", "scss", "svelte", "pug", "typescriptreact", "javascriptreact" } },
-        basedpyright = {
-            populate_diagnostics = true,
-            settings = {
-                basedpyright = {
-                    typeCheckingMode = "standard",
-                },
-            },
-        },
-        clangd = {
-            populate_diagnostics = true,
-            cmd = { "clangd", "--compile-commands-dir=." },
-            filetypes = { "c", "cpp", "objc", "objcpp" },
-            init_options = {
-                usePlaceholders = false,
-                completeUnimported = true,
-                clangdFileStatus = true,
-                compilationDatabasePath = ".",
-                fallbackFlags = fallbackFlags
-            },
-        },
-        lua_ls = {
-            populate_diagnostics = true,
-            settings = {
-                Lua = {
-                    runtime = { version = "LuaJIT" },
-                    workspace = {
-                        checkThirdParty = false,
-                        library = { vim.env.VIMRUNTIME },
+    -- local function setup_server(server_name)
+    --     if server_name == "ts_ls" then return end
+    --
+    --     local lsp = require("lspconfig")
+    --     local diagnostics = require("workspace-diagnostics")
+    --     local capabilities = {
+    --         textDocument = {
+    --             completion = {
+    --                 completionItem = {
+    --                     snippetSupport = true
+    --                 }
+    --             },
+    --             semanticTokens = {
+    --                 multilineTokenSupport = true,
+    --             },
+    --             foldingRange = {
+    --                 dynamicRegistration = true,
+    --                 lineFoldingOnly = true
+    --             }
+    --         }
+    --     }
+    --
+    --     local config = servers[server_name] or {}
+    --     config.capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
+    --
+    --     if servers[server_name] and servers[server_name].populate_diagnostics then
+    --         config.on_attach = function(client, bufnr)
+    --             diagnostics.populate_workspace_diagnostics(client, bufnr)
+    --         end
+    --     end
+    --     lsp[server_name].setup(config)
+    -- end
+
+    require('lsp-setup').setup({
+        servers = {
+            html = {},
+            cssls = {},
+            css_variables = {},
+            jsonls = {},
+            emmet_ls = { filetypes = { "css", "html", "less", "sass", "scss", "svelte", "pug", "typescriptreact", "javascriptreact" } },
+            basedpyright = {
+                settings = {
+                    basedpyright = {
+                        typeCheckingMode = "standard",
                     },
-                    complition = { callSnippet = "Replace" },
-                    telemetry = { enable = false },
-                    diagnostics = { globals = { "vim" } },
                 },
             },
-        }
-    }
+            clangd = {
+                cmd = { "clangd", "--compile-commands-dir=." },
+                filetypes = { "c", "cpp", "objc", "objcpp" },
+                init_options = {
+                    usePlaceholders = false,
+                    completeUnimported = true,
+                    clangdFileStatus = true,
+                    compilationDatabasePath = ".",
+                    fallbackFlags = fallbackFlags
+                },
+            },
+            lua_ls = {
+                settings = {
+                    Lua = {
+                        runtime = { version = "LuaJIT" },
+                        workspace = {
+                            checkThirdParty = false,
+                            library = { vim.env.VIMRUNTIME },
+                        },
+                        complition = { callSnippet = "Replace" },
+                        telemetry = { enable = false },
+                        diagnostics = { globals = { "vim" } },
+                        hint = {
+                            enable = false,
+                            arrayIndex = "Auto",
+                            await = true,
+                            paramName = "All",
+                            paramType = true,
+                            semicolon = "SameLine",
+                            setType = false,
+                        },
+                    },
+                },
+            }
+        },
 
-    vim.api.nvim_create_autocmd("LspAttach", {
-        callback = function(event)
-            local opts = { buffer = event.buf }
+        on_attach = function(client, bufnr)
+            local diagnostics = require("workspace-diagnostics")
+            diagnostics.populate_workspace_diagnostics(client, bufnr)
+
+            local opts = { buffer = bufnr }
             vim.keymap.set("n", "<C-g><C-]>", vim.lsp.buf.type_definition,
-            { table.insert(opts, { desc = "vim.lsp.buf.type_definition()" }) })
+                { table.insert(opts, { desc = "vim.lsp.buf.type_definition()" }) })
             vim.keymap.set({ "n", "v" }, "grf", vim.lsp.buf.format,
-            { table.insert(opts, { desc = "vim.lsp.buf.format()" }) })
-
-            local client = vim.lsp.get_client_by_id(event.data.client_id)
-            if not client then return end
+                { table.insert(opts, { desc = "vim.lsp.buf.format()" }) })
 
             if not client:supports_method("textDocument/documentHighlight") then
                 return
             end
 
             vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-                buffer = event.buf,
+                buffer = bufnr,
                 callback = function()
                     vim.lsp.buf.document_highlight()
                 end
             })
             vim.api.nvim_create_autocmd("CursorMoved", {
-                buffer = event.buf,
+                buffer = bufnr,
                 callback = function()
                     vim.lsp.buf.clear_references()
                 end
             })
-        end
-    })
-
-    local ensure_installed = {}
-    for server, _ in pairs(servers) do
-        table.insert(ensure_installed, server)
-    end
-    require("fidget").setup()
-    require("mason").setup()
-    require("mason-lspconfig").setup({
-        ensure_installed = ensure_installed,
-        handlers = {
-            function(server_name)
-                if server_name == "ts_ls" then return end
-
-                local lsp = require("lspconfig")
-                local diagnostics = require("workspace-diagnostics")
-                local capabilities = {
-                    textDocument = {
-                        completion = {
-                            completionItem = {
-                                snippetSupport = true
-                            }
-                        },
-                        semanticTokens = {
-                            multilineTokenSupport = true,
-                        },
-                        foldingRange = {
-                            dynamicRegistration = true,
-                            lineFoldingOnly = true
-                        }
-                    }
-                }
-
-                local config = servers[server_name] or {}
-                config.capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
-
-                if servers[server_name] and servers[server_name].populate_diagnostics then
-                    config.on_attach = function(client, bufnr)
-                        diagnostics.populate_workspace_diagnostics(client, bufnr)
-                    end
-                end
-                lsp[server_name].setup(config)
-            end,
-        }
+        end,
     })
 
     vim.diagnostic.config({
@@ -277,12 +268,12 @@ function M.config()
     })
 
     require('lint').linters_by_ft = {
-        markdown = {'vale'},
-        python = {'ruff'},
-        typescript = {'eslint_d'},
-        typescriptreact = {'eslint_d'},
-        javascript = {'eslint_d'},
-        javascriptreact = {'eslint_d'},
+        markdown = { 'vale' },
+        python = { 'ruff' },
+        typescript = { 'eslint_d' },
+        typescriptreact = { 'eslint_d' },
+        javascript = { 'eslint_d' },
+        javascriptreact = { 'eslint_d' },
     }
 
     require('conform').setup({
