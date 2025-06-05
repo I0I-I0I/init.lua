@@ -1,6 +1,12 @@
 return {
     "nvim-tree/nvim-tree.lua",
+    cond = false,
     -- dependencies = { "nvim-tree/nvim-web-devicons" },
+    lazy = false,
+    init = function()
+        vim.g.loaded_netrw = 1
+        vim.g.loaded_netrwPlugin = 1
+    end,
     opts = {
         sort = {
             sorter = "case_sensitive",

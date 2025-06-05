@@ -1,4 +1,5 @@
 local M = { "junnplus/lsp-setup.nvim" }
+
 local front = {
     {
         "dmmulroy/tsc.nvim",
@@ -109,39 +110,6 @@ function M.config()
             "-target", "x86_64-w64-mingw32-gcc"
         }
     end
-
-    -- local function setup_server(server_name)
-    --     if server_name == "ts_ls" then return end
-    --
-    --     local lsp = require("lspconfig")
-    --     local diagnostics = require("workspace-diagnostics")
-    --     local capabilities = {
-    --         textDocument = {
-    --             completion = {
-    --                 completionItem = {
-    --                     snippetSupport = true
-    --                 }
-    --             },
-    --             semanticTokens = {
-    --                 multilineTokenSupport = true,
-    --             },
-    --             foldingRange = {
-    --                 dynamicRegistration = true,
-    --                 lineFoldingOnly = true
-    --             }
-    --         }
-    --     }
-    --
-    --     local config = servers[server_name] or {}
-    --     config.capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
-    --
-    --     if servers[server_name] and servers[server_name].populate_diagnostics then
-    --         config.on_attach = function(client, bufnr)
-    --             diagnostics.populate_workspace_diagnostics(client, bufnr)
-    --         end
-    --     end
-    --     lsp[server_name].setup(config)
-    -- end
 
     require('lsp-setup').setup({
         servers = {
