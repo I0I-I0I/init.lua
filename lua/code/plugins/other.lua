@@ -1,12 +1,13 @@
 return {
     {
-        "karb94/neoscroll.nvim",
-        opts = {},
-    },
-    {
         'stevearc/quicker.nvim',
         event = "FileType qf",
         opts = {
+            mappings = {
+                '<C-u>', '<C-d>',
+                '<C-y>', '<C-e>',
+                'zt', 'zz', 'zb',
+            },
             keys = {
                 {
                     ">",
@@ -24,5 +25,23 @@ return {
                 },
             },
         },
+    },
+    {
+        "declancm/cinnamon.nvim",
+        version = "*",
+        lazy = false,
+        config = function()
+            local cinnamon = require("cinnamon")
+
+            cinnamon.setup {
+                keymaps = {
+                    basic = true,
+                    extra = true,
+                },
+            }
+
+            vim.keymap.set("n", "<C-y>", function() cinnamon.scroll("3<C-y>") end)
+            vim.keymap.set("n", "<C-e>", function() cinnamon.scroll("3<C-e>") end)
+        end
     }
 }
