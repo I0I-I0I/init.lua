@@ -15,8 +15,8 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 vim.g.colorscheme = {
-    theme = "rose",
-    bg = "NONE"
+    theme = "kanagawa",
+    -- bg = "#000001"
 }
 
 require("lazy").setup({ spec = "code.plugins", change_detection = { notify = false } })

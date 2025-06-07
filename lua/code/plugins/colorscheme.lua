@@ -35,13 +35,23 @@ local rose = {
     end
 }
 
-local hack_dark = {
-    "bettervim/yugen.nvim",
+local kanagawa = {
+    "rebelot/kanagawa.nvim",
     lazy = false,
     priority = 1000,
-    init = function ()
-        set_theme("hack_dark", function()
-            vim.cmd.colorscheme("yugen")
+    opts = {
+        compile = true,      -- enable compiling the colorscheme
+        undercurl = true,    -- enable undercurls
+        transparent = false, -- do not set background color
+        theme = "wave",      -- Load "wave" theme
+        background = {       -- map the value of 'background' option to a theme
+            dark = "wave",   -- try "dragon" !
+            light = "lotus"
+        },
+    },
+    init = function()
+        set_theme("kanagawa", function()
+            vim.cmd.colorscheme("kanagawa")
             vim.cmd([[
                 hi DiffAdd guibg=#002e00
                 hi DiffChange guibg=#434200
@@ -67,4 +77,4 @@ local hack = {
     end
 }
 
-return { rose, osaka, hack, hack_dark }
+return { rose, osaka, hack, kanagawa }
