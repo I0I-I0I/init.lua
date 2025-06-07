@@ -40,8 +40,14 @@ return {
                 },
             }
 
+<<<<<<< HEAD
             vim.keymap.set("n", "<C-y>", function() cinnamon.scroll("3<C-y>") end)
             vim.keymap.set("n", "<C-e>", function() cinnamon.scroll("3<C-e>") end)
+||||||| parent of edafd13 (update: scroll animation)
+=======
+            vim.keymap.set("n", "<C-y>", "3<C-y>", { noremap = true })
+            vim.keymap.set("n", "<C-e>", "3<C-e>", { noremap = true })
+>>>>>>> edafd13 (update: scroll animation)
         end
     }
 }
