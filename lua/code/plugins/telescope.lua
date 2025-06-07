@@ -4,8 +4,6 @@ M.dependencies = {
     "nvim-lua/plenary.nvim"
 }
 
-M.lazy = false
-
 M.branch = "0.1.x"
 
 M.opts = {
@@ -38,13 +36,15 @@ M.keys = function()
                 })
                 builtin.find_files(l_conf)
             end,
-            desc = "Find files"
+            desc = "Find files",
+            { noremap = true }
         },
-        { "",          function() builtin.live_grep(conf) end, desc = "Find words" },
-        { "<leader>fh", function() builtin.help_tags(conf) end, desc = "Find help" },
-        { "<leader>fk", function() builtin.keymaps(conf) end,   desc = "Find keymaps" },
-        { "<leader>fr", function() builtin.registers(conf) end, desc = "Find registers" },
-        { "<leader>fm", function() builtin.man_pages(conf) end, desc = "Find man pages" },
+        { "",          function() builtin.live_grep(conf) end,   desc = "Find words" },
+        { "grd",        function() builtin.diagnostics(conf) end, desc = "Find diagnostics" },
+        { "<leader>fh", function() builtin.help_tags(conf) end,   desc = "Find help" },
+        { "<leader>fk", function() builtin.keymaps(conf) end,     desc = "Find keymaps" },
+        { "<leader>fr", function() builtin.registers(conf) end,   desc = "Find registers" },
+        { "<leader>fm", function() builtin.man_pages(conf) end,   desc = "Find man pages" },
     }
 end
 

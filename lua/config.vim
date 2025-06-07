@@ -40,7 +40,7 @@ autocmd InsertLeave * set cul
 
 set completeopt=menu,menuone,fuzzy,noinsert,popup " Completion options
 
-set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --glob\ '!libs'\ --glob\ '!tags' " Use ripgrep for :grep commands
+"set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --glob\ '!libs'\ --glob\ '!tags' " Use ripgrep for :grep commands
 set grepformat=%f:%l:%c:%m
 
 augroup vimrc_autocmds
@@ -72,17 +72,13 @@ augroup vimrc_autocmds
     " C/C++: Toggle between header and source file
     autocmd FileType c,cpp nnoremap <silent> <A-s> :e %:p:s,.h$,.X123X,:s,.c$,.h,:s,.X123X$,.c,<cr>
     "autocmd FileType cpp nnoremap <silent> <A-s> :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<cr>
-
-    " Formatting for Markdown files
-    autocmd FileType markdown vnoremap grf :!pandoc -t commonmark_x<cr>
-    autocmd FileType markdown nnoremap grf mf:%!pandoc -t commonmark_x<cr>`f
 augroup END
 
 " Key mappings
 
 " Leader keys
 let mapleader = " "
-let maplocalleader = "" " <C-g>
+let maplocalleader = ""
 
 " -- Normal Mode Mappings --
 
@@ -99,10 +95,6 @@ vnoremap <silent> K :m '<-2<CR>gv=gv
 vnoremap <silent> J :m '>+1<CR>gv=gv
 nnoremap <silent> <C-w>C :tabc<CR>
 nnoremap <silent> <C-w>t :tabnew<CR>
-nnoremap <silent> <A-o> :tabn<CR>
-nnoremap <silent> <A-i> :tabp<CR>
-nnoremap <silent> <A-O> :tabmove +<CR>
-nnoremap <silent> <A-I> :tabmove -<CR>
 nnoremap <silent> <C-z> :bd<CR>
 nnoremap <silent> <leader><C-z> :bd!<CR>
 nnoremap <silent> <C-n> :cnext<CR>zz
@@ -111,16 +103,7 @@ nnoremap <silent> <A-]> :lnext<cr>zz
 nnoremap <silent> <A-[> :lprevious<cr>zz
 cnoremap <C-w> <backspace><C-w>
 nnoremap <silent> <M-c> :let @+=expand("%")<cr>
-nnoremap <silent> <leader><M-c> :let @+=expand("%") . ':' . line(".")<cr>
-
-nnoremap <M-C-K> <C-w>k
-nnoremap <M-C-J> <C-w>j
-nnoremap <M-C-H> <C-w>h
-nnoremap <M-C-L> <C-w>l
-nnoremap <C-Up> 5<C-w>-
-nnoremap <C-Down> 5<C-w>+
-nnoremap <C-Left> 5<C-w><
-nnoremap <C-Right> 5<C-w>>
+nnoremap <silent> <M-S-c> :let @+=expand("%") . ':' . line(".")<cr>
 
 " -- TMUX & External Tools --
 nnoremap <silent> <leader><C-Space> :execute '!tmux neww tmux-yazi ' . expand("%:p:h")<CR>
@@ -145,33 +128,12 @@ nnoremap <localleader><C-e> :e <C-r>=expand("%:p:h")<CR>/<C-d>
 nnoremap <localleader><C-v> :vs <C-r>=expand("%:p:h")<CR>/<C-d>
 nnoremap <localleader><C-t> :tabnew <C-r>=expand("%:p:h")<CR>/<C-d>
 
-function! FindFiles(command)
-    mark B
-    let output = system('find ' . a:command)
-    let lines = split(output, '\n')
-    let qflist = []
-    for line in lines
-        if line != ''
-            let filename = line
-            let lnum = 1
-            let text = filename
-            call add(qflist, {'filename': filename, 'lnum': lnum, 'text': text})
-        endif
-    endfor
-    call setqflist(qflist)
-    copen
-endfunction
-command! -nargs=1 Find call FindFiles(<q-args>)
-
-nnoremap <C-f> :find<space>
-nnoremap  :grep<space>
-nnoremap <M-f> :Find<space>
-nnoremap tt :tabnew<cr>:find<space>
-nnoremap tv :vs<cr>:find<space>
+nnoremap <C-f> :fin<space>
+nnoremap  :gr<space>
+nnoremap tt :tabnew<cr>:fin<space>
+nnoremap tv :vs<cr>:fin<space>
 
 " Remove hidden buffers
-
-command! -nargs=0 RemoveHiddenBuffers call RemoveHiddenBuffers()
 
 function! RemoveHiddenBuffers()
     let bufinfos = getbufinfo({'buflisted': 1})
@@ -189,7 +151,7 @@ function! RemoveHiddenBuffers()
     endfor
     echo 'Removed ' .. count .. ' hidden buffers'
 endfunction
-
+command! -nargs=0 RemoveHiddenBuffers call RemoveHiddenBuffers()
 nnoremap <silent> <leader>R <cmd>RemoveHiddenBuffers<cr>
 
 " Colors
@@ -200,7 +162,6 @@ function! SetBG(color, second_color = '')
     else
         let l:second_color = a:second_color
     endif
-
     set cursorline
     hi CursorLine gui=underline term=underline guibg=Normal
     hi CursorLineNr guibg=Normal
@@ -214,5 +175,4 @@ function! SetBG(color, second_color = '')
     hi TabLineFill guibg=l:second_color
     hi BlinkCmpSignatureHelpActiveParameter guibg=#D4D4D4 guifg=#000001
 endfunction
-
 command! -nargs=* Setbg call SetBG(<f-args>)

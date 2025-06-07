@@ -10,15 +10,15 @@ if not ok then
     return
 end
 
-local ok, lint = pcall(require, 'lint')
-if not ok then
-    print("Lint is not installed")
-    return
-end
-
 local ok, mason = pcall(require, 'mason')
 if not ok then
     print("Mason is not installed")
+    return
+end
+
+local ok, lint = pcall(require, 'lint')
+if not ok then
+    print("Lint is not installed")
     return
 end
 
@@ -33,11 +33,19 @@ end
 mason.setup()
 
 lint.linters_by_ft = {
-    python = {'ruff'},
-    cpp = {'cpplint'},
-    c = {'cpplint'},
-    markdown = {'cspell'},
-    text = {'cspell'},
+    python = { 'ruff' },
+    cpp = { 'cpplint' },
+    c = { 'cpplint' },
+    markdown = { 'cspell' },
+    text = { 'cspell' },
+}
+
+format.formatters_by_ft = {
+    python = { "ruff_format" },
+    javascript = { "prettierd" },
+    typescript = { "prettierd" },
+    javascriptreact = { "prettierd" },
+    typescriptreact = { "prettierd" },
 }
 
 format.setup({
@@ -47,14 +55,6 @@ format.setup({
     },
     log_level = vim.log.levels.WARN,
 })
-
-format.formatters_by_ft = {
-    python = { "ruff_format" },
-    javascript = { "prettierd" },
-    typescript = { "prettierd" },
-    javascriptreact = { "prettierd" },
-    typescriptreact = { "prettierd" },
-}
 
 vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
 
@@ -150,22 +150,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-lsp.basedpyright.setup({
-    capabilities = capabilities,
-    settings = {
-        basedpyright = {
-            typeCheckingMode = "standard",
-            reportOptionalMemberAccess = false,
-            reportUnusedVariable = "warning",
-            reportUnusedImport = "warning",
-            inlayHints = { callArgumentNames = true },
-        }
-    },
-    on_attach = function(client, bufnr)
-        client.server_capabilities.semanticTokensProvider = nil
-        diagnostics.populate_workspace_diagnostics(client, bufnr)
-    end
-})
 
 local fallbackFlags
 local is_win = os.getenv("OS") == "win"
@@ -186,6 +170,23 @@ lsp.clangd.setup({
         clangdFileStatus = true,
         compilationDatabasePath = ".",
         fallbackFlags = fallbackFlags
+    },
+    on_attach = function(client, bufnr)
+        client.server_capabilities.semanticTokensProvider = nil
+        diagnostics.populate_workspace_diagnostics(client, bufnr)
+    end
+})
+
+lsp.basedpyright.setup({
+    capabilities = capabilities,
+    settings = {
+        basedpyright = {
+            typeCheckingMode = "standard",
+            reportOptionalMemberAccess = false,
+            reportUnusedVariable = "warning",
+            reportUnusedImport = "warning",
+            inlayHints = { callArgumentNames = true },
+        }
     },
     on_attach = function(client, bufnr)
         client.server_capabilities.semanticTokensProvider = nil

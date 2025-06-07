@@ -1,4 +1,4 @@
-local M = { "folke/trouble.nvim" }
+local M = { "folke/trouble.nvim", cond = false }
 
 M.opts = {}
 
@@ -7,8 +7,8 @@ M.cmd = "Trouble"
 M.keys = function()
     local trouble = require("trouble")
     return {
-        { "<C-n>", function() trouble.next({skip_groups = true, jump = true}) end },
-        { "<C-p>", function() trouble.prev({skip_groups = true, jump = true}) end },
+        { "<C-n>", function() trouble.next({ skip_groups = true, jump = true }) end },
+        { "<C-p>", function() trouble.prev({ skip_groups = true, jump = true }) end },
         {
             "grd",
             "mZ<cmd>Trouble diagnostics toggle<cr>",

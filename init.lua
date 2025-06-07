@@ -4,8 +4,9 @@ vim.cmd.source(vim.fn.stdpath("config") .. "/lua/config.vim")
 
 local type = os.getenv("CONF")
 
-if type == "code" then
-    require("code")
-else
+if type == "text" then
     require("text")
+else
+    require("code")
 end
+

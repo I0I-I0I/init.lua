@@ -148,7 +148,7 @@ function M.config()
                         telemetry = { enable = false },
                         diagnostics = { globals = { "vim" } },
                         hint = {
-                            enable = false,
+                            enable = true,
                             arrayIndex = "Auto",
                             await = true,
                             paramName = "All",
@@ -160,6 +160,9 @@ function M.config()
                 },
             }
         },
+
+        default_mappings = false,
+        inlay_hints = { enabled = true },
 
         on_attach = function(client, bufnr)
             local diagnostics = require("workspace-diagnostics")
