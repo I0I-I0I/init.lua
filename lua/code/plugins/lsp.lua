@@ -1,4 +1,193 @@
-local M = { "junnplus/lsp-setup.nvim" }
+local M = { "mason-org/mason.nvim" }
+
+M.dependencies = {
+    "neovim/nvim-lspconfig",
+    "mason-org/mason-lspconfig.nvim",
+    "artemave/workspace-diagnostics.nvim",
+    {
+        "saghen/blink.cmp",
+        version = "*",
+        build = "cargo build --release",
+        opts = {
+            cmdline = { enabled = false },
+            keymap = { preset = "default" },
+            sources = { default = { "lsp", "path", "buffer" } },
+            fuzzy = { implementation = "rust" },
+            completion = {
+                menu = {
+                    auto_show = true,
+                    draw = {
+                        treesitter = { 'lsp' },
+                        columns = { { "kind_icon", gap = 1 }, { "label", "label_description", gap = 1 }, { "kind" } },
+                    }
+                },
+                trigger = { show_on_keyword = true },
+                list = {
+                    selection = { preselect = true, auto_insert = false },
+                },
+                documentation = { auto_show = true, auto_show_delay_ms = 10 },
+            },
+            signature = { enabled = true },
+        }
+    },
+
+    -- Other tools
+    {
+        "mfussenegger/nvim-lint",
+        opts = {
+            linters_by_ft = {
+                markdown = { 'vale' },
+                python = { 'ruff' },
+                typescript = { 'eslint_d' },
+                typescriptreact = { 'eslint_d' },
+                javascript = { 'eslint_d' },
+                javascriptreact = { 'eslint_d' },
+            }
+        },
+        config = function()
+            vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+                callback = function()
+                    require("lint").try_lint()
+                end,
+            })
+        end
+    },
+    {
+        "stevearc/conform.nvim",
+        opts = {
+            formatters_by_ft = {
+                python = { "ruff_format" },
+                javascript = { "prettierd" },
+                typescript = { "prettierd" },
+                javascriptreact = { "prettierd" },
+                typescriptreact = { "prettierd" },
+            },
+            format_on_save = {
+                timeout_ms = 500,
+                lsp_format = "fallback",
+            },
+        }
+    },
+}
+
+M.opts = {
+    servers = {
+        html = {},
+        cssls = {},
+        css_variables = {},
+        jsonls = {},
+        emmet_ls = { filetypes = { "css", "html", "less", "sass", "scss", "svelte", "pug", "typescriptreact", "javascriptreact" } },
+        basedpyright = {
+            settings = {
+                basedpyright = {
+                    typeCheckingMode = "standard",
+                },
+            },
+            on_attach = function(client, bufnr)
+                require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+            end,
+        },
+        clangd = {
+            cmd = { "clangd", "--compile-commands-dir=." },
+            filetypes = { "c", "cpp", "objc", "objcpp" },
+            init_options = {
+                usePlaceholders = false,
+                completeUnimported = true,
+                clangdFileStatus = true,
+                compilationDatabasePath = ".",
+            },
+            on_attach = function(client, bufnr)
+                require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+
+                vim.api.nvim_create_autocmd("FileType", {
+                    buffer = bufnr,
+                    callback = function()
+                        vim.keymap.set("n", "<A-s>", "<cmd>ClangdSwitchSourceHeader<cr>", { buffer = bufnr })
+                    end
+                })
+            end,
+        },
+        lua_ls = {
+            settings = {
+                Lua = {
+                    runtime = { version = "LuaJIT" },
+                    workspace = {
+                        checkThirdParty = false,
+                        library = { vim.env.VIMRUNTIME },
+                    },
+                    complition = { callSnippet = "Replace" },
+                    telemetry = { enable = false },
+                    diagnostics = { globals = { "vim" } },
+                    hint = {
+                        enable = true,
+                        arrayIndex = "Auto",
+                        await = true,
+                        paramName = "All",
+                        paramType = true,
+                        semicolon = "SameLine",
+                        setType = false,
+                    },
+                },
+            },
+            on_attach = function(client, bufnr)
+                require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
+            end,
+        }
+    },
+}
+
+M.init = function()
+    vim.diagnostic.config({
+        virtual_text = false,
+        underline = false,
+        severity_sort = true,
+        jump = { float = true },
+        float = { border = "rounded", header = "", source = true }
+    })
+end
+
+M.config = function(_, opts)
+    local servers = {}
+    for server, _ in pairs(opts.servers) do
+        table.insert(servers, server)
+    end
+    require("mason").setup()
+    require("mason-lspconfig").setup({ ensure_installed = servers })
+    for server, config in pairs(opts.servers) do
+        vim.lsp.config(server, config)
+        vim.lsp.enable(server)
+    end
+
+    vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(ev)
+            vim.keymap.set("n", "<C-g><C-]>", vim.lsp.buf.type_definition,
+                { table.insert({ buffer = ev.buf }, { desc = "vim.lsp.buf.type_definition()" }) })
+            vim.keymap.set({ "n", "v" }, "grf", vim.lsp.buf.format,
+                { table.insert({ buffer = ev.buf }, { desc = "vim.lsp.buf.format()" }) })
+
+            local client = vim.lsp.get_client_by_id(ev.data.client_id)
+
+            if not client then return end
+            if not client:supports_method("textDocument/documentHighlight") then
+                return
+            end
+
+            vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+                buffer = ev.buf,
+                callback = function()
+                    vim.lsp.buf.document_highlight()
+                end
+            })
+            vim.api.nvim_create_autocmd("CursorMoved", {
+                buffer = ev.buf,
+                callback = function()
+                    vim.lsp.buf.clear_references()
+                end
+            })
+        end
+    })
+end
+
 
 local front = {
     {
@@ -83,189 +272,5 @@ local front = {
         end
     }
 }
-
-
-M.dependencies = {
-    "neovim/nvim-lspconfig",
-    "mason-org/mason.nvim",
-    "mason-org/mason-lspconfig.nvim",
-    "artemave/workspace-diagnostics.nvim",
-    {
-        "saghen/blink.cmp",
-        version = "*",
-        build = "cargo build --release"
-    },
-
-    -- Other tools
-    "mfussenegger/nvim-lint",
-    "stevearc/conform.nvim",
-}
-
-function M.config()
-    local fallbackFlags
-    local is_win = os.getenv("OS") == "win"
-    if is_win then
-        fallbackFlags = {
-            "-I/usr/x86_64-w64-mingw32/include",
-            "-target", "x86_64-w64-mingw32-gcc"
-        }
-    end
-
-    require('lsp-setup').setup({
-        servers = {
-            html = {},
-            cssls = {},
-            css_variables = {},
-            jsonls = {},
-            emmet_ls = { filetypes = { "css", "html", "less", "sass", "scss", "svelte", "pug", "typescriptreact", "javascriptreact" } },
-            basedpyright = {
-                settings = {
-                    basedpyright = {
-                        typeCheckingMode = "standard",
-                    },
-                },
-            },
-            clangd = {
-                cmd = { "clangd", "--compile-commands-dir=." },
-                filetypes = { "c", "cpp", "objc", "objcpp" },
-                init_options = {
-                    usePlaceholders = false,
-                    completeUnimported = true,
-                    clangdFileStatus = true,
-                    compilationDatabasePath = ".",
-                    fallbackFlags = fallbackFlags
-                },
-            },
-            lua_ls = {
-                settings = {
-                    Lua = {
-                        runtime = { version = "LuaJIT" },
-                        workspace = {
-                            checkThirdParty = false,
-                            library = { vim.env.VIMRUNTIME },
-                        },
-                        complition = { callSnippet = "Replace" },
-                        telemetry = { enable = false },
-                        diagnostics = { globals = { "vim" } },
-                        hint = {
-                            enable = true,
-                            arrayIndex = "Auto",
-                            await = true,
-                            paramName = "All",
-                            paramType = true,
-                            semicolon = "SameLine",
-                            setType = false,
-                        },
-                    },
-                },
-            }
-        },
-
-        default_mappings = false,
-        inlay_hints = { enabled = true },
-
-        on_attach = function(client, bufnr)
-            local diagnostics = require("workspace-diagnostics")
-            diagnostics.populate_workspace_diagnostics(client, bufnr)
-
-            local opts = { buffer = bufnr }
-            vim.keymap.set("n", "<C-g><C-]>", vim.lsp.buf.type_definition,
-                { table.insert(opts, { desc = "vim.lsp.buf.type_definition()" }) })
-            vim.keymap.set({ "n", "v" }, "grf", vim.lsp.buf.format,
-                { table.insert(opts, { desc = "vim.lsp.buf.format()" }) })
-
-            if not client:supports_method("textDocument/documentHighlight") then
-                return
-            end
-
-            vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-                buffer = bufnr,
-                callback = function()
-                    vim.lsp.buf.document_highlight()
-                end
-            })
-            vim.api.nvim_create_autocmd("CursorMoved", {
-                buffer = bufnr,
-                callback = function()
-                    vim.lsp.buf.clear_references()
-                end
-            })
-        end,
-    })
-
-    vim.diagnostic.config({
-        virtual_text = false,
-        underline = false,
-        severity_sort = true,
-        jump = { float = true },
-        float = { border = "rounded", header = "", source = true }
-    })
-
-    vim.api.nvim_create_autocmd("FileType", {
-        pattern = { "c", "cpp", "h", "hpp" },
-        callback = function()
-            vim.keymap.set("n", "<A-s>", "<cmd>ClangdSwitchSourceHeader<cr>")
-        end
-    })
-
-    require("blink.cmp").setup({
-        cmdline = { enabled = false },
-        keymap = { preset = "default" },
-        sources = {
-            default = { "lsp", "path", "buffer" },
-        },
-        fuzzy = { implementation = "rust" },
-        completion = {
-            menu = {
-                auto_show = true,
-                draw = {
-                    treesitter = { 'lsp' },
-                    columns = { { "kind_icon", gap = 1 }, { "label", "label_description", gap = 1 }, { "kind" } },
-                }
-            },
-            trigger = {
-                show_on_keyword = true,
-            },
-            list = {
-                selection = { preselect = true, auto_insert = false },
-            },
-            documentation = { auto_show = true, auto_show_delay_ms = 10 },
-            ghost_text = {
-                enabled = true,
-                show_with_menu = false
-            }
-        },
-        signature = { enabled = true },
-    })
-
-    require('lint').linters_by_ft = {
-        markdown = { 'vale' },
-        python = { 'ruff' },
-        typescript = { 'eslint_d' },
-        typescriptreact = { 'eslint_d' },
-        javascript = { 'eslint_d' },
-        javascriptreact = { 'eslint_d' },
-    }
-
-    require('conform').setup({
-        formatters_by_ft = {
-            python = { "ruff_format" },
-            javascript = { "prettierd" },
-            typescript = { "prettierd" },
-            javascriptreact = { "prettierd" },
-            typescriptreact = { "prettierd" },
-        },
-        format_on_save = {
-            timeout_ms = 500,
-            lsp_format = "fallback",
-        },
-    })
-
-    vim.api.nvim_create_autocmd({ "BufWritePost" }, {
-        callback = function()
-            require("lint").try_lint()
-        end,
-    })
-end
 
 return { M, front }

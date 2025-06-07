@@ -40,20 +40,18 @@ lint.linters_by_ft = {
     text = { 'cspell' },
 }
 
-format.formatters_by_ft = {
-    python = { "ruff_format" },
-    javascript = { "prettierd" },
-    typescript = { "prettierd" },
-    javascriptreact = { "prettierd" },
-    typescriptreact = { "prettierd" },
-}
-
 format.setup({
+    formatters_by_ft = {
+        python = { "ruff_format" },
+        javascript = { "prettierd" },
+        typescript = { "prettierd" },
+        javascriptreact = { "prettierd" },
+        typescriptreact = { "prettierd" },
+    },
     format_on_save = {
         timeout_ms = 500,
         lsp_format = "fallback",
     },
-    log_level = vim.log.levels.WARN,
 })
 
 vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
