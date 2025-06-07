@@ -1,15 +1,28 @@
 return {
     {
-        "mistricky/codesnap.nvim",
-        build = "make build_generator",
-        cmd = { "CodeSnap", "CodeSnapSave" },
+        "karb94/neoscroll.nvim",
+        opts = {},
+    },
+    {
+        'stevearc/quicker.nvim',
+        event = "FileType qf",
         opts = {
-            save_path = os.getenv("HOME") .. "/Pictures",
-            has_breadcrumbs = true,
-            has_line_number = true,
-            bg_theme = "grape",
-            watermark = "",
-            code_font_family = "Maple Mono",
-        }
+            keys = {
+                {
+                    ">",
+                    function()
+                        require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
+                    end,
+                    desc = "Expand quickfix context",
+                },
+                {
+                    "<",
+                    function()
+                        require("quicker").collapse()
+                    end,
+                    desc = "Collapse quickfix context",
+                },
+            },
+        },
     }
 }
