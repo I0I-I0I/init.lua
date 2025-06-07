@@ -8,10 +8,10 @@ Plug('mhartington/oceanic-next')
 
 -- Utils
 Plug('jake-stewart/multicursor.nvim')
-Plug('i0i-i0i/sessions.nvim')
 Plug('kkoomen/vim-doge', { ['do'] = ':call doge#install()' })
 Plug('ThePrimeagen/harpoon', { branch = 'harpoon2' })
 Plug('nvim-lua/plenary.nvim')
+Plug('stevearc/quicker.nvim')
 
 -- LSP/Lint
 Plug('neovim/nvim-lspconfig')
@@ -26,6 +26,25 @@ vim.cmd("colo OceanicNext")
 vim.cmd.Setbg("NONE")
 
 require("text.ml")
-require("text.sessions")
 require("text.lsp")
 require("text.harpoon")
+
+require("quicker").setup({
+    keys = {
+        {
+            ">",
+            function()
+                require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
+            end,
+            desc = "Expand quickfix context",
+        },
+        {
+            "<",
+            function()
+                require("quicker").collapse()
+            end,
+            desc = "Collapse quickfix context",
+        },
+    }
+})
+
