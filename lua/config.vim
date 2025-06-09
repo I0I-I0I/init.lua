@@ -38,7 +38,7 @@ set cul
 autocmd InsertEnter * set nocul
 autocmd InsertLeave * set cul
 
-set completeopt=menu,menuone,fuzzy,noinsert,popup " Completion options
+set completeopt=menu,menuone,noinsert,popup,preview " Completion options
 
 "set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --glob\ '!libs'\ --glob\ '!tags' " Use ripgrep for :grep commands
 set grepformat=%f:%l:%c:%m

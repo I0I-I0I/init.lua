@@ -17,7 +17,7 @@ if not ok then
 end
 
 ui.setup()
-python.setup("python3")
+python.setup("uv")
 
 dap.listeners.before.attach.dapui_config = function()
     ui.open()
@@ -32,6 +32,7 @@ dap.listeners.before.event_exited.dapui_config = function()
     ui.close()
 end
 
+print("HI")
 vim.keymap.set("n", "<leader>?", function() dap.eval(nil, { enter = true }) end, { desc = "[DAP] Eval" })
 vim.keymap.set("n", "<leader>d", dap.disconnect, { desc = "[DAP] Disconnect" })
 vim.keymap.set("n", "<leader>r", dap.restart, { desc = "[DAP] Restart" })
@@ -42,3 +43,11 @@ vim.keymap.set("n", "<leader>B", dap.clear_breakpoints, { desc = "[DAP] Clear Al
 vim.keymap.set("n", "<leader>n", dap.step_over, { desc = "[DAP] Step Over" })
 vim.keymap.set("n", "<leader>i", dap.step_into, { desc = "[DAP] Step Into" })
 vim.keymap.set("n", "<leader>o", dap.step_out, { desc = "[DAP] Step Out" })
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "py" },
+    callback = function()
+        vim.keymap.set("n", "<leader>dn", python.test_method(), { desc = "[DAP] Python: test method", buffer = true })
+        vim.keymap.set("n", "<leader>df", python.test_class(), { desc = "[DAP] Python: test class", buffer = true })
+    end
+})

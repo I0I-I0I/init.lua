@@ -36,12 +36,15 @@ M.dependencies = {
         "mfussenegger/nvim-lint",
         opts = {
             linters_by_ft = {
-                markdown = { 'vale' },
-                python = { 'ruff' },
                 typescript = { 'eslint_d' },
                 typescriptreact = { 'eslint_d' },
                 javascript = { 'eslint_d' },
                 javascriptreact = { 'eslint_d' },
+                python = { 'ruff' },
+                cpp = { 'cpplint' },
+                c = { 'cpplint' },
+                markdown = { 'cspell' },
+                text = { 'cspell' },
             }
         },
         config = function()
@@ -61,6 +64,9 @@ M.dependencies = {
                 typescript = { "prettierd" },
                 javascriptreact = { "prettierd" },
                 typescriptreact = { "prettierd" },
+                html = { "prettierd" },
+                htmldjango = { "prettierd" },
+                css = { "prettierd" },
             },
             format_on_save = {
                 timeout_ms = 500,
@@ -72,11 +78,12 @@ M.dependencies = {
 
 M.opts = {
     servers = {
-        html = {},
+        html = { filetypes = { "html", "htmldjango", "typescriptreact", "javascriptreact"} },
+        djlsp = {},
         cssls = {},
         css_variables = {},
         jsonls = {},
-        emmet_ls = { filetypes = { "css", "html", "less", "sass", "scss", "svelte", "pug", "typescriptreact", "javascriptreact" } },
+        emmet_ls = { filetypes = { "css", "html", "htmldjango", "less", "sass", "scss", "svelte", "pug", "typescriptreact", "javascriptreact" } },
         basedpyright = {
             settings = {
                 basedpyright = {

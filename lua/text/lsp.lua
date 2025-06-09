@@ -1,4 +1,4 @@
-local ok, lsp = pcall(require, 'lspconfig')
+local ok, _ = pcall(require, 'lspconfig')
 if not ok then
     print("lsp-config is not installed")
     return
@@ -33,6 +33,10 @@ end
 mason.setup()
 
 lint.linters_by_ft = {
+    typescript = { 'eslint_d' },
+    typescriptreact = { 'eslint_d' },
+    javascript = { 'eslint_d' },
+    javascriptreact = { 'eslint_d' },
     python = { 'ruff' },
     cpp = { 'cpplint' },
     c = { 'cpplint' },
@@ -47,6 +51,9 @@ format.setup({
         typescript = { "prettierd" },
         javascriptreact = { "prettierd" },
         typescriptreact = { "prettierd" },
+        html = { "prettierd" },
+        htmldjango = { "prettierd" },
+        css = { "prettierd" },
     },
     format_on_save = {
         timeout_ms = 500,
@@ -146,9 +153,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end
 })
 
-
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-
 local fallbackFlags
 local is_win = os.getenv("OS") == "win"
 if is_win then
@@ -158,45 +162,59 @@ if is_win then
     }
 end
 
-lsp.clangd.setup({
-    capabilities = capabilities,
-    cmd = { "clangd", "--compile-commands-dir=." },
-    filetypes = { "c", "cpp", "objc", "objcpp" },
-    init_options = {
-        usePlaceholders = false,
-        completeUnimported = true,
-        clangdFileStatus = true,
-        compilationDatabasePath = ".",
-        fallbackFlags = fallbackFlags
+local servers = {
+    html = { filetypes = { "html", "htmldjango", "typescriptreact", "javascriptreact"} },
+    djlsp = {},
+    cssls = {},
+    css_variables = {},
+    jsonls = {},
+    emmet_ls = { filetypes = { "css", "html", "htmldjango", "less", "sass", "scss", "svelte", "pug", "typescriptreact", "javascriptreact" } },
+    clangd = {
+        cmd = { "clangd", "--compile-commands-dir=." },
+        filetypes = { "c", "cpp", "objc", "objcpp" },
+        init_options = {
+            usePlaceholders = false,
+            completeUnimported = true,
+            clangdFileStatus = true,
+            compilationDatabasePath = ".",
+            fallbackFlags = fallbackFlags
+        },
+        on_attach = function(client, bufnr)
+            client.server_capabilities.semanticTokensProvider = nil
+            diagnostics.populate_workspace_diagnostics(client, bufnr)
+            vim.api.nvim_create_autocmd("FileType", {
+                buffer = bufnr,
+                callback = function()
+                    vim.keymap.set("n", "<A-s>", "<cmd>ClangdSwitchSourceHeader<cr>", { buffer = bufnr })
+                end
+            })
+        end
     },
-    on_attach = function(client, bufnr)
-        client.server_capabilities.semanticTokensProvider = nil
-        diagnostics.populate_workspace_diagnostics(client, bufnr)
-    end
-})
-
-lsp.basedpyright.setup({
-    capabilities = capabilities,
-    settings = {
-        basedpyright = {
-            typeCheckingMode = "standard",
-            reportOptionalMemberAccess = false,
-            reportUnusedVariable = "warning",
-            reportUnusedImport = "warning",
-            inlayHints = { callArgumentNames = true },
-        }
+    basedpyright = {
+        settings = {
+            basedpyright = {
+                typeCheckingMode = "standard",
+                reportOptionalMemberAccess = false,
+                reportUnusedVariable = "warning",
+                reportUnusedImport = "warning",
+                inlayHints = { callArgumentNames = true },
+            }
+        },
+        on_attach = function(client, bufnr)
+            client.server_capabilities.semanticTokensProvider = nil
+            diagnostics.populate_workspace_diagnostics(client, bufnr)
+        end
     },
-    on_attach = function(client, bufnr)
-        client.server_capabilities.semanticTokensProvider = nil
-        diagnostics.populate_workspace_diagnostics(client, bufnr)
-    end
-})
+    ts_ls = {
+        filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "typescript.tsx" },
+        on_attach = function(client, bufnr)
+            client.server_capabilities.semanticTokensProvider = nil
+            diagnostics.populate_workspace_diagnostics(client, bufnr)
+        end
+    }
+}
 
-lsp.ts_ls.setup({
-    capabilities = capabilities,
-    filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact", "typescript.tsx" },
-    on_attach = function(client, bufnr)
-        client.server_capabilities.semanticTokensProvider = nil
-        diagnostics.populate_workspace_diagnostics(client, bufnr)
-    end
-})
+for server, config in pairs(servers) do
+    vim.lsp.config(server, config)
+    vim.lsp.enable(server)
+end

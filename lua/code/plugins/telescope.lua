@@ -1,5 +1,7 @@
 local M = { "nvim-telescope/telescope.nvim" }
 
+M.priority = 100
+
 M.dependencies = {
     "nvim-lua/plenary.nvim"
 }
