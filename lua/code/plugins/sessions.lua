@@ -23,9 +23,7 @@ M.config = function()
     ---@type Session
     local prev = { name = "", path = "" }
 
-    local builtins = require("sessions").setup({
-        path = "C:\\Users\\NnoFLy\\sessions\\"
-    })
+    local builtins = require("sessions").setup()
 
     ---@param new_session Session
     local goto_prev = function(new_session)

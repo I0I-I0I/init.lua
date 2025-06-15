@@ -12,7 +12,7 @@ M.dependencies = {
             cmdline = { enabled = false },
             keymap = { preset = "default" },
             sources = { default = { "lsp", "path", "buffer" } },
-            fuzzy = { implementation = "rust" },
+            fuzzy = { implementation = "lua" },
             completion = {
                 menu = {
                     auto_show = true,
@@ -78,8 +78,7 @@ M.dependencies = {
 
 M.opts = {
     servers = {
-        html = { filetypes = { "html", "htmldjango", "typescriptreact", "javascriptreact"} },
-        djlsp = {},
+        html = { filetypes = { "html", "htmldjango", "typescriptreact", "javascriptreact" } },
         cssls = {},
         css_variables = {},
         jsonls = {},
@@ -164,6 +163,10 @@ M.config = function(_, opts)
         vim.lsp.config(server, config)
         vim.lsp.enable(server)
     end
+    vim.lsp.config("djlsp", {
+        cmd = { "/home/nnofly/.local/bin/djlsp" },
+    })
+    vim.lsp.enable("djlsp")
 
     vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(ev)
