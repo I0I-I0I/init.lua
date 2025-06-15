@@ -12,6 +12,10 @@ M.opts = {
     defaults = { sorting_strategy = "descending" }
 }
 
+M.config = function()
+    require('telescope').load_extension('neoclip')
+end
+
 M.keys = function()
     local builtin = require("telescope.builtin")
     local themes = require("telescope.themes")

@@ -23,7 +23,6 @@ vim.cmd.Setbg("NONE")
 require("text.ml")
 require("text.lsp")
 require("text.harpoon")
-require("text.sessions")
 
 require("quicker").setup({
     keys = {

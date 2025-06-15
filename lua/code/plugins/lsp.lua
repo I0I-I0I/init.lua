@@ -87,7 +87,11 @@ M.opts = {
             settings = {
                 basedpyright = {
                     typeCheckingMode = "standard",
+                    diagnosticMode = "workspace",
                 },
+                python = {
+                    pythonPath = ".venv/bin/python"
+                }
             },
             on_attach = function(client, bufnr)
                 require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)

@@ -26,6 +26,7 @@ return {
             },
         },
     },
+
     {
         "declancm/cinnamon.nvim",
         version = "*",
@@ -44,5 +45,32 @@ return {
             vim.keymap.set("n", "<C-y>", "3<C-y>", { noremap = true })
             vim.keymap.set("n", "<C-e>", "3<C-e>", { noremap = true })
         end
+    },
+
+    {
+        "AckslD/nvim-neoclip.lua",
+        dependencies = {
+            { "nvim-telescope/telescope.nvim" },
+            { "kkharji/sqlite.lua",           module = "sqlite" },
+        },
+        opts = {
+            enable_persistent_history = true,
+            prompt = nil,
+            content_spec_column = true,
+            dedent_picker_display = true,
+            keys = { telescope = { i = { paste = "<c-v>" } } }
+        },
+        keys = {
+            {
+                "<M-v>",
+                function()
+                    require("telescope").extensions.neoclip.default(
+                        require("telescope.themes").get_cursor()
+                    )
+                end,
+                mode = { "n", "v", "i" },
+                desc = "Neoclip"
+            },
+        }
     }
 }
