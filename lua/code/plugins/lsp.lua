@@ -12,8 +12,9 @@ M.dependencies = {
             cmdline = { enabled = false },
             keymap = { preset = "default" },
             sources = { default = { "lsp", "path", "buffer" } },
-            fuzzy = { implementation = "lua" },
+            fuzzy = { implementation = "prefer_rust_with_warning" },
             completion = {
+                accept = { auto_brackets = { enabled = false }, },
                 menu = {
                     auto_show = true,
                     draw = {
@@ -201,7 +202,6 @@ M.config = function(_, opts)
         end
     })
 end
-
 
 local front = {
     {

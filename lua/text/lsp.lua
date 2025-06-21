@@ -32,6 +32,11 @@ lint.linters_by_ft = {
     text = { 'cspell' },
 }
 
+local lint_langs = {}
+for lang, _ in pairs(lint.linters_by_ft) do
+    table.insert(lint_langs, lang)
+end
+
 format.setup({
     formatters_by_ft = {
         python = { "ruff_format" },
@@ -52,6 +57,7 @@ format.setup({
 vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
 
 vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+    pattern = lint_langs,
     callback = function()
         require("lint").try_lint()
     end,

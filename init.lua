@@ -10,3 +10,9 @@ else
     require("code")
 end
 
+if type == "tty" then
+    vim.cmd.colo("default")
+    vim.cmd.hi("LineNrAbove ctermfg=WHITE")
+    vim.cmd.hi("LineNrBelow ctermfg=WHITE")
+    vim.cmd.hi("CursorLine ctermfg=BLUE ctermbg=WHITE guifg=LIGHTBLUE")
+end

@@ -15,7 +15,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 vim.g.colorscheme = {
-    theme = "kanagawa",
+    theme = "rose",
     -- bg = "#000001"
 }
 
