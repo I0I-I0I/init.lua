@@ -154,25 +154,38 @@ endfunction
 command! -nargs=0 RemoveHiddenBuffers call RemoveHiddenBuffers()
 nnoremap <silent> <leader>R <cmd>RemoveHiddenBuffers<cr>
 
-" Colors
+lua << EOF
+function SetBG(color, second_color)
+    second_color = second_color or "#1e1e1e"
 
-function! SetBG(color, second_color = '')
-    if empty(a:second_color)
-        let l:second_color = '#1e1e1e'
+    vim.api.nvim_set_hl(0, "CursorLine", { underline = true, bg = color })
+    vim.cmd.hi("Normal guibg=" .. color)
+    vim.cmd.hi("CursorLineNr guibg=" .. color)
+    vim.cmd.hi("NormalNC guibg=" .. color)
+    vim.cmd.hi("EndOfBuffer guibg=" .. color)
+    vim.cmd.hi("SignColumn guibg=" .. color)
+    vim.cmd.hi("Folded guibg=" .. color)
+    vim.cmd.hi("LineNr guibg=" .. color)
+    vim.cmd.hi("StatusLine guibg=" .. second_color)
+    vim.cmd.hi("TabLineFill guibg=" .. second_color)
+
+    vim.api.nvim_set_hl(0, "BlinkCmpSignatureHelpActiveParameter", {
+        bg = "#D4D4D4",
+        fg = "#000001"
+    })
+
+    vim.opt.cursorline = true
+end
+
+vim.api.nvim_create_user_command('Setbg', function(opts)
+    local args = vim.split(opts.args or '', '%s+')
+    local color = args[1]
+    local second_color = args[2] or ''
+
+    if color then
+        SetBG(color, second_color ~= '' and second_color or nil)
     else
-        let l:second_color = a:second_color
-    endif
-    set cursorline
-    hi CursorLine gui=underline term=underline guibg=Normal
-    hi CursorLineNr guibg=Normal
-    hi Normal guibg=a:color
-    hi NormalNC guibg=Normal
-    hi EndOfBuffer guibg=Normal
-    hi LineNr guibg=Normal
-    hi SignColumn guibg=Normal
-    hi Folded guibg=Normal
-    hi StatusLine guibg=l:second_color
-    hi TabLineFill guibg=l:second_color
-    hi BlinkCmpSignatureHelpActiveParameter guibg=#D4D4D4 guifg=#000001
-endfunction
-command! -nargs=* Setbg call SetBG(<f-args>)
+        vim.notify('Setbg requires at least a color argument', vim.log.levels.ERROR)
+    end
+end, { nargs = '*' })
+EOF

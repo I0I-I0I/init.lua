@@ -68,6 +68,7 @@ M.dependencies = {
                 html = { "prettierd" },
                 htmldjango = { "prettierd" },
                 css = { "prettierd" },
+                bash = { "shfmt" },
             },
             format_on_save = {
                 timeout_ms = 500,
@@ -83,6 +84,7 @@ M.opts = {
         cssls = {},
         css_variables = {},
         jsonls = {},
+        bashls = {},
         emmet_ls = { filetypes = { "css", "html", "htmldjango", "less", "sass", "scss", "svelte", "pug", "typescriptreact", "javascriptreact" } },
         basedpyright = {
             settings = {
