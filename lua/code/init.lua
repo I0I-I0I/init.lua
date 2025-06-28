@@ -19,4 +19,7 @@ vim.g.colorscheme = {
     bg = "NONE"
 }
 
-require("lazy").setup({ spec = "code.plugins", change_detection = { notify = false } })
+require("lazy").setup({
+    spec = "code.plugins",
+    change_detection = { notify = false }
+})

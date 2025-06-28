@@ -77,8 +77,8 @@ augroup END
 " Key mappings
 
 " Leader keys
-let mapleader = " "
-let maplocalleader = ""
+let mapleader=" "
+let maplocalleader=""
 
 " -- Normal Mode Mappings --
 
@@ -124,9 +124,10 @@ endfunction
 nnoremap <silent> <leader>q :call ToggleList('copen', 'cclose')<CR>
 nnoremap <silent> <leader>l :call ToggleList('lopen', 'lclose')<CR>
 
-nnoremap <localleader><C-e> :e <C-r>=expand("%:p:h")<CR>/<C-d>
+nnoremap <localleader><C-f> :e <C-r>=expand("%:p:h")<CR>/<C-d>
 nnoremap <localleader><C-v> :vs <C-r>=expand("%:p:h")<CR>/<C-d>
 nnoremap <localleader><C-t> :tabnew <C-r>=expand("%:p:h")<CR>/<C-d>
+nnoremap cd :cd %:p:h<CR>:pwd<CR>
 
 nnoremap <C-f> :fin<space>
 nnoremap  :gr<space>

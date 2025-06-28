@@ -6,13 +6,14 @@ M.dependencies = {
     "artemave/workspace-diagnostics.nvim",
     {
         "saghen/blink.cmp",
-        version = "*",
+        version = "1.4.0",
+        lazy = false,
         build = "cargo build --release",
         opts = {
             cmdline = { enabled = false },
             keymap = { preset = "default" },
             sources = { default = { "lsp", "path", "buffer" } },
-            fuzzy = { implementation = "prefer_rust_with_warning" },
+            fuzzy = { implementation = "lua" },
             completion = {
                 accept = { auto_brackets = { enabled = false }, },
                 menu = {

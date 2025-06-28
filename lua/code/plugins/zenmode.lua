@@ -33,15 +33,15 @@ M.keys = function()
     end
 
     return {
-        { "<leader>zf",  function()
-            vim.cmd("ZenmodeOpenAll 15")
+        { "<leader>zf", function()
+            vim.cmd("ZenmodeOpenAll 20")
             setOpts(on_open)
         end, { silent = true } },
 
-        { "<leader>zo",  function()
+        { "<leader>zo", function()
             setOpts(defaults)
             opt.fillchars = "eob:\\u00A0,vert:\\u00A0"
-            vim.cmd("ZenmodeOpenAll 10")
+            vim.cmd("ZenmodeOpenAll 20")
         end, { silent = true } },
 
         { "<leader>zc", function()
