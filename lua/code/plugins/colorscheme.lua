@@ -43,9 +43,9 @@ local kanagawa = {
         compile = true,      -- enable compiling the colorscheme
         undercurl = true,    -- enable undercurls
         transparent = false, -- do not set background color
-        theme = "wave",      -- Load "wave" theme
+        theme = "dragon",    -- Load "wave" theme
         background = {       -- map the value of 'background' option to a theme
-            dark = "wave",   -- try "dragon" !
+            dark = "dragon", -- try "dragon" !
             light = "lotus"
         },
     },
@@ -72,8 +72,22 @@ local hack = {
     init = function()
         set_theme("hack", function()
             vim.cmd.colorscheme("komau")
+            vim.cmd([[
+                hi DiagnosticSignError guifg=#aaaaaa
+                hi DiagnosticSignWarn guifg=#aaaaaa
+                hi DiagnosticSignOk guifg=#aaaaaa
+                hi DiagnosticSignInfo guifg=#aaaaaa
+                hi DiagnosticSignHint guifg=#aaaaaa
+
+                hi DiagnosticFloatingError guifg=#aaaaaa
+                hi DiagnosticFloatingWarn guifg=#aaaaaa
+                hi DiagnosticFloatingOk guifg=#aaaaaa
+                hi DiagnosticFloatingInfo guifg=#aaaaaa
+                hi DiagnosticFloatingHint guifg=#aaaaaa
+
+                hi TabLineFill guibg=NONE
+            ]])
         end)
-        vim.cmd.hi("TabLineFill guibg=NONE")
     end
 }
 

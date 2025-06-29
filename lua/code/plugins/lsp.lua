@@ -6,30 +6,16 @@ M.dependencies = {
     "artemave/workspace-diagnostics.nvim",
     {
         "saghen/blink.cmp",
-        version = "1.4.0",
-        lazy = false,
+        version = "1.*",
         build = "cargo build --release",
         opts = {
             cmdline = { enabled = false },
-            keymap = { preset = "default" },
-            sources = { default = { "lsp", "path", "buffer" } },
             fuzzy = { implementation = "lua" },
             completion = {
                 accept = { auto_brackets = { enabled = false }, },
-                menu = {
-                    auto_show = true,
-                    draw = {
-                        treesitter = { 'lsp' },
-                        columns = { { "kind_icon", gap = 1 }, { "label", "label_description", gap = 1 }, { "kind" } },
-                    }
-                },
-                trigger = { show_on_keyword = true },
-                list = {
-                    selection = { preselect = true, auto_insert = false },
-                },
-                documentation = { auto_show = true, auto_show_delay_ms = 10 },
+                documentation = { auto_show = true, auto_show_delay_ms = 0 },
             },
-            signature = { enabled = true },
+            -- signature = { enabled = true },
         }
     },
 
@@ -139,7 +125,7 @@ M.opts = {
                         paramName = "All",
                         paramType = true,
                         semicolon = "SameLine",
-                        setType = false,
+                        setType = true,
                     },
                 },
             },
@@ -151,9 +137,10 @@ M.opts = {
 }
 
 M.init = function()
+    vim.o.winborder = "rounded"
     vim.diagnostic.config({
         virtual_text = false,
-        underline = false,
+        underline = true,
         severity_sort = true,
         jump = { float = true },
         float = { border = "rounded", header = "", source = true }

@@ -10,37 +10,41 @@ M.config = function()
 
     local set = vim.keymap.set
 
-    set({"n", "v"}, "<A-j>", function() mc.lineAddCursor(1) end)
-    set({"n", "v"}, "<A-k>", function() mc.lineAddCursor(-1) end)
-    set({"n", "v"}, "<A-S-j>", function() mc.lineSkipCursor(1) end)
-    set({"n", "v"}, "<A-S-k>", function() mc.lineSkipCursor(-1) end)
+    set({ "n", "v" }, "<A-j>", function() mc.lineAddCursor(1) end)
+    set({ "n", "v" }, "<A-k>", function() mc.lineAddCursor(-1) end)
+    set({ "n", "v" }, "<A-S-j>", function() mc.lineSkipCursor(1) end)
+    set({ "n", "v" }, "<A-S-k>", function() mc.lineSkipCursor(-1) end)
 
-    set({"n", "v"} , "<A-n>", function() mc.matchAddCursor(1) end)
-    set({"n", "v"} , "<A-p>", function() mc.matchAddCursor(-1) end)
-    set({"n", "v"} , "<A-S-n>", function() mc.matchSkipCursor(1) end)
-    set({"n", "v"} , "<A-S-p>", function() mc.matchSkipCursor(-1) end)
+    set({ "n", "v" }, "<A-n>", function() mc.matchAddCursor(1) end)
+    set({ "n", "v" }, "<A-p>", function() mc.matchAddCursor(-1) end)
+    set({ "n", "v" }, "<A-S-n>", function() mc.matchSkipCursor(1) end)
+    set({ "n", "v" }, "<A-S-p>", function() mc.matchSkipCursor(-1) end)
 
-    set({"n", "v"}, "<A-a>", mc.matchAllAddCursors)
+    set({ "n", "v" }, "<A-a>", mc.matchAllAddCursors)
 
-    set({"n", "v"}, "<A-l>", mc.nextCursor)
-    set({"n", "v"}, "<A-h>", mc.prevCursor)
+    set({ "n", "v" }, "<A-l>", mc.nextCursor)
+    set({ "n", "v" }, "<A-h>", mc.prevCursor)
 
-    set({"n", "v"}, "<A-x>", mc.deleteCursor)
+    set({ "n", "v" }, "<A-x>", mc.deleteCursor)
 
     set("n", "<A-leftmouse>", mc.handleMouse)
 
-    set({"n", "v"}, "<A-q>", mc.toggleCursor)
+    set({ "n", "v" }, "<A-q>", mc.toggleCursor)
 
-    set({"n", "v"}, "<A-S-q>", mc.duplicateCursors)
+    set({ "n", "v" }, "<A-S-q>", mc.duplicateCursors)
 
     set("n", "<esc>", function()
-        if not mc.cursorsEnabled() then mc.enableCursors()
-        elseif mc.hasCursors() then mc.clearCursors()
+        if not mc.cursorsEnabled() then
+            mc.enableCursors()
+        elseif mc.hasCursors() then
+            mc.clearCursors()
         end
     end)
     set("n", "<C-[>", function()
-        if not mc.cursorsEnabled() then mc.enableCursors()
-        elseif mc.hasCursors() then mc.clearCursors()
+        if not mc.cursorsEnabled() then
+            mc.enableCursors()
+        elseif mc.hasCursors() then
+            mc.clearCursors()
         end
     end)
 
@@ -55,8 +59,8 @@ M.config = function()
 
     set("v", "M", mc.matchCursors)
 
-    set({"v", "n"}, "<c-i>", mc.jumpForward)
-    set({"v", "n"}, "<c-o>", mc.jumpBackward)
+    set({ "v", "n" }, "<c-i>", mc.jumpForward)
+    set({ "v", "n" }, "<c-o>", mc.jumpBackward)
 end
 
 return M
