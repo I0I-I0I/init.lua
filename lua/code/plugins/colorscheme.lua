@@ -10,7 +10,6 @@ local function set_theme(theme, callback)
 end
 
 -- Colors
-
 local osaka = {
     "craftzdog/solarized-osaka.nvim",
     lazy = false,
@@ -59,6 +58,14 @@ local kanagawa = {
                 hi LspReferenceRead guibg=#222222
                 hi LspReferenceText guibg=#222222
                 hi LspReferenceWrite guibg=#222222
+
+                hi Pmenu guibg=NONE
+                hi NormalFloat guibg=NONE
+                hi Float guibg=NONE
+                hi FloatBorder guibg=NONE
+                hi BlinkCmpMenu guibg=NONE
+                hi BlinkCmpMenuBorder guibg=NONE
+                hi BlinkCmpMenuSelection guibg=NONE guifg=#ffffff
             ]])
         end)
     end
@@ -72,21 +79,6 @@ local hack = {
     init = function()
         set_theme("hack", function()
             vim.cmd.colorscheme("komau")
-            vim.cmd([[
-                hi DiagnosticSignError guifg=#aaaaaa
-                hi DiagnosticSignWarn guifg=#aaaaaa
-                hi DiagnosticSignOk guifg=#aaaaaa
-                hi DiagnosticSignInfo guifg=#aaaaaa
-                hi DiagnosticSignHint guifg=#aaaaaa
-
-                hi DiagnosticFloatingError guifg=#aaaaaa
-                hi DiagnosticFloatingWarn guifg=#aaaaaa
-                hi DiagnosticFloatingOk guifg=#aaaaaa
-                hi DiagnosticFloatingInfo guifg=#aaaaaa
-                hi DiagnosticFloatingHint guifg=#aaaaaa
-
-                hi TabLineFill guibg=NONE
-            ]])
         end)
     end
 }

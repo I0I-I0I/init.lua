@@ -16,7 +16,7 @@ vim.opt.rtp:prepend(lazypath)
 
 -- hack, kanagawa, rose, osaka
 vim.g.colorscheme = {
-    theme = "hack",
+    theme = "kanagawa",
     bg = "NONE"
 }
 
@@ -24,3 +24,4 @@ require("lazy").setup({
     spec = "code.plugins",
     change_detection = { notify = false }
 })
+

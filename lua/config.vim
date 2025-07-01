@@ -106,8 +106,8 @@ nnoremap <silent> <M-c> :let @+=expand("%")<cr>
 nnoremap <silent> <M-S-c> :let @+=expand("%") . ':' . line(".")<cr>
 
 " -- TMUX & External Tools --
-nnoremap <silent> <leader><C-Space> :execute '!tmux neww tmux-yazi ' . expand("%:p:h")<CR>
-nnoremap <silent> <leader><C-t> :!tmux neww tmux-sessionizer<CR>
+nnoremap <silent> <C-Space> :execute '!tmux neww tmux-yazi ' . expand("%:p:h")<CR>
+nnoremap <silent> <C-s> :!tmux neww tmux-sessionizer<CR>
 
 " Custom functions
 
