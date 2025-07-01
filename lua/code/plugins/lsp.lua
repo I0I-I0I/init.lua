@@ -157,10 +157,10 @@ M.config = function(_, opts)
         vim.lsp.config(server, config)
         vim.lsp.enable(server)
     end
-    vim.lsp.config("djlsp", {
-        cmd = { "/home/nnofly/.local/bin/djlsp" },
-    })
-    vim.lsp.enable("djlsp")
+    -- vim.lsp.config("djlsp", {
+    --     cmd = { "/home/nnofly/.local/bin/djlsp" },
+    -- })
+    -- vim.lsp.enable("djlsp")
 
     vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(ev)

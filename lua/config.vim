@@ -124,9 +124,9 @@ endfunction
 nnoremap <silent> <leader>q :call ToggleList('copen', 'cclose')<CR>
 nnoremap <silent> <leader>l :call ToggleList('lopen', 'lclose')<CR>
 
-nnoremap <localleader><C-f> :e <C-r>=expand("%:p:h")<CR>/<C-d>
+nnoremap <localleader><C-f> :tabnew <C-r>=expand("%:p:h")<CR>/<C-d>
 nnoremap <localleader><C-v> :vs <C-r>=expand("%:p:h")<CR>/<C-d>
-nnoremap <localleader><C-t> :tabnew <C-r>=expand("%:p:h")<CR>/<C-d>
+"nnoremap <localleader><C-t> :tabnew <C-r>=expand("%:p:h")<CR>/<C-d>
 nnoremap cd :cd %:p:h<CR>:pwd<CR>
 nnoremap <localleader><C-c> <cmd>clo<cr>
 nnoremap <localleader><C-x> <cmd>bd<cr>

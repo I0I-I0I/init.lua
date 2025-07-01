@@ -21,6 +21,7 @@ else
         hi BlinkCmpDoc guibg=NONE
         hi BlinkCmpDocBorder guibg=NONE
         hi BlinkCmpDocSeparator guibg=NONE
+        hi TelescopeBorder guibg=NONE
     ]])
 end
 

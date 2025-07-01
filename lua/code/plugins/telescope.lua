@@ -30,6 +30,7 @@ M.keys = function()
         {
             "<C-f>",
             function()
+                vim.o.winborder = "none"
                 local l_conf = themes.get_ivy({
                     previewer = false,
                     sorting_strategy = "descending",
@@ -39,16 +40,65 @@ M.keys = function()
                     },
                 })
                 builtin.find_files(l_conf)
+                vim.o.winborder = "rounded"
             end,
             desc = "Find files",
             { noremap = true }
         },
-        { "",          function() builtin.live_grep(conf) end,   desc = "Find words" },
-        { "grd",        function() builtin.diagnostics(conf) end, desc = "Find diagnostics" },
-        { "<leader>fh", function() builtin.help_tags(conf) end,   desc = "Find help" },
-        { "<leader>fk", function() builtin.keymaps(conf) end,     desc = "Find keymaps" },
-        { "<leader>fr", function() builtin.registers(conf) end,   desc = "Find registers" },
-        { "<leader>fm", function() builtin.man_pages(conf) end,   desc = "Find man pages" },
+        {
+            "",
+            function()
+                vim.o.winborder = "none"
+                builtin.live_grep(conf)
+                vim.o.winborder = "rounded"
+            end,
+            desc = "Find words"
+        },
+        {
+            "grd",
+            function()
+                vim.o.winborder = "none"
+                builtin.diagnostics(conf)
+                vim.o.winborder = "rounded"
+            end,
+            desc = "Find diagnostics"
+        },
+        {
+            "<leader>fh",
+            function()
+                vim.o.winborder = "none"
+                builtin.help_tags(conf)
+                vim.o.winborder = "rounded"
+            end,
+            desc = "Find help"
+        },
+        {
+            "<leader>fk",
+            function()
+                vim.o.winborder = "none"
+                builtin.keymaps(conf)
+                vim.o.winborder = "rounded"
+            end,
+            desc = "Find keymaps"
+        },
+        {
+            "<leader>fr",
+            function()
+                vim.o.winborder = "none"
+                builtin.registers(conf)
+                vim.o.winborder = "rounded"
+            end,
+            desc = "Find registers"
+        },
+        {
+            "<leader>fm",
+            function()
+                vim.o.winborder = "none"
+                builtin.man_pages(conf)
+                vim.o.winborder = "rounded"
+            end,
+            desc = "Find man pages"
+        },
     }
 end
 
