@@ -8,22 +8,10 @@ if type == "text" then
     require("text")
 else
     require("code")
-    vim.cmd([[
-        hi TabLineFill guibg=NONE
-
-        hi Pmenu guibg=NONE
-        hi NormalFloat guibg=NONE
-        hi Float guibg=NONE
-        hi FloatBorder guibg=NONE
-        hi BlinkCmpMenu guibg=NONE
-        hi BlinkCmpMenuBorder guibg=NONE
-        hi BlinkCmpMenuSelection guibg=NONE guifg=#ffffff
-        hi BlinkCmpDoc guibg=NONE
-        hi BlinkCmpDocBorder guibg=NONE
-        hi BlinkCmpDocSeparator guibg=NONE
-        hi TelescopeBorder guibg=NONE
-    ]])
+    vim.cmd.hi("Pmenu guibg=NONE")
 end
+
+vim.o.winborder = "rounded"
 
 if type == "tty" then
     vim.cmd.colo("default")

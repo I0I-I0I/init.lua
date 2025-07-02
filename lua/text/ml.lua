@@ -1,6 +1,7 @@
 local ok, mc = pcall(require, "multicursor-nvim")
 if not ok then
     print("multicursor-nvim not found")
+    return
 end
 
 mc.setup()

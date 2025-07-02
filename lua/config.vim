@@ -24,7 +24,6 @@ set wildmode=list,full
 set wildmenu
 set splitright            " Split windows to the right by default
 set signcolumn=yes        " Always show the sign column
-set shortmess=aoOtTI
 set laststatus=3          " Global statusline (Neovim 0.7+ supports)
 " Indentation & whitespace
 set smartindent
@@ -39,9 +38,6 @@ autocmd InsertEnter * set nocul
 autocmd InsertLeave * set cul
 
 set completeopt=menu,menuone,noinsert,popup,preview " Completion options
-
-"set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case\ --glob\ '!libs'\ --glob\ '!tags' " Use ripgrep for :grep commands
-set grepformat=%f:%l:%c:%m
 
 augroup vimrc_autocmds
     autocmd!
@@ -78,11 +74,10 @@ augroup END
 
 " Leader keys
 let mapleader=" "
-let maplocalleader=""
+let maplocalleader="" " <C-x>
 
 " -- Normal Mode Mappings --
 
-nnoremap Q <nop>
 nnoremap n nzzzv
 nnoremap N Nzzzv
 nnoremap * *zzzv
@@ -93,51 +88,23 @@ nnoremap <silent> <leader><leader> :nohlsearch<CR>
 nnoremap <silent> - :Ex<CR>
 vnoremap <silent> K :m '<-2<CR>gv=gv
 vnoremap <silent> J :m '>+1<CR>gv=gv
-nnoremap <silent> <C-w>C :tabc<CR>
-nnoremap <silent> <C-w>t :tabnew<CR>
-nnoremap <silent> <C-z> :bd<CR>
-nnoremap <silent> <leader><C-z> :bd!<CR>
 nnoremap <silent> <C-n> :cnext<CR>zz
 nnoremap <silent> <C-p> :cprevious<CR>zz
-nnoremap <silent> <A-]> :lnext<cr>zz
-nnoremap <silent> <A-[> :lprevious<cr>zz
+nnoremap <silent> <C-M-n> :lnext<cr>zz
+nnoremap <silent> <C-M-p> :lprevious<cr>zz
 cnoremap <C-w> <backspace><C-w>
 nnoremap <silent> <M-c> :let @+=expand("%")<cr>
 nnoremap <silent> <M-S-c> :let @+=expand("%") . ':' . line(".")<cr>
+
+nnoremap <localleader><C-f> :e <C-r>=expand("%:p:h")<CR>/<C-d>
+nnoremap <localleader><C-v> :vs <C-r>=expand("%:p:h")<CR>/<C-d>
+nnoremap <localleader><C-n> :tabnew <C-r>=expand("%:p:h")<CR>/<C-d>
 
 " -- TMUX & External Tools --
 nnoremap <silent> <C-Space> :execute '!tmux neww tmux-yazi ' . expand("%:p:h")<CR>
 nnoremap <silent> <C-s> :!tmux neww tmux-sessionizer<CR>
 
-" Custom functions
-
-function! ToggleList(list_open, list_close)
-    for winnr in range(1, winnr('$'))
-        if getwinvar(winnr, '&syntax') == 'qf'
-            execute a:list_close
-            return
-        endif
-    endfor
-    execute a:list_open . ' | wincmd p'
-endfunction
-
-nnoremap <silent> <leader>q :call ToggleList('copen', 'cclose')<CR>
-nnoremap <silent> <leader>l :call ToggleList('lopen', 'lclose')<CR>
-
-nnoremap <localleader><C-f> :tabnew <C-r>=expand("%:p:h")<CR>/<C-d>
-nnoremap <localleader><C-v> :vs <C-r>=expand("%:p:h")<CR>/<C-d>
-"nnoremap <localleader><C-t> :tabnew <C-r>=expand("%:p:h")<CR>/<C-d>
-nnoremap cd :cd %:p:h<CR>:pwd<CR>
-nnoremap <localleader><C-c> <cmd>clo<cr>
-nnoremap <localleader><C-x> <cmd>bd<cr>
-
-nnoremap <C-f> :fin<space>
-nnoremap  :gr<space>
-nnoremap tt :tabnew<cr>:fin<space>
-nnoremap tv :vs<cr>:fin<space>
-
 " Remove hidden buffers
-
 function! RemoveHiddenBuffers()
     let bufinfos = getbufinfo({'buflisted': 1})
     let count = 0
@@ -171,6 +138,22 @@ function SetBG(color, second_color)
     vim.cmd.hi("LineNr guibg=" .. color)
     vim.cmd.hi("StatusLine guibg=" .. second_color)
     vim.cmd.hi("TabLineFill guibg=" .. second_color)
+
+    if color == "NONE" then
+        vim.cmd([[
+            hi TabLineFill guibg=NONE
+            hi NormalFloat guibg=NONE
+            hi Float guibg=NONE
+            hi FloatBorder guibg=NONE
+            hi BlinkCmpMenu guibg=NONE
+            hi BlinkCmpMenuBorder guibg=NONE
+            hi BlinkCmpMenuSelection guibg=NONE guifg=#ffffff
+            hi BlinkCmpDoc guibg=NONE
+            hi BlinkCmpDocBorder guibg=NONE
+            hi BlinkCmpDocSeparator guibg=NONE
+            hi TelescopeBorder guibg=NONE
+        ]])
+    end
 
     vim.api.nvim_set_hl(0, "BlinkCmpSignatureHelpActiveParameter", {
         bg = "#D4D4D4",

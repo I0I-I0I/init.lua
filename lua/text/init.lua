@@ -6,24 +6,29 @@ sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.
 --]]
 
 local vim = vim
-local Plug = vim.fn['plug#']
+local Plug = vim.fn["plug#"]
 
-vim.call('plug#begin')
+vim.call("plug#begin")
 
--- Theme
-Plug('mhartington/oceanic-next')
+Plug("ntk148v/komau.vim")
+Plug("mhartington/oceanic-next")
+Plug("jake-stewart/multicursor.nvim")
+Plug("i0i-i0i/sessions.nvim")
+Plug("stevearc/quicker.nvim")
+Plug("williamboman/mason.nvim")
+Plug("mfussenegger/nvim-lint")
+Plug("stevearc/conform.nvim")
+Plug("artemave/workspace-diagnostics.nvim")
 
--- Utils
-Plug('jake-stewart/multicursor.nvim')
-Plug('i0i-i0i/sessions.nvim')
-Plug('stevearc/quicker.nvim')
-Plug('williamboman/mason.nvim')
-Plug('mfussenegger/nvim-lint')
-Plug('stevearc/conform.nvim')
+-- Debug
+-- Plug("mfussenegger/nvim-dap")
+-- Plug("rcarriga/nvim-dap-ui")
+-- Plug("nvim-neotest/nvim-nio")
+-- Plug("mfussenegger/nvim-dap-python")
 
-vim.call('plug#end')
+vim.call("plug#end")
 
-vim.cmd("colo OceanicNext")
+vim.cmd("colo komau")
 vim.cmd.Setbg("NONE")
 
 require("text.ml")

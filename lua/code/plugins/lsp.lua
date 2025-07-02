@@ -136,7 +136,6 @@ M.opts = {
 }
 
 M.init = function()
-    vim.o.winborder = "rounded"
     vim.diagnostic.config({
         virtual_text = false,
         underline = true,

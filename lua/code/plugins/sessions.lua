@@ -1,4 +1,4 @@
-local M = { "i0i-i0i/sessions.nvim" }
+local M = { dir = "~/code/work/sessions.nvim/" }
 
 M.dependencies = {
     "nvim-telescope/telescope.nvim",
@@ -20,10 +20,22 @@ vim.api.nvim_create_user_command("RemoveHiddenBuffers", function()
 end, { desc = "Wipeout all hidden buffers" })
 
 M.config = function()
+    ---@class Session
+    ---@field name string | nil
+    ---@field path string | nil
+
     ---@type Session
     local prev = { name = "", path = "" }
 
-    local builtins = require("sessions").setup()
+    ---@class Builtins
+    ---@field attach fun(session: Session | nil): boolean
+    ---@field completion fun(): string[]
+    ---@field get_current fun(): Session
+    ---@field open_list fun()
+    ---@field pin fun()
+    ---@field save fun(): boolean
+    ---@field setup fun(user_opts: table): Builtins
+    local builtins = require("sessions.nvim").setup()
 
     ---@param new_session Session
     local goto_prev = function(new_session)
@@ -44,7 +56,10 @@ M.config = function()
     vim.api.nvim_create_user_command("CustomSessionAttach", function(input)
         prev = builtins.get_current()
         vim.cmd("SessionAttach " .. input.args)
-    end, { nargs = "?" })
+    end, {
+        nargs = "?",
+        complete = builtins.completion
+    })
 
     vim.api.nvim_create_autocmd("VimLeavePre", {
         callback = function()
