@@ -46,7 +46,7 @@ M.config = function()
     end
 
     vim.keymap.set("n", "<leader><C-^>", function()
-        vim.cmd("ZenmodeCloseAll")
+        vim.cmd("ZenmodeClose")
         builtins.save()
         vim.cmd("wa")
         vim.cmd("silent! bufdo bd")
@@ -63,7 +63,7 @@ M.config = function()
 
     vim.api.nvim_create_autocmd("VimLeavePre", {
         callback = function()
-            vim.cmd("ZenmodeCloseAll")
+            vim.cmd("ZenmodeClose")
             builtins.save()
         end
     })

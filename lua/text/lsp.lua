@@ -16,7 +16,7 @@ if not ok then
     return
 end
 
-local ok, workspace_diagnostics = pcall(require, 'workspace-diagnostics')
+local ok, _ = pcall(require, 'workspace-diagnostics')
 if not ok then
     error("workspace-diagnostics is not installed")
     return
@@ -109,6 +109,7 @@ local function set_diagnostics_to_quickfix()
 
     vim.cmd.sleep("100m")
     if #qflist == 0 then
+        print("Errors was not found")
         return
     end
     vim.cmd([[
@@ -148,7 +149,7 @@ vim.lsp.config("ruff", {
     },
     on_attach = function(client, bufnr)
         client.server_capabilities.semanticTokensProvider = nil
-        workspace_diagnostics.populate_workspace_diagnostics(client, bufnr)
+        require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
     end
 })
 
@@ -167,7 +168,7 @@ vim.lsp.config("basedpyright", {
     },
     on_attach = function(client, bufnr)
         client.server_capabilities.semanticTokensProvider = nil
-        workspace_diagnostics.populate_workspace_diagnostics(client, bufnr)
+        require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
     end
 })
 
@@ -198,7 +199,7 @@ vim.lsp.config("lua_ls", {
     },
     on_attach = function(client, bufnr)
         client.server_capabilities.semanticTokensProvider = nil
-        workspace_diagnostics.populate_workspace_diagnostics(client, bufnr)
+        require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
     end
 })
 

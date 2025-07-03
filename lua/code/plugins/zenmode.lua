@@ -1,53 +1,30 @@
-local local_plugins = vim.fn.stdpath("config") .. "/plugins/"
-
-local M = { dir = local_plugins .. "zenmode" }
+local M = { dir = "~/code/work/zenmode.nvim" }
 
 M.cmd = {
     "ZenmodeToggle",
-    "ZenmodeCloseAll",
     "ZenmodeClose",
-    "ZenmodeOpenAll",
     "ZenmodeOpen"
 }
 
-M.keys = function()
-    local opt = vim.opt
-    local defaults = {
-        rnu = opt.rnu,
-        nu = opt.nu,
-        laststatus = opt.laststatus,
-        fillchars = opt.fillchars,
-    }
-
-    local on_open = {
-        fillchars = "eob:\\u00A0,vert:\\u00A0",
-        rnu = false,
+M.opts = {
+    default_width = 20,
+    toggle_opts = {
         nu = false,
-        laststatus = 0,
+        rnu = false,
+        laststatus = 0
     }
+}
 
-    local function setOpts(arr)
-        for key, value in pairs(arr) do
-            opt[key] = value
-        end
-    end
-
+M.keys = function()
+    ---@class Buitlin
+    ---@field toggle fun(input_width: integer | nil)
+    ---@field open fun(input_width: integer | nil)
+    ---@field close fun()
+    local builtin = require("zenmode.nvim").builtin()
     return {
-        { "<leader>zf", function()
-            vim.cmd("ZenmodeOpenAll 20")
-            setOpts(on_open)
-        end, { silent = true } },
-
-        { "<leader>zo", function()
-            setOpts(defaults)
-            opt.fillchars = "eob:\\u00A0,vert:\\u00A0"
-            vim.cmd("ZenmodeOpenAll 20")
-        end, { silent = true } },
-
-        { "<leader>zc", function()
-            vim.cmd("ZenmodeCloseAll")
-            setOpts(defaults)
-        end, { silent = true } }
+        { "<leader>zo", function() builtin.open() end,   { silent = true } },
+        { "<leader>zt", function() builtin.toggle() end, { silent = true } },
+        { "<leader>zc", function() builtin.close() end,  { silent = true } }
     }
 end
 

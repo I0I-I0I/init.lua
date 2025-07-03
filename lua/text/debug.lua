@@ -32,7 +32,6 @@ dap.listeners.before.event_exited.dapui_config = function()
     ui.close()
 end
 
-print("HI")
 vim.keymap.set("n", "<leader>?", function() dap.eval(nil, { enter = true }) end, { desc = "[DAP] Eval" })
 vim.keymap.set("n", "<leader>d", dap.disconnect, { desc = "[DAP] Disconnect" })
 vim.keymap.set("n", "<leader>r", dap.restart, { desc = "[DAP] Restart" })

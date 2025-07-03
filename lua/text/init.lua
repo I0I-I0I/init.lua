@@ -11,14 +11,14 @@ local Plug = vim.fn["plug#"]
 vim.call("plug#begin")
 
 Plug("ntk148v/komau.vim")
-Plug("mhartington/oceanic-next")
 Plug("jake-stewart/multicursor.nvim")
-Plug("i0i-i0i/sessions.nvim")
 Plug("stevearc/quicker.nvim")
 Plug("williamboman/mason.nvim")
 Plug("mfussenegger/nvim-lint")
 Plug("stevearc/conform.nvim")
 Plug("artemave/workspace-diagnostics.nvim")
+Plug("i0i-i0i/sessions.nvim")
+Plug("i0i-i0i/zenmode.nvim")
 
 -- Debug
 -- Plug("mfussenegger/nvim-dap")
@@ -34,6 +34,7 @@ vim.cmd.Setbg("NONE")
 require("text.ml")
 require("text.lsp")
 require("text.sessions")
+require("text.zenmode")
 
 -- Quicker (better qflist)
 

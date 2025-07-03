@@ -15,6 +15,7 @@ local goto_prev = function(new_session)
 end
 
 vim.keymap.set("n", "<leader><C-^>", function()
+    vim.cmd("ZenmodeClose")
     builtins.save()
     vim.cmd("wa")
     vim.cmd("silent! bufdo bd")
@@ -28,6 +29,7 @@ end, { nargs = "?" })
 
 vim.api.nvim_create_autocmd("VimLeavePre", {
     callback = function()
+        vim.cmd("ZenmodeClose")
         builtins.save()
     end
 })
