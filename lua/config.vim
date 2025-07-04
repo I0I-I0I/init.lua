@@ -172,7 +172,7 @@ vim.api.nvim_create_user_command("Colors", function()
     local normal_float_hl = vim.api.nvim_get_hl(0, { name = "NormalFloat" })
     local colors = {
         {
-            hl = { bg = normal_hl.bg, fg = normal_hl.fg },
+            hl = { bg = "NONE", fg = normal_hl.fg },
             list = {
                 "DiagnosticSignError",
                 "DiagnosticSignWarn",

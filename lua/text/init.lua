@@ -30,7 +30,7 @@ Plug("artemave/workspace-diagnostics.nvim")
 
 vim.call("plug#end")
 
-local night_start = 22
+local night_start = 23
 local night_end   = 6
 
 local function check_and_switch()
@@ -52,3 +52,6 @@ require("text.ml")
 require("text.lsp")
 require("text.sessions")
 require("text.zenmode")
+
+
+vim.keymap.set("n", "grc", "<cmd>GitGutterQuickFix<cr><cmd>copen<cr>")
