@@ -28,8 +28,23 @@ Plug("i0i-i0i/zenmode.nvim")
 
 vim.call("plug#end")
 
-vim.cmd("colo komau")
-vim.cmd.Setbg("NONE")
+local night_start = 22
+local night_end   = 6
+
+local function check_and_switch()
+    local hour = tonumber(os.date("%H"))
+    if hour >= night_start or hour < night_end then
+        vim.cmd("colo komau")
+        vim.cmd.Colors()
+        vim.cmd.Setbg("none")
+    else
+        vim.cmd("colo zenesque")
+        vim.cmd.Colors()
+    end
+end
+
+local timer = vim.loop.new_timer()
+timer:start(0, 60 * 1000 * 10, vim.schedule_wrap(check_and_switch))
 
 require("text.ml")
 require("text.lsp")
