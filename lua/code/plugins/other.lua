@@ -26,4 +26,7 @@ return {
             },
         },
     },
+    {
+        "airblade/vim-gitgutter"
+    }
 }

@@ -23,7 +23,7 @@ set rnu nu                " Relative line numbers and line numbers
 set wildmode=list,full
 set wildmenu
 set splitright            " Split windows to the right by default
-set signcolumn=yes        " Always show the sign column
+set signcolumn=yes:2      " Always show the sign column
 set laststatus=3          " Global statusline (Neovim 0.7+ supports)
 " Indentation & whitespace
 set smartindent
@@ -32,6 +32,7 @@ set shiftwidth=4
 set tabstop=4
 set linebreak
 set smartcase incsearch hlsearch " Search settings
+set winborder=solid
 
 set cul
 autocmd InsertEnter * set nocul
@@ -142,15 +143,6 @@ function SetBG(color, second_color)
     if color == "NONE" then
         vim.cmd([[
             hi TabLineFill guibg=NONE
-            hi NormalFloat guibg=NONE
-            hi Float guibg=NONE
-            hi FloatBorder guibg=NONE
-            hi BlinkCmpMenu guibg=NONE
-            hi BlinkCmpMenuBorder guibg=NONE
-            hi BlinkCmpMenuSelection guibg=NONE guifg=#ffffff
-            hi BlinkCmpDoc guibg=NONE
-            hi BlinkCmpDocBorder guibg=NONE
-            hi BlinkCmpDocSeparator guibg=NONE
             hi TelescopeBorder guibg=NONE
         ]])
     end
@@ -174,4 +166,54 @@ vim.api.nvim_create_user_command('Setbg', function(opts)
         vim.notify('Setbg requires at least a color argument', vim.log.levels.ERROR)
     end
 end, { nargs = '*' })
+
+vim.api.nvim_create_user_command("Colors", function()
+    local normal_hl = vim.api.nvim_get_hl(0, { name = "Normal" })
+    local normal_float_hl = vim.api.nvim_get_hl(0, { name = "NormalFloat" })
+    local colors = {
+        {
+            hl = { bg = normal_hl.bg, fg = normal_hl.fg },
+            list = {
+                "DiagnosticSignError",
+                "DiagnosticSignWarn",
+                "DiagnosticSignOk",
+                "DiagnosticSignInfo",
+                "DiagnosticSignHint",
+                "GitGutterAdd",
+                "GitGutterRemove",
+                "GitGutterChange",
+                "GitGutterDelete"
+            },
+        },
+        {
+            hl = { bg = normal_float_hl.bg, fg = normal_hl.fg },
+            list = {
+                "DiagnosticFloatingError",
+                "DiagnosticFloatingWarn",
+                "DiagnosticFloatingOk",
+                "DiagnosticFloatingInfo",
+                "DiagnosticFloatingHint"
+            },
+        }
+    }
+
+    for _, item in pairs(colors) do
+        for _, color in pairs(item.list) do
+            vim.api.nvim_set_hl(0, color, {
+                fg = item.hl.fg,
+                bg = item.hl.bg
+            })
+        end
+    end
+
+    vim.cmd([[
+        hi DiffAdded guibg=NONE guifg=#199F4B
+        hi DiffAdd guibg=NONE guifg=#199F4B
+        hi DiffDelete guibg=NONE guifg=#D48787
+        hi DiffRemoved guibg=NONE guifg=#D48787
+        hi DiffChange guibg=NONE guifg=#F9ED77
+        hi DiffChanged guibg=NONE guifg=#F9ED77
+        hi SignColumn guibg=NONE
+    ]])
+end, { nargs = 0 })
 EOF

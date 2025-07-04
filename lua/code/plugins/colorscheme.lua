@@ -58,13 +58,6 @@ local kanagawa = {
                 hi LspReferenceRead guibg=#222222
                 hi LspReferenceText guibg=#222222
                 hi LspReferenceWrite guibg=#222222
-
-                hi Pmenu guibg=NONE
-                hi NormalFloat guibg=NONE
-                hi Float guibg=NONE
-                hi FloatBorder guibg=NONE
-                hi BlinkCmpMenu guibg=NONE
-                hi BlinkCmpMenuBorder guibg=NONE
                 hi BlinkCmpMenuSelection guibg=NONE guifg=#ffffff
             ]])
         end)

@@ -10,15 +10,17 @@ local Plug = vim.fn["plug#"]
 
 vim.call("plug#begin")
 
+Plug("vim-scripts/zenesque.vim")
 Plug("ntk148v/komau.vim")
+
+Plug("i0i-i0i/sessions.nvim")
+Plug("i0i-i0i/zenmode.nvim")
 Plug("jake-stewart/multicursor.nvim")
-Plug("stevearc/quicker.nvim")
+Plug("airblade/vim-gitgutter")
 Plug("williamboman/mason.nvim")
 Plug("mfussenegger/nvim-lint")
 Plug("stevearc/conform.nvim")
 Plug("artemave/workspace-diagnostics.nvim")
-Plug("i0i-i0i/sessions.nvim")
-Plug("i0i-i0i/zenmode.nvim")
 
 -- Debug
 -- Plug("mfussenegger/nvim-dap")
@@ -44,30 +46,9 @@ local function check_and_switch()
 end
 
 local timer = vim.loop.new_timer()
-timer:start(0, 60 * 1000 * 10, vim.schedule_wrap(check_and_switch))
+if timer then timer:start(0, 10 * (60 * 1000), vim.schedule_wrap(check_and_switch)) end
 
 require("text.ml")
 require("text.lsp")
 require("text.sessions")
 require("text.zenmode")
-
--- Quicker (better qflist)
-
-require("quicker").setup({
-    keys = {
-        {
-            ">",
-            function()
-                require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
-            end,
-            desc = "Expand quickfix context",
-        },
-        {
-            "<",
-            function()
-                require("quicker").collapse()
-            end,
-            desc = "Collapse quickfix context",
-        },
-    }
-})

@@ -148,7 +148,7 @@ vim.lsp.config("ruff", {
         },
     },
     on_attach = function(client, bufnr)
-        client.server_capabilities.semanticTokensProvider = nil
+        -- client.server_capabilities.semanticTokensProvider = nil
         require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
     end
 })
@@ -167,7 +167,7 @@ vim.lsp.config("basedpyright", {
         }
     },
     on_attach = function(client, bufnr)
-        client.server_capabilities.semanticTokensProvider = nil
+        -- client.server_capabilities.semanticTokensProvider = nil
         require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
     end
 })
@@ -198,7 +198,7 @@ vim.lsp.config("lua_ls", {
         },
     },
     on_attach = function(client, bufnr)
-        client.server_capabilities.semanticTokensProvider = nil
+        -- client.server_capabilities.semanticTokensProvider = nil
         require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
     end
 })

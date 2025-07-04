@@ -12,7 +12,15 @@ M.opts = {
         nu = false,
         rnu = false,
         laststatus = 0
-    }
+    },
+    on_open = function()
+        vim.cmd("GitGutterDisable")
+        vim.cmd("set signcolumn=no")
+    end,
+    on_close = function()
+        vim.cmd("GitGutterEnable")
+        vim.cmd("set signcolumn=yes:2")
+    end
 }
 
 M.keys = function()
@@ -29,3 +37,4 @@ M.keys = function()
 end
 
 return M
+
