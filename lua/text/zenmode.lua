@@ -5,7 +5,7 @@ if not ok then
 end
 
 zenmode.setup({
-    default_width = 30,
+    default_width = 20,
     toggle_opts = {
         nu = false,
         rnu = false,

@@ -102,8 +102,9 @@ nnoremap <localleader><C-v> :vs <C-r>=expand("%:p:h")<CR>/<C-d>
 nnoremap <localleader><C-n> :tabnew <C-r>=expand("%:p:h")<CR>/<C-d>
 
 " -- TMUX & External Tools --
-nnoremap <silent> <C-Space> :execute '!tmux neww tmux-yazi ' . expand("%:p:h")<CR>
+nnoremap <silent> <C-Space> :execute '!tmux-yazi ' . expand("%:p:h")<CR>
 nnoremap <silent> <C-s> :!tmux neww tmux-sessionizer<CR>
+nnoremap <silent> <C-g> :!tmux-git<CR>
 
 " Remove hidden buffers
 function! RemoveHiddenBuffers()
