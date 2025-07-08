@@ -5,7 +5,7 @@ if not ok then
 end
 
 zenmode.setup({
-    default_width = 20,
+    default_width = 30,
     toggle_opts = {
         nu = false,
         rnu = false,
@@ -15,14 +15,14 @@ zenmode.setup({
 
 local builtin = zenmode.builtin()
 
-vim.keymap.set("n", "<leader>zo", function()
-    builtin.open()
-end, { silent = true })
-
-vim.keymap.set("n", "<leader>zt", function()
+vim.keymap.set("n", "<leader>z", function()
     builtin.toggle()
 end, { silent = true })
 
-vim.keymap.set("n", "<leader>zc", function()
-    builtin.close()
-end, { silent = true })
+-- vim.keymap.set("n", "<leader>zo", function()
+--     builtin.open()
+-- end, { silent = true })
+--
+-- vim.keymap.set("n", "<leader>zc", function()
+--     builtin.close()
+-- end, { silent = true })

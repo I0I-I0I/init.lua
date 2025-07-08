@@ -134,7 +134,10 @@ vim.lsp.config("*", {
                 multilineTokenSupport = true,
             }
         }
-    }
+    },
+    on_attach = function(client, bufnr)
+        vim.lsp.completion.enable(true, client, bufnr, { autotrigger = false })
+    end
 })
 
 vim.lsp.config("ruff", {

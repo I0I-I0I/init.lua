@@ -38,7 +38,7 @@ local function check_and_switch()
     if hour >= night_start or hour < night_end then
         vim.cmd("colo komau")
         vim.cmd.Colors()
-        vim.cmd.Setbg("none")
+        vim.cmd.Setbg("#000000")
     else
         vim.cmd("colo zenesque")
         vim.cmd.Colors()

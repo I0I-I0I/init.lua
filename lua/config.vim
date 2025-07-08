@@ -137,8 +137,8 @@ function SetBG(color, second_color)
     vim.cmd.hi("SignColumn guibg=" .. color)
     vim.cmd.hi("Folded guibg=" .. color)
     vim.cmd.hi("LineNr guibg=" .. color)
+    vim.cmd.hi("TabLineFill guibg=" .. color)
     vim.cmd.hi("StatusLine guibg=" .. second_color)
-    vim.cmd.hi("TabLineFill guibg=" .. second_color)
 
     if color == "NONE" then
         vim.cmd([[
