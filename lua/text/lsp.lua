@@ -1,22 +1,22 @@
-local ok, mason = pcall(require, 'mason')
+local ok, mason = pcall(require, "mason")
 if not ok then
     error("Mason is not installed")
     return
 end
 
-local ok, lint = pcall(require, 'lint')
+local ok, lint = pcall(require, "lint")
 if not ok then
     error("Lint is not installed")
     return
 end
 
-local ok, format = pcall(require, 'conform')
+local ok, format = pcall(require, "conform")
 if not ok then
     error("conform.nvim is not installed")
     return
 end
 
-local ok, _ = pcall(require, 'workspace-diagnostics')
+local ok, workspace_diagnostics = pcall(require, "workspace-diagnostics")
 if not ok then
     error("workspace-diagnostics is not installed")
     return
@@ -127,7 +127,7 @@ end, { silent = true })
 -- LSP configs
 
 vim.lsp.config("*", {
-    root_markers = { '.git', '.hg' },
+    root_markers = { ".git", ".hg", "src" },
     capabilities = {
         textDocument = {
             semanticTokens = {
