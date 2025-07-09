@@ -175,6 +175,7 @@ vim.api.nvim_create_user_command("Colors", function()
         {
             hl = { bg = "NONE", fg = normal_hl.fg },
             list = {
+                "SignColumn",
                 "DiagnosticSignError",
                 "DiagnosticSignWarn",
                 "DiagnosticSignOk",

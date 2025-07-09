@@ -22,11 +22,13 @@ Plug("mfussenegger/nvim-lint")
 Plug("stevearc/conform.nvim")
 Plug("artemave/workspace-diagnostics.nvim")
 
--- Debug
--- Plug("mfussenegger/nvim-dap")
--- Plug("rcarriga/nvim-dap-ui")
--- Plug("nvim-neotest/nvim-nio")
--- Plug("mfussenegger/nvim-dap-python")
+Plug("Exafunction/windsurf.nvim")
+Plug("nvim-lua/plenary.nvim")
+
+Plug("mfussenegger/nvim-dap")
+Plug("rcarriga/nvim-dap-ui")
+Plug("nvim-neotest/nvim-nio")
+Plug("mfussenegger/nvim-dap-python")
 
 vim.call("plug#end")
 
@@ -52,6 +54,8 @@ require("text.ml")
 require("text.lsp")
 require("text.sessions")
 require("text.zenmode")
-
+require("text.debug")
+require("text.ai")
 
 vim.keymap.set("n", "grc", "<cmd>GitGutterQuickFix<cr><cmd>copen<cr>")
+vim.keymap.set("n", "<leader>hh", "<cmd>GitGutterToggle<cr>")
