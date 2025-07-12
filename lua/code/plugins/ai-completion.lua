@@ -1,33 +1,43 @@
-local M = { "monkoose/neocodeium" }
+local M = { "Exafunction/windsurf.nvim" }
 
-M.opts = {
-    enabled = true,
-    manual = false,
-    show_label = false,
-    silent = false,
-    filetypes = {
-        TelescopePrompt = false,
-        ["dap-repl"] = false,
-    },
-    filter = function(bufnr)
-        if vim.endswith(vim.api.nvim_buf_get_name(bufnr), ".env") then
-            return false
+M.enabled = false
+M.lazy = true
+M.event = "InsertEnter"
+M.dependencies = { "nvim-lua/plenary.nvim" }
+
+M.config = function()
+    local codeium = require("codeium")
+
+    codeium.setup({
+        enable_cmp_source = false,
+        virtual_text = {
+            enabled = true
+        },
+    })
+
+    function Custom_status()
+        local status = require("codeium.virtual_text").status()
+
+        if status.state == "idle" then
+            return " "
         end
-        return true
-    end
-}
 
-M.keys = function()
-    local neocodeium = require("neocodeium")
-    return {
-        { "<A-a>", mode = { "n", "i" }, "<cmd>NeoCodeium enable<cr>" },
-        { "<A-y>", mode = "i",          neocodeium.accept },
-        { "<A-w>", mode = "i",          neocodeium.accept_word },
-        { "<A-l>", mode = "i",          neocodeium.accept_line },
-        { "<A-n>", mode = "i",          neocodeium.cycle_or_complete },
-        { "<A-p>", mode = "i",          function() neocodeium.cycle_or_complete(-1) end },
-        { "<A-e>", mode = "i",          neocodeium.clear }
-    }
+        if status.state == "waiting" then
+            return "    Waiting..."
+        end
+
+        if status.state == "completions" and status.total > 0 then
+            return "    " .. string.format("%d/%d", status.current, status.total)
+        end
+
+        return "    0 "
+    end
+
+    vim.opt.statusline = "%<%f %h%w%m%r"
+        .. "%3{v:lua.Custom_status()}"
+        .. "%=%{% &showcmdloc == 'statusline' ? '%-10.S ' : '' %}"
+        .. "%{% exists('b:keymap_name') ? '<'..b:keymap_name..'> ' : '' %}"
+        .. "%{% &ruler ? ( &rulerformat == '' ? '%-14.(%l,%c%V%) %P' : &rulerformat ) : '' %}"
 end
 
 return M

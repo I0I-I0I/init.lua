@@ -1,4 +1,6 @@
-local M = { dir = "~/code/work/sessions.nvim/" }
+local M = { "i0i-i0i/sessions.nvim" }
+
+M.lazy = false
 
 M.dependencies = {
     "nvim-telescope/telescope.nvim",

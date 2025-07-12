@@ -1,13 +1,9 @@
 return {
     {
         'stevearc/quicker.nvim',
+        lazy = true,
         event = "FileType qf",
         opts = {
-            mappings = {
-                '<C-u>', '<C-d>',
-                '<C-y>', '<C-e>',
-                'zt', 'zz', 'zb',
-            },
             keys = {
                 {
                     ">",
@@ -27,6 +23,94 @@ return {
         },
     },
     {
-        "airblade/vim-gitgutter"
+        "lewis6991/gitsigns.nvim",
+        lazy = true,
+        event = { "BufReadPost" },
+        opts = {
+            on_attach = function(bufnr)
+                local gitsigns = require('gitsigns')
+
+                local function map(mode, l, r, opts)
+                    opts = opts or {}
+                    opts.buffer = bufnr
+                    vim.keymap.set(mode, l, r, opts)
+                end
+
+                -- Navigation
+                map('n', ']c', function()
+                    if vim.wo.diff then
+                        vim.cmd.normal({ ']c', bang = true })
+                    else
+                        gitsigns.nav_hunk('next')
+                    end
+                end)
+
+                map('n', '[c', function()
+                    if vim.wo.diff then
+                        vim.cmd.normal({ '[c', bang = true })
+                    else
+                        gitsigns.nav_hunk('prev')
+                    end
+                end)
+
+                -- Actions
+                map('n', '<leader>hs', gitsigns.stage_hunk)
+                map('n', '<leader>hr', gitsigns.reset_hunk)
+
+                map('v', '<leader>hs', function()
+                    gitsigns.stage_hunk({ vim.fn.line('.'), vim.fn.line('v') })
+                end)
+
+                map('v', '<leader>hr', function()
+                    gitsigns.reset_hunk({ vim.fn.line('.'), vim.fn.line('v') })
+                end)
+
+                map('n', '<leader>hS', gitsigns.stage_buffer)
+                map('n', '<leader>hR', gitsigns.reset_buffer)
+                map('n', '<leader>hp', gitsigns.preview_hunk)
+                map('n', '<leader>hi', gitsigns.preview_hunk_inline)
+
+                map('n', '<leader>hb', function()
+                    gitsigns.blame_line({ full = true })
+                end)
+
+                map('n', '<leader>hd', gitsigns.diffthis)
+
+                map('n', '<leader>hD', function()
+                    gitsigns.diffthis('~')
+                end)
+
+                map('n', 'grc', function() gitsigns.setqflist('all') end)
+                map('n', '<leader>hq', gitsigns.setqflist)
+
+                -- Toggles
+                map('n', '<leader>tb', gitsigns.toggle_current_line_blame)
+                map('n', '<leader>tw', gitsigns.toggle_word_diff)
+
+                -- Text object
+                map({ 'o', 'x' }, 'ih', gitsigns.select_hunk)
+
+                vim.cmd([[
+                    hi GitSignsAdd guibg=NONE
+                    hi GitSignsChange guibg=NONE
+                    hi GitSignsDelete guibg=NONE
+                    hi GitSignsCurrentLineBlame guibg=NONE
+
+                    hi GitSignsStaged guibg=NONE
+                    hi GitSignsStagedAdd guibg=NONE
+                    hi GitSignsStagedDelete guibg=NONE
+                    hi GitSignsStagedChange guibg=NONE
+                ]])
+            end
+        }
+    },
+
+    ---@module 'python'
+    {
+        "joshzcold/python.nvim",
+        lazy = true,
+        filetypes = { "python" },
+        opts = { ---@diagnostic disable-line: missing-fields`
+        }
     }
 }

@@ -1,5 +1,7 @@
 local M = { "mfussenegger/nvim-dap" }
 
+M.lazy = true
+
 M.dependencies = {
     "rcarriga/nvim-dap-ui",
     "nvim-neotest/nvim-nio",
@@ -29,13 +31,13 @@ M.config = function()
 end
 
 M.keys = {
-    { "<leader>?", "<cmd>DapEval<cr>",              desc = "[DAP] Eval" },
-    { "<leader>d", "<cmd>DapTerminate<cr>",         desc = "[DAP] Disconnect" },
-    { "<leader>r", "<cmd>DapRestartFrame<cr>",      desc = "[DAP] Restart" },
-    { "<leader>c", "<cmd>DapContinue<cr>",          desc = "[DAP] Continue" },
-    { "<leader>n", "<cmd>DapStepOver<cr>",          desc = "[DAP] Step Over" },
-    { "<leader>i", "<cmd>DapStepInto<cr>",          desc = "[DAP] Step Into" },
-    { "<leader>o", "<cmd>DapStepOut<cr>",           desc = "[DAP] Step Out" },
+    { "<leader>?", "<cmd>DapEval<cr>",             desc = "[DAP] Eval" },
+    { "<leader>d", "<cmd>DapTerminate<cr>",        desc = "[DAP] Disconnect" },
+    { "<leader>r", "<cmd>DapRestartFrame<cr>",     desc = "[DAP] Restart" },
+    { "<leader>c", "<cmd>DapContinue<cr>",         desc = "[DAP] Continue" },
+    { "<leader>n", "<cmd>DapStepOver<cr>",         desc = "[DAP] Step Over" },
+    { "<leader>i", "<cmd>DapStepInto<cr>",         desc = "[DAP] Step Into" },
+    { "<leader>o", "<cmd>DapStepOut<cr>",          desc = "[DAP] Step Out" },
     { "<leader>b", "<cmd>DapToggleBreakpoint<cr>", desc = "[DAP] Toggle Breakpoint" },
     { "<leader>B", "<cmd>DapClearBreakpoints<cr>", desc = "[DAP] Clear All Breakpoints" },
 }

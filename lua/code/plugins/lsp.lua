@@ -1,5 +1,7 @@
 local M = { "mason-org/mason.nvim" }
 
+M.event = { "BufReadPre" }
+
 M.dependencies = {
     "neovim/nvim-lspconfig",
     "mason-org/mason-lspconfig.nvim",
@@ -12,6 +14,7 @@ M.dependencies = {
             cmdline = { enabled = false },
             fuzzy = { implementation = "lua" },
             completion = {
+                menu = { auto_show = false },
                 accept = { auto_brackets = { enabled = false }, },
                 documentation = { auto_show = true, auto_show_delay_ms = 0 },
             },

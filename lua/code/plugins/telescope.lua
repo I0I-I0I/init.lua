@@ -1,10 +1,9 @@
 local M = { "nvim-telescope/telescope.nvim" }
 
 M.priority = 100
-
 M.dependencies = { "nvim-lua/plenary.nvim" }
-
 M.branch = "0.1.x"
+M.lazy = true
 
 M.opts = {
     defaults = {
