@@ -58,7 +58,6 @@ local kanagawa = {
                 hi LspReferenceRead guibg=#222222
                 hi LspReferenceText guibg=#222222
                 hi LspReferenceWrite guibg=#222222
-                hi BlinkCmpMenuSelection guibg=NONE guifg=#ffffff
             ]])
         end)
     end
@@ -76,4 +75,16 @@ local hack = {
     end
 }
 
-return { rose, osaka, hack, kanagawa }
+local ocean = {
+    "roflolilolmao/oceanic-next.nvim",
+    lazy = false,
+    priority = 1000,
+    name = "ocean",
+    init = function()
+        set_theme("ocean", function()
+            vim.cmd.colorscheme("OceanicNext")
+        end)
+    end
+}
+
+return { rose, osaka, hack, kanagawa, ocean }

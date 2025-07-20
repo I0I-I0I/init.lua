@@ -33,6 +33,7 @@ set tabstop=4
 set linebreak
 set smartcase incsearch hlsearch " Search settings
 set winborder=solid
+set cmdheight=0
 
 set cul
 autocmd InsertEnter * set nocul
@@ -48,16 +49,8 @@ augroup vimrc_autocmds
                 \   execute "normal! g`\"" |
                 \ endif
 
-    " Close fugitive window with q
-    autocmd FileType qf,git,help nmap <buffer> q <cmd>bd<cr>
-
-    " Highlight yanked text
     autocmd TextYankPost * silent! lua vim.hl.on_yank({higroup="IncSearch", timeout=100})
-
-    " Create missing directories on save
     autocmd BufWritePre * call mkdir(expand("<afile>:p:h"), "p")
-
-    " Remove trailing whitespace on save
     autocmd BufWritePre * %s/\s\+$//e
 
     " Check if files have changed outside Vim
@@ -89,15 +82,12 @@ nnoremap <silent> <leader><leader> :nohlsearch<CR>
 nnoremap <silent> - :Ex<CR>
 vnoremap <silent> K :m '<-2<CR>gv=gv
 vnoremap <silent> J :m '>+1<CR>gv=gv
-nnoremap <silent> <C-n> :cnext<CR>zz
-nnoremap <silent> <C-p> :cprevious<CR>zz
-nnoremap <silent> <C-M-n> :lnext<cr>zz
-nnoremap <silent> <C-M-p> :lprevious<cr>zz
-cnoremap <C-w> <backspace><C-w>
 nnoremap <silent> <M-c> :let @+=expand("%")<cr>
 nnoremap <silent> <M-S-c> :let @+=expand("%") . ':' . line(".")<cr>
+cnoremap <C-w> <backspace><C-w>
 
 nnoremap <localleader><C-f> :e <C-r>=expand("%:p:h")<CR>/<C-d>
+nnoremap <localleader><C-s> :sp <C-r>=expand("%:p:h")<CR>/<C-d>
 nnoremap <localleader><C-v> :vs <C-r>=expand("%:p:h")<CR>/<C-d>
 nnoremap <localleader><C-n> :tabnew <C-r>=expand("%:p:h")<CR>/<C-d>
 
@@ -139,7 +129,7 @@ function SetBG(color, second_color)
     vim.cmd.hi("Folded guibg=" .. color)
     vim.cmd.hi("LineNr guibg=" .. color)
     vim.cmd.hi("TabLineFill guibg=" .. color)
-    vim.cmd.hi("StatusLine guibg=" .. second_color)
+    vim.cmd.hi("StatusLine guibg=NONE")
 
     if color == "NONE" then
         vim.cmd([[
@@ -184,7 +174,8 @@ vim.api.nvim_create_user_command("Colors", function()
                 "GitGutterAdd",
                 "GitGutterRemove",
                 "GitGutterChange",
-                "GitGutterDelete"
+                "GitGutterDelete",
+                "StatusLine"
             },
         },
         {

@@ -86,6 +86,7 @@ M.opts = {
                 }
             },
             on_attach = function(client, bufnr)
+                client.server_capabilities.semanticTokensProvider = nil
                 require("workspace-diagnostics").populate_workspace_diagnostics(client, bufnr)
             end,
         },
@@ -166,7 +167,7 @@ M.config = function(_, opts)
 
     vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(ev)
-            vim.keymap.set("n", "<C-g><C-]>", vim.lsp.buf.type_definition,
+            vim.keymap.set("n", "g<C-]>", vim.lsp.buf.type_definition,
                 { table.insert({ buffer = ev.buf }, { desc = "vim.lsp.buf.type_definition()" }) })
             vim.keymap.set({ "n", "v" }, "grf", vim.lsp.buf.format,
                 { table.insert({ buffer = ev.buf }, { desc = "vim.lsp.buf.format()" }) })

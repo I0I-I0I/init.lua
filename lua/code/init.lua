@@ -14,9 +14,9 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- hack, kanagawa, rose, osaka
+-- hack, kanagawa, rose, osaka, ocean
 vim.g.colorscheme = {
-    theme = "kanagawa",
+    theme = "ocean",
     bg = "NONE"
 }
 
@@ -25,3 +25,11 @@ require("lazy").setup({
     change_detection = { notify = false }
 })
 
+require("vim._extui").enable({
+    enable = true,
+    msg = {
+        ---@type "cmd"|"msg" Where to place regular messages, either in the
+        target = "cmd",
+        timeout = 4000,
+    },
+})

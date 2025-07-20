@@ -143,7 +143,7 @@ vim.lsp.config("*", {
 vim.lsp.config("ruff", {
     cmd = { "ruff", "server" },
     filetypes = { "python" },
-    root_markers = {"pyproject.toml", "setup.py"},
+    root_markers = { "pyproject.toml", "setup.py" },
     init_opts = {
         settings = {
             lint = { preview = true },
@@ -158,7 +158,7 @@ vim.lsp.config("ruff", {
 vim.lsp.config("basedpyright", {
     cmd = { "basedpyright-langserver", "--stdio" },
     filetypes = { "python" },
-    root_dir = vim.fs.root(0, {"pyproject.toml", "setup.py"}),
+    root_dir = vim.fs.root(0, { "pyproject.toml", "setup.py" }),
     settings = {
         basedpyright = {
             typeCheckingMode = "standard",
@@ -175,7 +175,7 @@ vim.lsp.config("basedpyright", {
 
 vim.lsp.config("lua_ls", {
     cmd = { "lua-language-server" },
-    root_dir = vim.fs.root(0, {"lua"}),
+    root_dir = vim.fs.root(0, { "lua" }),
     filetypes = { "lua" },
     settings = {
         Lua = {

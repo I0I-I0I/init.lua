@@ -72,10 +72,10 @@ M.config = function()
 end
 
 M.keys = {
-    { "<localleader><C-s>s", "<cmd>SessionSave<cr>",         desc = "Save session" },
-    { "<localleader><C-s>c", "<cmd>SessionCreate<cr>",       desc = "Create session" },
-    { "<localleader><C-s>l", "<cmd>SessionsList<cr>",        desc = "List sessions" },
-    { "<leader>s",           "<cmd>CustomSessionAttach<cr>", desc = "Attach session" },
+    { "<localleader>ss", "<cmd>SessionSave<cr>",         desc = "Save session" },
+    { "<localleader>sc", "<cmd>SessionCreate<cr>",       desc = "Create session" },
+    { "<localleader>sl", "<cmd>SessionsList<cr>",        desc = "List sessions" },
+    { "<leader>s",       "<cmd>CustomSessionAttach<cr>", desc = "Attach session" },
 }
 
 return M

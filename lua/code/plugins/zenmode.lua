@@ -1,5 +1,4 @@
 local M = { dir = "~/code/work/zenmode.nvim" }
-
 M.cmd = {
     "ZenmodeToggle",
     "ZenmodeClose",
@@ -11,14 +10,12 @@ M.opts = {
     toggle_opts = {
         nu = false,
         rnu = false,
-        laststatus = 0,
+        -- laststatus = 0,
         signcolumn = "no"
     },
     on_open = function()
-        vim.cmd("GitGutterDisable")
     end,
     on_close = function()
-        vim.cmd("GitGutterEnable")
     end
 }
 

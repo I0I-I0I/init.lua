@@ -1,7 +1,7 @@
 return {
     {
-        'stevearc/quicker.nvim',
         lazy = true,
+        "stevearc/quicker.nvim",
         event = "FileType qf",
         opts = {
             keys = {
@@ -22,6 +22,7 @@ return {
             },
         },
     },
+
     {
         "lewis6991/gitsigns.nvim",
         lazy = true,
@@ -109,8 +110,79 @@ return {
     {
         "joshzcold/python.nvim",
         lazy = true,
-        filetypes = { "python" },
-        opts = { ---@diagnostic disable-line: missing-fields`
+        ft = { "python" },
+        config = function()
+            vim.keymap.set("n", "]t", "<cmd>Neotest jump next<cr>")
+            vim.keymap.set("n", "[t", "<cmd>Neotest jump prev<cr>")
+            vim.keymap.set("n", "<leader>td", "<cmd>Neotest output<cr>")
+            vim.keymap.set("n", "<leader>to", "<cmd>Neotest output-panel<cr>")
+            vim.keymap.set("n", "<leader>ts", "<cmd>Neotest summary<cr>")
+
+            vim.api.nvim_create_autocmd("FileType", {
+                pattern = { "python" },
+                callback = function()
+                    vim.keymap.set("n", "<leader>tm", "<cmd>PythonTestMethod<cr>", { buffer = true, noremap = true })
+                    vim.keymap.set("n", "<leader>tf", "<cmd>PythonTestFile<cr>", { buffer = true, noremap = true })
+                    vim.keymap.set("n", "<leader>tt", "<cmd>PythonTest<cr>", { buffer = true, noremap = true })
+                    vim.keymap.set("n", "<leader>tt", "<cmd>PythonTest<cr>", { buffer = true, noremap = true })
+                end
+            })
+
+            require("python").setup()
+        end
+    },
+
+    {
+        "A7Lavinraj/fyler.nvim",
+        dependencies = { "echasnovski/mini.icons" },
+        lazy = false,
+        config = function()
+            vim.api.nvim_create_autocmd("FileType", {
+                pattern = { "fyler" },
+                callback = function()
+                    vim.cmd([[
+                        set <buffer> nonu
+                        set <buffer> norelativenumber
+                    ]])
+                end
+            })
+            require("fyler").setup({
+                default_explorer = true,
+                close_on_select = true,
+                git_status = true,
+                indentscope = {
+                    enabled = true,
+                    group = "FylerDarkGrey",
+                    marker = "│",
+                },
+
+                views = {
+                    explorer = {
+                        width = 0.8,
+                        height = 0.8,
+                        kind = "float",
+                        border = "rounded",
+                    },
+                    confirm = {
+                        width = 0.5,
+                        height = 0.4,
+                        kind = "float",
+                        border = "rounded",
+                    },
+                },
+                mappings = {
+                    explorer = {
+                        n = {
+                            ["q"] = "CloseView",
+                            ["<Tab>"] = "Select",
+                        },
+                    },
+                },
+
+            })
+        end,
+        keys = {
+            { "-", "<cmd>Fyler<cr>", { noremap = true } },
         }
-    }
+    },
 }
