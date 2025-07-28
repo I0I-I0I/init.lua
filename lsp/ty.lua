@@ -1,15 +1,13 @@
 return {
-    cmd = { "ruff", "server" },
+    cmd = { "ty", "server" },
+    root_dir = vim.fs.root(0, { "pyproject.toml", ".venv", "requirements.txt", "setup.py" }),
     filetypes = { "python" },
-    root_markers = { "pyproject.toml", "setup.py" },
-    init_opts = {
+    init_options = {
         settings = {
-            lint = { preview = true },
-            format = { preview = true }
-        },
+            -- ty language server settings go here
+        }
     },
     on_attach = function(client, bufnr)
-        vim.lsp.semantic_tokens.enable(false, { bufnr = bufnr })
         local workspace_diagnostics_ok, workspace_diagnostics = pcall(require, "workspace-diagnostics")
         if not workspace_diagnostics_ok then return end
         workspace_diagnostics.populate_workspace_diagnostics(client, bufnr)
