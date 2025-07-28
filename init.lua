@@ -1,10 +1,10 @@
 vim.loader.enable()
 
-vim.cmd.source(vim.fn.stdpath("config") .. "/lua/config.vim")
 
 local type = os.getenv("CONF")
 
 if type == "code" then
+    vim.cmd.source(vim.fn.stdpath("config") .. "/lua/config.vim")
     require("code")
 else
     require("text")
@@ -17,4 +17,4 @@ if type == "tty" then
     vim.cmd.hi("CursorLine ctermfg=BLUE ctermbg=WHITE guifg=LIGHTBLUE")
 end
 
-vim.cmd.Colors()
+-- vim.cmd.Colors()
