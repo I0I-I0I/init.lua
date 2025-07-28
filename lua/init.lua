@@ -1,3 +1,4 @@
+--- Config
 vim.g.mapleader = " "
 vim.g.maplocalleader = ""
 vim.o.lazyredraw = true
@@ -24,15 +25,12 @@ vim.o.winborder = "rounded"
 vim.o.completeopt = "menu,menuone,noinsert,popup,preview"
 vim.o.colorcolumn = "120"
 vim.o.scrolloff = 8
+vim.o.undofile = true
+vim.o.undolevels = 10000000
+vim.o.undoreload = 10000000
 
-vim.cmd([[
-    autocmd BufWritePre * %s/\s\+$//e
-    autocmd FileType netrw setlocal bufhidden=wipe
-    autocmd BufWritePre * call mkdir(expand("<afile>:p:h"), "p")
-    autocmd TextYankPost * silent! lua vim.hl.on_yank({higroup="IncSearch", timeout=100})
-    autocmd FocusGained,BufEnter * checktime
-]])
-
+vim.keymap.set("n", "gh", "diffget \\1")
+vim.keymap.set("n", "gl", "diffget \\2")
 vim.keymap.set("n", "-", "<cmd>Ex<CR>")
 vim.keymap.set("n", "<C-y>", "3<C-y>")
 vim.keymap.set("n", "<C-e>", "3<C-e>")
@@ -43,59 +41,85 @@ vim.keymap.set("n", "<localleader><C-n>", ":tabnew <C-r>=expand('%:p:h')<CR>/<C-
 vim.keymap.set("n", "<M-c>", ":let @+=expand('%')<cr>", { silent = true })
 vim.keymap.set("n", "<M-S-c>", ":let @+=expand('%') . ':' . line('.')<cr>", { silent = true })
 vim.keymap.set("c", "<C-w>", "<backspace><C-w>")
+vim.keymap.set("i", "<C-space>", "<C-x><C-o>")
 
-local function check_and_switch()
-    local hour = tonumber(os.date("%H"))
-    if hour >= 22 or hour < 6 then
-        vim.cmd("colo komau")
-        vim.cmd.hi("Normal guibg=#000000")
-        vim.cmd.hi("CursorLineNr guibg=#000000")
-        vim.cmd.hi("NormalNC guibg=#000000")
-        vim.cmd.hi("EndOfBuffer guibg=#000000")
-        vim.cmd.hi("SignColumn guibg=#000000")
-        vim.cmd.hi("Folded guibg=#000000")
-        vim.cmd.hi("LineNr guibg=#000000")
-        vim.cmd.hi("TabLineFill guibg=#000000")
-        vim.cmd.hi("StatusLine guibg=#000000")
-    else
-        vim.cmd("colo zenesque")
-        vim.cmd([[
-            highlight Cursor guibg=#696969 ctermbg=67
-            set guicursor=n-v-c:block-Cursor/lCursor
-            \,i-ci-ve:ver100-Cursor
-            \,r-cr:block-Cursor
-            \,o:hor50-Cursor/lCursor
-            \,sm:block-Cursor
-            \,a:blinkwait700-blinkoff400-blinkon250-Cursor]])
-    end
+vim.cmd([[
+    autocmd BufWritePre * %s/\s\+$//e
+    autocmd FileType netrw setlocal bufhidden=wipe
+    autocmd BufWritePre * call mkdir(expand("<afile>:p:h"), "p")
+    autocmd TextYankPost * silent! lua vim.hl.on_yank({higroup="IncSearch", timeout=100})
+    autocmd FocusGained,BufEnter * checktime
+]])
+
+if vim.g.vscode then return end
+
+vim.pack.add({
+    { src = "https://github.com/vim-scripts/zenesque.vim" },
+    { src = "https://github.com/ntk148v/komau.vim" },
+    { src = "https://github.com/vague2k/vague.nvim" },
+
+    { src = "https://github.com/Exafunction/windsurf.vim" },
+    { src = "https://github.com/i0i-i0i/zenmode.nvim" },
+    { src = "https://github.com/i0i-i0i/sessions.nvim" },
+    { src = "https://github.com/stevearc/conform.nvim" },
+    { src = "https://github.com/mfussenegger/nvim-lint" },
+    { src = "https://github.com/artemave/workspace-diagnostics.nvim" },
+    { src = "https://github.com/jake-stewart/multicursor.nvim" },
+    { src = "https://github.com/folke/trouble.nvim" },
+    { src = "https://github.com/ibhagwan/fzf-lua" },
+
+    { src = "https://github.com/A7Lavinraj/fyler.nvim" },
+    { src = "https://github.com/echasnovski/mini.icons" },
+
+    { src = "https://github.com/pmizio/typescript-tools.nvim" },
+    { src = "https://github.com/nvim-lua/plenary.nvim" },
+    { src = "https://github.com/neovim/nvim-lspconfig" },
+})
+
+vim.cmd([[
+    highlight Cursor guibg=#696969 ctermbg=67
+    set guicursor=n-v-c:block-Cursor/lCursor
+    \,i-ci-ve:ver100-Cursor
+    \,r-cr:block-Cursor
+    \,o:hor50-Cursor/lCursor
+    \,sm:block-Cursor
+    \,a:blinkwait700-blinkoff400-blinkon250-Cursor
+]])
+
+local function transparency()
+    vim.cmd.hi("Normal guibg=NONE")
+    vim.cmd.hi("CursorLineNr guibg=NONE")
+    vim.cmd.hi("NormalNC guibg=NONE")
+    vim.cmd.hi("EndOfBuffer guibg=NONE")
+    vim.cmd.hi("SignColumn guibg=NONE")
+    vim.cmd.hi("Folded guibg=NONE")
+    vim.cmd.hi("LineNr guibg=NONE")
+    vim.cmd.hi("TabLineFill guibg=NONE")
+    vim.cmd.hi("StatusLine guibg=NONE")
 end
 
+vim.cmd.colo("vague")
+transparency()
+
 local timer = vim.loop.new_timer()
-if timer then timer:start(0, 10 * (60 * 1000), vim.schedule_wrap(check_and_switch)) end
+if timer then
+    timer:start(0, 10 * (60 * 1000), vim.schedule_wrap(function()
+        local hour = tonumber(os.date("%H"))
+        -- if hour >= 22 or hour < 6 then
+        --     vim.cmd("colo komau")
+        --     transparency()
+        -- else
+        --     vim.cmd("colo zenesque")
+        -- end
+    end))
+end
 
 require("vim._extui").enable({
     enable = true,
     msg = { target = "cmd", timeout = 4000 },
 })
 
---- Plugins
-vim.pack.add({
-    { src = "https://github.com/vim-scripts/zenesque.vim" },
-    { src = "https://github.com/ntk148v/komau.vim" },
-})
-
---- Mini Pick
-vim.pack.add({ "https://github.com/echasnovski/mini.pick" })
-local pick_ok, pick = pcall(require, "mini.pick")
-if pick_ok then
-    pick.setup()
-    vim.keymap.set("n", "<C-p>", "<cmd>Pick files<cr>")
-    vim.keymap.set("n", "<C-/>", "<cmd>Pick grep<cr>")
-    vim.keymap.set("n", "<C-h>", "<cmd>Pick help<cr>")
-end
-
 --- Codeium
-vim.pack.add({ "https://github.com/Exafunction/windsurf.vim" })
 local codeium_ok, codeium = pcall(require, "codeium")
 if codeium_ok then
     codeium.setup({
@@ -107,7 +131,6 @@ if codeium_ok then
 end
 
 --- Zenmode
-vim.pack.add({ "https://github.com/i0i-i0i/zenmode.nvim" })
 local zenmode_ok, zenmode = pcall(require, "zenmode.nvim")
 if zenmode_ok then
     zenmode.setup({
@@ -121,20 +144,16 @@ if zenmode_ok then
 end
 
 --- Sessions
-vim.pack.add({"https://github.com/i0i-i0i/sessions.nvim"})
 local sessions_ok, sessions = pcall(require, "sessions")
 if sessions_ok then
     local prev = { name = "", path = "" }
-
     local builtins = sessions.setup()
-
     local goto_prev = function(new_session)
         prev = builtins.get_current()
         if new_session.path ~= "" and prev.path ~= new_session.path then
             builtins.attach({ path = new_session.path })
         end
     end
-
     vim.keymap.set("n", "<leader><C-^>", function()
         if zenmode_ok then
             vim.cmd("ZenmodeClose")
@@ -144,12 +163,10 @@ if sessions_ok then
         vim.cmd("silent! bufdo bd")
         goto_prev(prev)
     end)
-
     vim.api.nvim_create_user_command("CustomSessionAttach", function(input)
         prev = builtins.get_current()
         vim.cmd("SessionAttach " .. input.args)
     end, { nargs = "?" })
-
     vim.api.nvim_create_autocmd("VimLeavePre", {
         callback = function()
             if zenmode_ok then
@@ -162,12 +179,6 @@ if sessions_ok then
 end
 
 --- LSP
-vim.pack.add({
-    "https://github.com/stevearc/conform.nvim",
-    "https://github.com/mfussenegger/nvim-lint",
-    "https://github.com/artemave/workspace-diagnostics.nvim"
-})
-
 vim.keymap.set("n", "grd", function()
     vim.diagnostic.setqflist({})
     vim.cmd("copen")
@@ -191,22 +202,11 @@ if lint_ok then
         markdown = { "cspell" },
         text = { "cspell" },
     }
-
     vim.api.nvim_create_autocmd({ "BufWritePost" }, {
-        pattern = {
-            "*.c",
-            "*.cpp",
-            "*.js",
-            "*.jsx",
-            "*.ts",
-            "*.tsx",
-            "*.py",
-            "*.md",
-            "*.txt",
-        },
+        pattern = { "*.c", "*.cpp", "*.js", "*.jsx", "*.ts", "*.tsx", "*.py", "*.md", "*.txt" },
         callback = function()
             require("lint").try_lint()
-        end,
+        end
     })
 end
 
@@ -221,10 +221,31 @@ if format_ok then
             html = { "prettierd" },
             htmldjango = { "prettierd" },
             css = { "prettierd" },
+            python = { "ruff_format" }
         }
     })
     vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
-    vim.keymap.set("n", "<leader>f", format.format, { noremap = true, silent = true })
+    vim.keymap.set("n", "grf", format.format, { noremap = true, silent = true })
+end
+
+local typescript_ok, typescript = pcall(require, "typescript-tools")
+if typescript_ok then
+    typescript.setup({
+        settings = {
+            jsx_close_tag = {
+                enable = false,
+                filetypes = { "javascriptreact", "typescriptreact" },
+            }
+        },
+        tsserver_file_preferences = {
+            includeCompletionsForModuleExports = true,
+            quotePreference = "double",
+        },
+        tsserver_format_options = {
+            allowIncompleteCompletions = false,
+            allowRenameOfImportPath = false,
+        }
+    })
 end
 
 local workspace_diagnostics_ok, _ = pcall(require, "workspace-diagnostics")
@@ -246,11 +267,38 @@ if workspace_diagnostics_ok then
             end
         end
     })
-    vim.lsp.enable({ "basedpyright", "ruff", "lua_ls" })
+    vim.lsp.enable({ "ruff", "lua_ls", "djlsp", "basedpyright", "clangd" })
+end
+
+--- FzfLua
+local fzf_lua_ok, fzf_lua = pcall(require, "fzf-lua")
+if fzf_lua_ok then
+    fzf_lua.setup()
+    vim.keymap.set("n", "<C-p>", fzf_lua.files, { silent = true })
+    vim.keymap.set("n", "<C-/>", fzf_lua.live_grep, { silent = true })
+    vim.keymap.set("n", "<C-b>", fzf_lua.buffers, { silent = true })
+    vim.keymap.set("n", "<C-h>", fzf_lua.help_tags, { silent = true })
+end
+
+--- Trouble
+local trouble_ok, trouble = pcall(require, "trouble")
+if trouble_ok then
+    trouble.setup()
+    vim.keymap.set("n", "<leader>l", "<cmd>Trouble loclist<cr>", { silent = true })
+    vim.keymap.set("n", "<leader>q", "<cmd>Trouble quickfix<cr>", { silent = true })
+    vim.keymap.set("n", "grr", "<cmd>Trouble lsp_references<cr>", { silent = true })
+    vim.keymap.set("n", "grd", "<cmd>Trouble diagnostics<cr>", { silent = true })
+    vim.keymap.set("n", "<C-j>", function() trouble.next({ jump = true, skip_groups = true }) end)
+    vim.keymap.set("n", "<C-k>", function() trouble.prev({ jump = true, skip_groups = true }) end)
+
+    if fzf_lua_ok then
+        local config = require("fzf-lua.config")
+        local actions = require("trouble.sources.fzf").actions
+        config.defaults.actions.files["ctrl-q"] = actions.open
+    end
 end
 
 --- Multicursor
-vim.pack.add({ "https://github.com/jake-stewart/multicursor.nvim" })
 local mc_ok, mc = pcall(require, "multicursor-nvim")
 if mc_ok then
     mc.setup()
@@ -291,4 +339,35 @@ if mc_ok then
     vim.keymap.set("v", "M", mc.matchCursors)
     vim.keymap.set({ "v", "n" }, "<c-i>", mc.jumpForward)
     vim.keymap.set({ "v", "n" }, "<c-o>", mc.jumpBackward)
+end
+
+-- Explorer
+local fyler_ok, fyler = pcall(require, "fyler")
+if fyler_ok then
+    vim.api.nvim_create_autocmd("FileType", {
+        pattern = { "fyler" },
+        callback = function()
+            vim.cmd([[
+                set <buffer> nonu
+                set <buffer> norelativenumber
+            ]])
+        end
+    })
+    vim.keymap.set("n", "-", fyler.open, { noremap = true })
+    fyler.setup({
+        views = {
+            explorer = {
+                close_on_select = false,
+                confirm_simple = true,
+                win = {
+                    kind = "split_left",
+                    kind_presets = {
+                        split_left = {
+                            width = 0.2,
+                        },
+                    },
+                },
+            }
+        }
+    })
 end
