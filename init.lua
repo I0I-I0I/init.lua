@@ -1,5 +1,7 @@
 vim.loader.enable()
 
+require("tabline").setup()
+
 vim.g.mapleader = " "
 vim.g.maplocalleader = "" -- <C-x>
 vim.o.lazyredraw = true
@@ -23,6 +25,7 @@ vim.o.expandtab = true
 vim.o.shiftwidth = 4
 vim.o.tabstop = 4
 vim.o.winborder = "rounded"
+vim.o.showtabline = 3
 vim.o.completeopt = "menu,menuone,noinsert,popup,preview"
 vim.o.colorcolumn = "120"
 vim.o.scrolloff = 8
@@ -30,6 +33,8 @@ vim.o.undofile = true
 vim.o.undolevels = 10000000
 vim.o.undoreload = 10000000
 
+vim.keymap.set("n", "<Tab>",  ":tabnext<CR>")
+vim.keymap.set("n", "<S-Tab>", ":tabprev<CR>")
 vim.keymap.set("n", "gh", "diffget \\1")
 vim.keymap.set("n", "gl", "diffget \\2")
 vim.keymap.set({ "n", "i" }, "<C-[>", "<cmd>noh<cr><C-[>")
@@ -91,11 +96,13 @@ local function set_bg(color)
     vim.cmd.hi("SignColumn guibg=" .. color)
     vim.cmd.hi("Folded guibg=" .. color)
     vim.cmd.hi("LineNr guibg=" .. color)
+    vim.cmd.hi("TabLine guibg=" .. color)
     vim.cmd.hi("TabLineFill guibg=" .. color)
     vim.cmd.hi("StatusLine guibg=" .. color)
 end
 
 vim.cmd.colo("solarized-osaka")
+set_bg("NONE")
 
 -- local timer = vim.loop.new_timer()
 -- if timer then
@@ -114,39 +121,6 @@ require("vim._extui").enable({
     enable = true,
     msg = { target = "cmd", timeout = 4000 },
 })
-
---- TreeSitter
-local treesitter_ok, _ = pcall(require, "nvim-treesitter")
-if treesitter_ok then
-    require('nvim-treesitter.configs').setup({
-        ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline" },
-        sync_install = false,
-        auto_install = true,
-        highlight = { enable = true },
-        indent = { enable = true },
-        textobjects = { enable = true },
-        incremental_selection = {
-            enable = true,
-            keymaps = {
-                init_selection = "<M-S-l>",
-                node_incremental = "<M-S-l>",
-                scope_incremental = "<M-S-m>",
-                node_decremental = "<M-S-h>",
-            },
-        },
-    })
-end
-
---- Codeium
-local codeium_ok, codeium = pcall(require, "codeium")
-if codeium_ok then
-    codeium.setup({
-        enable_cmp_source = false,
-        virtual_text = {
-            enabled = true
-        },
-    })
-end
 
 --- Zenmode
 local zenmode_ok, zenmode = pcall(require, "zenmode.nvim")
@@ -184,6 +158,7 @@ if sessions_ok then
     vim.api.nvim_create_user_command("CustomSessionAttach", function(input)
         prev = builtins.get_current()
         vim.cmd("SessionAttach " .. input.args)
+        vim.cmd("ZenmodeOpen")
     end, { nargs = "?" })
     vim.api.nvim_create_autocmd("VimLeavePre", {
         callback = function()
@@ -193,15 +168,59 @@ if sessions_ok then
             builtins.save()
         end
     })
+    vim.api.nvim_create_autocmd("VimEnter", {
+        callback = function()
+            if vim.fn.argc() == 0 then
+                vim.schedule(function()
+                    vim.cmd("CustomSessionAttach")
+                end)
+            end
+        end
+    })
     vim.keymap.set("n", "<leader>s", "<cmd>CustomSessionAttach<cr>", { desc = "Attach session" })
 end
 
+--- TreeSitter
+local treesitter_ok, _ = pcall(require, "nvim-treesitter")
+if treesitter_ok then
+    require('nvim-treesitter.configs').setup({
+        ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline" },
+        sync_install = false,
+        auto_install = true,
+        highlight = { enable = true },
+        indent = { enable = true },
+        textobjects = { enable = true },
+        incremental_selection = {
+            enable = true,
+            keymaps = {
+                init_selection = "<M-S-l>",
+                node_incremental = "<M-S-l>",
+                scope_incremental = "<M-S-m>",
+                node_decremental = "<M-S-h>",
+            },
+        },
+    })
+end
+
+--- Codeium
+local codeium_ok, codeium = pcall(require, "codeium")
+if codeium_ok then
+    codeium.setup({
+        enable_cmp_source = false,
+        virtual_text = {
+            enabled = true
+        },
+    })
+end
+
+
 --- LSP
 vim.diagnostic.config({
-    virtual_text = false,
+    -- virtual_text = false,
     signs = false,
-    jump = { float = true },
-    float = { source = true }
+    virtual_lines = { current_line = true }
+    -- jump = { float = true },
+    -- float = { source = true }
 })
 
 local mason_ok, mason = pcall(require, "mason")
@@ -368,23 +387,10 @@ if fyler_ok then
             vim.cmd([[
                 set <buffer> nonu
                 set <buffer> norelativenumber
-            ]])
+                ]])
         end
     })
-    fyler.setup({
-        views = {
-            explorer = {
-                close_on_select = false,
-                confirm_simple = true,
-                win = {
-                    kind = "split_left",
-                    kind_presets = {
-                        split_left = { width = 0.2 },
-                    },
-                },
-            }
-        }
-    })
+    fyler.setup({})
     vim.keymap.set("n", "-", fyler.open, { noremap = true })
 end
 
