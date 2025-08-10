@@ -56,13 +56,17 @@ vim.pack.add({
     { src = "https://github.com/vim-scripts/zenesque.vim" },
     { src = "https://github.com/ntk148v/komau.vim" },
     { src = "https://github.com/vague2k/vague.nvim" },
+    { src = "https://github.com/craftzdog/solarized-osaka.nvim" },
 
     { src = "https://github.com/Exafunction/windsurf.vim" },
     { src = "https://github.com/i0i-i0i/zenmode.nvim" },
     { src = "https://github.com/i0i-i0i/sessions.nvim" },
     { src = "https://github.com/jake-stewart/multicursor.nvim" },
     { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
+    { src = "https://github.com/MeanderingProgrammer/render-markdown.nvim" },
 
+    { src = "https://github.com/mason-org/mason-lspconfig.nvim" },
+    { src = "https://github.com/mason-org/mason.nvim" },
     { src = "https://github.com/neovim/nvim-lspconfig" },
     { src = "https://github.com/artemave/workspace-diagnostics.nvim" },
     { src = "https://github.com/stevearc/conform.nvim" },
@@ -75,6 +79,8 @@ vim.pack.add({
 
     { src = "https://github.com/pmizio/typescript-tools.nvim" },
     { src = "https://github.com/nvim-lua/plenary.nvim" },
+    { src = "https://github.com/dmmulroy/ts-error-translator.nvim" },
+    -- { src = "https://github.com/luckasRanarison/tailwind-tools.nvim" },
 })
 
 local function set_bg(color)
@@ -89,8 +95,7 @@ local function set_bg(color)
     vim.cmd.hi("StatusLine guibg=" .. color)
 end
 
-vim.cmd.colo("vague")
-set_bg("NONE")
+vim.cmd.colo("solarized-osaka")
 
 -- local timer = vim.loop.new_timer()
 -- if timer then
@@ -98,7 +103,7 @@ set_bg("NONE")
 --         local hour = tonumber(os.date("%H"))
 --         if hour >= 22 or hour < 6 then
 --             vim.cmd("colo komau")
---             transparency()
+--             set_bg("NONE")
 --         else
 --             vim.cmd("colo zenesque")
 --         end
@@ -117,7 +122,7 @@ if treesitter_ok then
         ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline" },
         sync_install = false,
         auto_install = true,
-        highlight = { enable = false },
+        highlight = { enable = true },
         indent = { enable = true },
         textobjects = { enable = true },
         incremental_selection = {
@@ -147,7 +152,7 @@ end
 local zenmode_ok, zenmode = pcall(require, "zenmode.nvim")
 if zenmode_ok then
     zenmode.setup({
-        default_width = 20,
+        default_width = 15,
         toggle_opts = {
             nu = false,
             rnu = false
@@ -198,6 +203,15 @@ vim.diagnostic.config({
     jump = { float = true },
     float = { source = true }
 })
+
+local mason_ok, mason = pcall(require, "mason")
+local mason_lspconfig_ok, mason_lspconfig = pcall(require, "mason-lspconfig")
+if mason_ok and mason_lspconfig_ok then
+    mason.setup()
+    mason_lspconfig.setup({
+        ensure_installed = { "basedpyright", "clangd", "bashls", "lua_ls", "ruff" },
+    })
+end
 
 local lint_ok, lint = pcall(require, "lint")
 if lint_ok then
@@ -373,3 +387,9 @@ if fyler_ok then
     })
     vim.keymap.set("n", "-", fyler.open, { noremap = true })
 end
+
+require("ts-error-translator").setup()
+require("render-markdown").setup({
+    html = { enabled = false },
+    completions = { lsp = { enabled = true } } }
+)
