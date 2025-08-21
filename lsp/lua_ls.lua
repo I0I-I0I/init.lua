@@ -5,6 +5,9 @@ return {
     settings = {
         Lua = {
             runtime = { version = "LuaJIT" },
+            -- workspace = {
+            --     library = vim.api.nvim_get_runtime_file("", true),
+            -- },
             workspace = {
                 checkThirdParty = false,
                 library = { vim.env.VIMRUNTIME },
@@ -24,6 +27,7 @@ return {
         },
     },
     on_attach = function(client, bufnr)
+        vim.lsp.semantic_tokens.enable(false, { bufnr = bufnr })
         local workspace_diagnostics_ok, workspace_diagnostics = pcall(require, "workspace-diagnostics")
         if not workspace_diagnostics_ok then return end
         workspace_diagnostics.populate_workspace_diagnostics(client, bufnr)
