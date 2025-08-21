@@ -9,7 +9,7 @@ return {
             analysis = {
                 autoSearchPaths = true,        -- pick up installed packages & stubs
                 useLibraryCodeForTypes = true, -- fall back to library .pyi for typing
-                typeCheckingMode = "strict",    -- or "strict" if you’re brave
+                typeCheckingMode = "strict",   -- or "strict" if you’re brave
                 extraPaths = { "src" },        -- mirror your pyrightconfig.json
                 disableLanguageServices = false,
                 diagnosticMode = "workspace",

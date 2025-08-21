@@ -24,7 +24,7 @@ vim.o.smartindent = true
 vim.o.expandtab = true
 vim.o.shiftwidth = 4
 vim.o.tabstop = 4
-vim.o.winborder = "rounded"
+vim.o.winborder = "single"
 vim.o.showtabline = 3
 vim.o.completeopt = "menu,menuone,noinsert,popup,preview"
 vim.o.colorcolumn = "120"
@@ -32,6 +32,7 @@ vim.o.scrolloff = 8
 vim.o.undofile = true
 vim.o.undolevels = 10000000
 vim.o.undoreload = 10000000
+vim.opt.foldnestmax = 1
 
 vim.keymap.set("n", "<Tab>",  ":tabnext<CR>")
 vim.keymap.set("n", "<S-Tab>", ":tabprev<CR>")
@@ -49,6 +50,14 @@ vim.keymap.set("n", "<M-S-c>", ":let @+=expand('%') . ':' . line('.')<cr>", { si
 vim.keymap.set("c", "<C-w>", "<backspace><C-w>")
 vim.keymap.set("i", "<C-space>", "<C-x><C-o>")
 
+vim.diagnostic.config({
+    -- virtual_text = false,
+    signs = false,
+    virtual_lines = { current_line = true }
+    -- jump = { float = true },
+    -- float = { source = true }
+})
+
 vim.cmd([[
     autocmd BufWritePre * %s/\s\+$//e
     autocmd FileType netrw setlocal bufhidden=wipe
@@ -62,26 +71,23 @@ vim.pack.add({
     { src = "https://github.com/ntk148v/komau.vim" },
     { src = "https://github.com/vague2k/vague.nvim" },
     { src = "https://github.com/craftzdog/solarized-osaka.nvim" },
-
-    { src = "https://github.com/Exafunction/windsurf.vim" },
+    { src = "https://github.com/Exafunction/windsurf.nvim" },
     { src = "https://github.com/i0i-i0i/zenmode.nvim" },
     { src = "https://github.com/i0i-i0i/sessions.nvim" },
     { src = "https://github.com/jake-stewart/multicursor.nvim" },
     { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
+    { src = "https://github.com/chrisgrieser/nvim-origami" },
     { src = "https://github.com/MeanderingProgrammer/render-markdown.nvim" },
-
     { src = "https://github.com/mason-org/mason-lspconfig.nvim" },
     { src = "https://github.com/mason-org/mason.nvim" },
     { src = "https://github.com/neovim/nvim-lspconfig" },
     { src = "https://github.com/artemave/workspace-diagnostics.nvim" },
     { src = "https://github.com/stevearc/conform.nvim" },
     { src = "https://github.com/mfussenegger/nvim-lint" },
-
     { src = "https://github.com/A7Lavinraj/fyler.nvim" },
     { src = "https://github.com/echasnovski/mini.icons" },
     { src = "https://github.com/folke/trouble.nvim" },
     { src = "https://github.com/ibhagwan/fzf-lua" },
-
     { src = "https://github.com/pmizio/typescript-tools.nvim" },
     { src = "https://github.com/nvim-lua/plenary.nvim" },
     { src = "https://github.com/dmmulroy/ts-error-translator.nvim" },
@@ -99,43 +105,36 @@ local function set_bg(color)
     vim.cmd.hi("TabLine guibg=" .. color)
     vim.cmd.hi("TabLineFill guibg=" .. color)
     vim.cmd.hi("StatusLine guibg=" .. color)
+
+    vim.cmd.hi("NormalFloat guibg=" .. color)
+    vim.cmd.hi("Float guibg=" .. color)
+    vim.cmd.hi("FloatBorder guibg=" .. color)
+    vim.cmd.hi("FloatTitle guibg=" .. color)
+    vim.cmd.hi("FloatFooter guibg=" .. color)
+    vim.cmd.hi("RenderMarkdownCode guibg=" .. color)
 end
 
 vim.cmd.colo("solarized-osaka")
 set_bg("NONE")
-
--- local timer = vim.loop.new_timer()
--- if timer then
---     timer:start(0, 10 * (60 * 1000), vim.schedule_wrap(function()
---         local hour = tonumber(os.date("%H"))
---         if hour >= 22 or hour < 6 then
---             vim.cmd("colo komau")
---             set_bg("NONE")
---         else
---             vim.cmd("colo zenesque")
---         end
---     end))
--- end
 
 require("vim._extui").enable({
     enable = true,
     msg = { target = "cmd", timeout = 4000 },
 })
 
---- Zenmode
 local zenmode_ok, zenmode = pcall(require, "zenmode.nvim")
 if zenmode_ok then
     zenmode.setup({
         default_width = 15,
         toggle_opts = {
             nu = false,
-            rnu = false
+            rnu = false,
         }
     })
     vim.keymap.set("n", "<leader>z", "<cmd>ZenmodeToggle<cr>", { silent = true })
+else print("zenmode not found")
 end
 
---- Sessions
 local sessions_ok, sessions = pcall(require, "sessions")
 if sessions_ok then
     local prev = { name = "", path = "" }
@@ -178,9 +177,9 @@ if sessions_ok then
         end
     })
     vim.keymap.set("n", "<leader>s", "<cmd>CustomSessionAttach<cr>", { desc = "Attach session" })
+else print("sessions not found")
 end
 
---- TreeSitter
 local treesitter_ok, _ = pcall(require, "nvim-treesitter")
 if treesitter_ok then
     require('nvim-treesitter.configs').setup({
@@ -200,9 +199,9 @@ if treesitter_ok then
             },
         },
     })
+else print("nvim-treesitter not found")
 end
 
---- Codeium
 local codeium_ok, codeium = pcall(require, "codeium")
 if codeium_ok then
     codeium.setup({
@@ -211,103 +210,9 @@ if codeium_ok then
             enabled = true
         },
     })
+else print("codeium not found")
 end
 
-
---- LSP
-vim.diagnostic.config({
-    -- virtual_text = false,
-    signs = false,
-    virtual_lines = { current_line = true }
-    -- jump = { float = true },
-    -- float = { source = true }
-})
-
-local mason_ok, mason = pcall(require, "mason")
-local mason_lspconfig_ok, mason_lspconfig = pcall(require, "mason-lspconfig")
-if mason_ok and mason_lspconfig_ok then
-    mason.setup()
-    mason_lspconfig.setup({
-        ensure_installed = { "basedpyright", "clangd", "bashls", "lua_ls", "ruff" },
-    })
-end
-
-local lint_ok, lint = pcall(require, "lint")
-if lint_ok then
-    lint.linters_by_ft = {
-        typescript = { "eslint_d" },
-        typescriptreact = { "eslint_d" },
-        javascript = { "eslint_d" },
-        javascriptreact = { "eslint_d" },
-        cpp = { "cpplint" },
-        c = { "cpplint" },
-        markdown = { "cspell" },
-        text = { "cspell" },
-    }
-    vim.api.nvim_create_autocmd({ "BufWritePost" }, {
-        pattern = { "*.c", "*.cpp", "*.js", "*.jsx", "*.ts", "*.tsx", "*.py", "*.md", "*.txt" },
-        callback = function()
-            require("lint").try_lint()
-        end
-    })
-end
-
-local format_ok, format = pcall(require, "conform")
-if format_ok then
-    format.setup({
-        formatters_by_ft = {
-            javascript = { "prettierd" },
-            typescript = { "prettierd" },
-            javascriptreact = { "prettierd" },
-            typescriptreact = { "prettierd" },
-            html = { "prettierd" },
-            htmldjango = { "prettierd" },
-            css = { "prettierd" },
-            python = { "ruff_format" }
-        }
-    })
-    vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
-    vim.keymap.set("n", "grf", format.format, { noremap = true, silent = true })
-end
-
-local typescript_ok, typescript = pcall(require, "typescript-tools")
-if typescript_ok then
-    typescript.setup({
-        settings = {
-            jsx_close_tag = {
-                enable = false,
-                filetypes = { "javascriptreact", "typescriptreact" },
-            }
-        },
-        tsserver_file_preferences = {
-            includeCompletionsForModuleExports = true,
-            quotePreference = "double",
-        },
-        tsserver_format_options = {
-            allowIncompleteCompletions = false,
-            allowRenameOfImportPath = false,
-        }
-    })
-end
-
-local workspace_diagnostics_ok, _ = pcall(require, "workspace-diagnostics")
-if workspace_diagnostics_ok then
-    vim.lsp.config("*", {
-        root_markers = { ".git", ".hg", "src" },
-    })
-    vim.api.nvim_create_autocmd("LspAttach", {
-        callback = function(args)
-            local client = vim.lsp.get_client_by_id(args.data.client_id)
-            if not client then return end
-            if client:supports_method('textDocument/completion') then
-                vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
-            end
-        end
-    })
-    vim.lsp.enable({ "ruff", "lua_ls", "djlsp", "basedpyright", "clangd" })
-end
-
---- FzfLua
 local fzf_lua_ok, fzf_lua = pcall(require, "fzf-lua")
 if fzf_lua_ok then
     fzf_lua.setup()
@@ -315,9 +220,9 @@ if fzf_lua_ok then
     vim.keymap.set("n", "<C-/>", fzf_lua.live_grep, { silent = true })
     vim.keymap.set("n", "<C-b>", fzf_lua.buffers, { silent = true })
     vim.keymap.set("n", "<C-h>", fzf_lua.help_tags, { silent = true })
+else print("fzf-lua not found")
 end
 
---- Trouble
 local trouble_ok, trouble = pcall(require, "trouble")
 if trouble_ok then
     trouble.setup()
@@ -333,9 +238,9 @@ if trouble_ok then
         local actions = require("trouble.sources.fzf").actions
         config.defaults.actions.files["ctrl-q"] = actions.open
     end
+else print("trouble not found")
 end
 
---- Multicursor
 local mc_ok, mc = pcall(require, "multicursor-nvim")
 if mc_ok then
     mc.setup()
@@ -376,9 +281,9 @@ if mc_ok then
     vim.keymap.set("v", "M", mc.matchCursors)
     vim.keymap.set({ "v", "n" }, "<c-i>", mc.jumpForward)
     vim.keymap.set({ "v", "n" }, "<c-o>", mc.jumpBackward)
+else print("multicursor-nvim not found")
 end
 
--- Explorer
 local fyler_ok, fyler = pcall(require, "fyler")
 if fyler_ok then
     vim.api.nvim_create_autocmd("FileType", {
@@ -392,10 +297,115 @@ if fyler_ok then
     })
     fyler.setup({})
     vim.keymap.set("n", "-", fyler.open, { noremap = true })
+else print("fyler not found")
 end
 
-require("ts-error-translator").setup()
-require("render-markdown").setup({
-    html = { enabled = false },
-    completions = { lsp = { enabled = true } } }
-)
+local rm_ok, rm = pcall(require,"render-markdown")
+if rm_ok then
+    rm.setup({
+        html = { enabled = false },
+        completions = { lsp = { enabled = true } } }
+    )
+else print("render-markdown not found")
+end
+
+local origami_ok, origami = pcall(require, "origami")
+if origami_ok then
+    origami.setup()
+else print("origami not found")
+end
+
+local mason_ok, mason = pcall(require, "mason")
+local mason_lspconfig_ok, mason_lspconfig = pcall(require, "mason-lspconfig")
+if mason_ok and mason_lspconfig_ok then
+    mason.setup()
+    mason_lspconfig.setup({
+        ensure_installed = { "basedpyright", "clangd", "bashls", "lua_ls", "ruff" },
+    })
+else print("mason or mason-lspconfig not found")
+end
+
+local lint_ok, lint = pcall(require, "lint")
+if lint_ok then
+    lint.linters_by_ft = {
+        typescript = { "eslint_d" },
+        typescriptreact = { "eslint_d" },
+        javascript = { "eslint_d" },
+        javascriptreact = { "eslint_d" },
+        cpp = { "cpplint" },
+        c = { "cpplint" },
+        markdown = { "cspell" },
+        text = { "cspell" },
+    }
+    vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+        pattern = { "*.c", "*.cpp", "*.js", "*.jsx", "*.ts", "*.tsx", "*.py", "*.md", "*.txt" },
+        callback = function()
+            require("lint").try_lint()
+        end
+    })
+else print("lint not found")
+end
+
+local format_ok, format = pcall(require, "conform")
+if format_ok then
+    format.setup({
+        formatters_by_ft = {
+            javascript = { "prettierd" },
+            typescript = { "prettierd" },
+            javascriptreact = { "prettierd" },
+            typescriptreact = { "prettierd" },
+            html = { "prettierd" },
+            htmldjango = { "prettierd" },
+            css = { "prettierd" },
+            python = { "ruff_format" }
+        }
+    })
+    vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+    vim.keymap.set("n", "grf", format.format, { noremap = true, silent = true })
+else print("conform not found")
+end
+
+local typescript_ok, typescript = pcall(require, "typescript-tools")
+if typescript_ok then
+    typescript.setup({
+        settings = {
+            jsx_close_tag = {
+                enable = false,
+                filetypes = { "javascriptreact", "typescriptreact" },
+            }
+        },
+        tsserver_file_preferences = {
+            includeCompletionsForModuleExports = true,
+            quotePreference = "double",
+        },
+        tsserver_format_options = {
+            allowIncompleteCompletions = false,
+            allowRenameOfImportPath = false,
+        }
+    })
+else print("typescript-tools not found")
+end
+
+local te_ok, te = pcall(require, "ts-error-translator")
+if te_ok then
+    te.setup()
+else print("ts-error-translator not found")
+end
+
+local workspace_diagnostics_ok, _ = pcall(require, "workspace-diagnostics")
+if workspace_diagnostics_ok then
+    vim.lsp.config("*", {
+        root_markers = { ".git", ".hg", "src" },
+    })
+    vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(args)
+            local client = vim.lsp.get_client_by_id(args.data.client_id)
+            if not client then return end
+            if client:supports_method('textDocument/completion') then
+                vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
+            end
+        end
+    })
+    vim.lsp.enable({ "ruff", "lua_ls", "djlsp", "basedpyright", "clangd" })
+else print("workspace-diagnostics not found")
+end
