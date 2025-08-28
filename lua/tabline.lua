@@ -151,7 +151,7 @@ function tabline.setup()
 		callback = function()
 			local diff = vim.api.nvim_get_hl_by_name("DiffAdd", true)
 			local bg = diff.background and string.format("#%06x", diff.background)
-			vim.cmd.hi("Directory guibg=" .. bg)
+			vim.cmd.hi("Directory guibg=" .. (bg or "NONE"))
 		end,
 	})
 
@@ -165,6 +165,10 @@ function tabline.setup()
 	}, {
 		group = group,
 		callback = function()
+			local buf = vim.api.nvim_get_current_buf()
+			if vim.api.nvim_buf_get_option(buf, "filetype") == "cmd" then
+				return
+			end
 			local ok = pcall(vim.cmd.redrawtabline)
 			if not ok then
 				pcall(vim.cmd.redraw)

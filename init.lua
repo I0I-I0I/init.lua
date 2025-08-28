@@ -18,7 +18,7 @@ vim.o.hlsearch = true
 vim.o.cmdheight = 0
 vim.o.number = true
 vim.o.relativenumber = true
-vim.o.signcolumn = "no"
+vim.o.signcolumn = "yes"
 vim.o.cursorline = true
 vim.o.smartindent = true
 vim.o.expandtab = true
@@ -27,7 +27,6 @@ vim.o.tabstop = 4
 vim.o.winborder = "single"
 vim.o.showtabline = 3
 vim.o.completeopt = "menu,menuone,noinsert,popup,preview"
-vim.o.colorcolumn = "120"
 vim.o.undofile = true
 vim.o.undolevels = 10000000
 vim.o.undoreload = 10000000
@@ -44,6 +43,7 @@ vim.keymap.set("n", "<C-e>", "3<C-e>")
 vim.keymap.set("n", "gh", "diffget \\1")
 vim.keymap.set("n", "gl", "diffget \\2")
 vim.keymap.set("n", "gw", "<cmd>bp|bd #<cr>", { silent = true })
+vim.keymap.set("n", "gW", "<cmd>bp|bd! #<cr>", { silent = true })
 vim.keymap.set("n", "<localleader><C-f>", ":e <C-r>=expand('%:p:h')<CR>/<C-d>")
 vim.keymap.set("n", "<localleader><C-s>", ":sp <C-r>=expand('%:p:h')<CR>/<C-d>")
 vim.keymap.set("n", "<localleader><C-v>", ":vs <C-r>=expand('%:p:h')<CR>/<C-d>")
@@ -51,7 +51,7 @@ vim.keymap.set("n", "<localleader><C-n>", ":tabnew <C-r>=expand('%:p:h')<CR>/<C-
 vim.keymap.set("n", "<M-c>", ":let @+=expand('%')<cr>", { silent = true })
 vim.keymap.set("n", "<M-S-c>", ":let @+=expand('%') . ':' . line('.')<cr>", { silent = true })
 vim.keymap.set("n", "<C-s>", "<cmd>!tmux neww tmux-sessionizer<cr>", { silent = true })
-vim.keymap.set("n", "<leader>n", ":tabnew ~/Dropbox/notes/.md<Left><Left><Left>")
+vim.keymap.set("n", "<leader>N", ":tabnew ~/Dropbox/notes/.md<Left><Left><Left>")
 vim.keymap.set("c", "<C-w>", "<backspace><C-w>")
 vim.keymap.set("i", "<C-space>", "<C-x><C-o>")
 
@@ -99,23 +99,28 @@ Plug("https://github.com/bassamsdata/namu.nvim")
 -- Tools
 Plug("https://github.com/A7Lavinraj/fyler.nvim")
 Plug("https://github.com/nvim-telescope/telescope.nvim")
-Plug("https://github.com/Exafunction/windsurf.nvim")
+Plug("https://github.com/supermaven-inc/supermaven-nvim")
 Plug("https://github.com/NeogitOrg/neogit")
 Plug("https://github.com/sindrets/diffview.nvim")
+Plug("https://github.com/pohlrabi404/compile.nvim")
 -- UI
 Plug("https://github.com/echasnovski/mini.icons")
 Plug("https://github.com/OXY2DEV/markview.nvim")
+-- Dap
+Plug("https://github.com/mfussenegger/nvim-dap")
+Plug("https://github.com/nvim-neotest/nvim-nio")
+Plug("https://github.com/rcarriga/nvim-dap-ui")
+Plug("https://github.com/theHamsta/nvim-dap-virtual-text")
+-- Testing
+Plug("https://github.com/nvim-neotest/neotest")
 -- Frontend
 Plug("https://github.com/pmizio/typescript-tools.nvim")
 Plug("https://github.com/dmmulroy/ts-error-translator.nvim")
 -- Python
 Plug("https://github.com/joshzcold/python.nvim")
-Plug("https://github.com/mfussenegger/nvim-dap")
 Plug("https://github.com/mfussenegger/nvim-dap-python")
-Plug("https://github.com/neovim/nvim-lspconfig")
-Plug("https://github.com/L3MON4D3/LuaSnip", { ["do"] = "make install_jsregexp" })
-Plug("https://github.com/nvim-neotest/neotest")
 Plug("https://github.com/nvim-neotest/neotest-python")
+Plug("https://github.com/L3MON4D3/LuaSnip", { ["do"] = "make install_jsregexp" })
 Plug("https://github.com/Jamsjz/django.nvim")
 
 vim.call("plug#end")
@@ -142,6 +147,11 @@ local function set_bg(color)
 	vim.cmd.hi("WinSeparator guibg=" .. color)
 end
 
+vim.api.nvim_create_user_command("BG", function(input)
+	BG = input.args
+	set_bg()
+end, { nargs = "?" })
+
 vim.api.nvim_create_autocmd("ColorScheme", {
 	callback = function()
 		set_bg()
@@ -160,17 +170,17 @@ if markview_ok then
 	vim.api.nvim_create_autocmd("FileType", {
 		pattern = { "markdown" },
 		callback = function()
-			vim.keymap.set("n", "<C-m>", "<cmd>Markview Toggle<cr>", { silent = true })
+			vim.keymap.set("n", "<C-m>", "<cmd>Markview Toggle<cr>", { silent = true, buffer = true })
 		end,
 	})
 else
 	print("markview not found")
 end
 
-local treesitter_ok, _ = pcall(require, "nvim-treesitter")
+local treesitter_ok, treesitter = pcall(require, "nvim-treesitter")
 if treesitter_ok then
 	---@diagnostic disable-next-line
-	require("nvim-treesitter.configs").setup({
+	treesitter.setup({
 		ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline" },
 		sync_install = false,
 		auto_install = true,
@@ -189,7 +199,6 @@ if zenmode_ok then
 			relativenumber = false,
 			foldcolumn = "0",
 			list = false,
-			signcolumn = "no",
 			laststatus = 0,
 		},
 	})
@@ -239,7 +248,7 @@ if sessions_ok then
 			end
 		end,
 	})
-	vim.keymap.set("n", "<leader>s", "<cmd>CustomSessionAttach<cr>", { desc = "Attach session" })
+	vim.keymap.set("n", "<leader>S", "<cmd>CustomSessionAttach<cr>", { desc = "Attach session" })
 else
 	print("sessions not found")
 end
@@ -248,19 +257,9 @@ local neogit_ok, neogit = pcall(require, "neogit")
 if neogit_ok then
 	require("diffview").setup({ use_icons = false })
 	neogit.setup()
-	vim.keymap.set("n", "<leader>g", "<cmd>Neogit<cr>", { silent = true })
+	vim.keymap.set("n", "<C-g>", "<cmd>Neogit<cr>", { silent = true })
 else
 	print("neogit not found")
-end
-
-local codeium_ok, codeium = pcall(require, "codeium")
-if codeium_ok then
-	codeium.setup({
-		enable_cmp_source = false,
-		virtual_text = { enabled = true },
-	})
-else
-	print("codeium not found")
 end
 
 local telescope_ok, telescope = pcall(require, "telescope")
@@ -358,10 +357,9 @@ if mason_ok and mason_lspconfig_ok then
 	vim.lsp.config("*", {
 		on_attach = function(client, bufnr)
 			local workspace_diagnostics_ok, workspace_diagnostics = pcall(require, "workspace-diagnostics")
-			if not workspace_diagnostics_ok then
-				return
+			if workspace_diagnostics_ok then
+				workspace_diagnostics.populate_workspace_diagnostics(client, bufnr)
 			end
-			workspace_diagnostics.populate_workspace_diagnostics(client, bufnr)
 		end,
 	})
 	mason.setup()
@@ -424,4 +422,78 @@ if django_ok then
 	django.setup()
 else
 	print("django not found")
+end
+
+local supermaven_ok, supermaven = pcall(require, "supermaven-nvim")
+if supermaven_ok then
+	supermaven.setup({ ignore_filetypes = { "" } })
+else
+	print("supermaven not found")
+end
+
+local compile_ok, compile = pcall(require, "compile")
+if compile_ok then
+	compile.setup({
+		keys = {
+			global = {
+				["n"] = {
+					["<leader>C"] = "require('compile').compile()",
+					["<leader>j"] = "require('compile').next_error()",
+					["<leader>k"] = "require('compile').prev_error()",
+					["<leader>J"] = "require('compile').last_error()",
+					["<leader>K"] = "require('compile').first_error()",
+				},
+			},
+		},
+	})
+else
+	print("compile not found")
+end
+
+local dap_ok, dap = pcall(require, "dap")
+local dapui_ok, dapui = pcall(require, "dapui")
+if dap_ok and dapui_ok then
+	dapui.setup()
+	local nvim_dap_virtual_text_ok, nvim_dap_virtual_text = pcall(require, "nvim-dap-virtual-text")
+	if nvim_dap_virtual_text_ok then
+		nvim_dap_virtual_text.setup()
+	end
+	local dap_python_ok, dap_python = pcall(require, "dap-python")
+	if dap_python_ok then
+		dap_python.setup("uv")
+	end
+
+	table.insert(dap.configurations.python, {
+		type = "python",
+		request = "launch",
+		name = "DAP Django",
+		program = vim.loop.cwd() .. "/manage.py",
+		args = { "runserver", "--noreload" },
+		justMyCode = true,
+		django = true,
+		console = "integratedTerminal",
+	})
+
+	dap.listeners.before.attach.dapui_config = function()
+		dapui.open()
+	end
+	dap.listeners.before.launch.dapui_config = function()
+		dapui.open()
+	end
+	dap.listeners.before.event_terminated.dapui_config = function()
+		dapui.close()
+	end
+	dap.listeners.before.event_exited.dapui_config = function()
+		dapui.close()
+	end
+
+	vim.keymap.set("n", "<leader>n", dap.step_over, { silent = true })
+	vim.keymap.set("n", "<leader>o", dap.step_out, { silent = true })
+	vim.keymap.set("n", "<leader>i", dap.step_into, { silent = true })
+	vim.keymap.set("n", "<leader>d", dap.disconnect, { silent = true })
+	vim.keymap.set("n", "<leader>b", dap.toggle_breakpoint, { silent = true })
+	vim.keymap.set("n", "<leader>r", dap.run_to_cursor, { silent = true })
+	vim.keymap.set("n", "<leader>c", dap.continue, { silent = true })
+else
+	print("dap not found")
 end
