@@ -40,8 +40,6 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-y>", "3<C-y>")
 vim.keymap.set("n", "<C-e>", "3<C-e>")
-vim.keymap.set("n", "gh", "diffget \\1")
-vim.keymap.set("n", "gl", "diffget \\2")
 vim.keymap.set("n", "gw", "<cmd>bp|bd #<cr>", { silent = true })
 vim.keymap.set("n", "gW", "<cmd>bp|bd! #<cr>", { silent = true })
 vim.keymap.set("n", "<localleader><C-f>", ":e <C-r>=expand('%:p:h')<CR>/<C-d>")
@@ -82,6 +80,7 @@ Plug("https://github.com/ntk148v/komau.vim")
 Plug("https://github.com/vague2k/vague.nvim")
 Plug("https://github.com/craftzdog/solarized-osaka.nvim")
 Plug("https://github.com/aktersnurra/no-clown-fiesta.nvim")
+Plug("https://github.com/neanias/everforest-nvim")
 -- Utils
 Plug("https://github.com/nvim-lua/plenary.nvim")
 Plug("https://github.com/nvim-treesitter/nvim-treesitter")
@@ -157,12 +156,25 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 		set_bg()
 	end,
 })
-vim.cmd.colo("no-clown-fiesta")
+vim.cmd.colo("everforest")
 
 require("vim._extui").enable({
 	enable = true,
 	msg = { target = "cmd", timeout = 4000 },
 })
+
+local ef_ok, ef = pcall(require, "everforest")
+if ef_ok then
+	ef.setup({
+		background = "hard",
+		italics = true,
+		ui_contrast = "high",
+		diagnostic_text_highlight = true,
+		diagnostic_virtual_text = "grey",
+		diagnostic_line_highlight = true,
+		show_eob = false,
+	})
+end
 
 local markview_ok, markview = pcall(require, "markview")
 if markview_ok then
@@ -177,7 +189,7 @@ else
 	print("markview not found")
 end
 
-local treesitter_ok, treesitter = pcall(require, "nvim-treesitter")
+local treesitter_ok, treesitter = pcall(require, "nvim-treesitter.configs")
 if treesitter_ok then
 	---@diagnostic disable-next-line
 	treesitter.setup({
@@ -356,6 +368,7 @@ local mason_lspconfig_ok, mason_lspconfig = pcall(require, "mason-lspconfig")
 if mason_ok and mason_lspconfig_ok then
 	vim.lsp.config("*", {
 		on_attach = function(client, bufnr)
+			vim.lsp.semantic_tokens.enable(false, { bufnr = bufnr })
 			local workspace_diagnostics_ok, workspace_diagnostics = pcall(require, "workspace-diagnostics")
 			if workspace_diagnostics_ok then
 				workspace_diagnostics.populate_workspace_diagnostics(client, bufnr)
@@ -403,9 +416,9 @@ if namu_ok then
 	vim.keymap.set("n", "grD", "<cmd>Namu diagnostics workspace<cr>", { silent = true })
 	vim.keymap.set("n", "grc", "<cmd>Namu call both<cr>", { silent = true })
 	vim.keymap.set("n", "<leader>t", "<cmd>Namu colorscheme<cr>", { silent = true })
-	vim.keymap.set("n", "<C-f>", "<cmd>Namu workspace<cr>", { silent = true })
-	vim.keymap.set("n", "<C-j>", "<cmd>Namu symbols<cr>", { silent = true })
-	vim.keymap.set("n", "<C-k>", "<cmd>Namu watchtower<cr>", { silent = true })
+	vim.keymap.set("n", "<C-t>", "<cmd>Namu workspace<cr>", { silent = true })
+	vim.keymap.set("n", "gO", "<cmd>Namu symbols<cr>", { silent = true })
+	vim.keymap.set("n", "<C-S-t>", "<cmd>Namu watchtower<cr>", { silent = true })
 else
 	print("namu not found")
 end
