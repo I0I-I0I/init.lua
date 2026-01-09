@@ -64,11 +64,20 @@ local function open_terminal(path)
     end)
 end
 
+local function _run(path)
+    vim.g.sess_unload_is_enabled = false
+    vim.cmd.cd(path)
+    open_terminal(path)
+    vim.cmd.cd("-")
+    vim.g.sess_unload_is_enabled = true
+end
+
 vim.keymap.set("n", "<M-;>", function()
-    open_terminal(get_path.current())
+    _run(get_path.current())
 end, { noremap = true })
+
 vim.keymap.set("n", "<M-:>", function()
-    open_terminal(get_path.cwd())
+    _run(get_path.cwd())
 end, { noremap = true })
 
 vim.api.nvim_create_autocmd({ "TermRequest" }, {

@@ -1,11 +1,19 @@
 {
   "plugins": {
+    "komau.vim": {
+      "rev": "52c193bb912b782ebe3c348e38e81f15458b500d",
+      "src": "https://github.com/ntk148v/komau.vim"
+    },
+    "marks.nvim": {
+      "rev": "f353e8c08c50f39e99a9ed474172df7eddd89b72",
+      "src": "https://github.com/chentoast/marks.nvim"
+    },
     "mason.nvim": {
-      "rev": "57e5a8addb8c71fb063ee4acda466c7cf6ad2800",
+      "rev": "44d1e90e1f66e077268191e3ee9d2ac97cc18e65",
       "src": "https://github.com/mason-org/mason.nvim"
     },
     "nvim-lspconfig": {
-      "rev": "41ceb6bba3a40128b7841f5b7f5a9dae7201e823",
+      "rev": "5a82e10b2df0ed31bec642c1c0344baee7c458b6",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "oceanic-next": {

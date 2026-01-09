@@ -1,23 +1,86 @@
 vim.loader.enable()
 
+-- Theme
+vim.o.bg = "dark"
+vim.pack.add({ "https://github.com/mhartington/oceanic-next",
+               "https://github.com/ntk148v/komau.vim" })
+
+local is_transparent = false
+vim.cmd.cabbrev("colo Colo")
+vim.api.nvim_create_user_command("Colo", function(args)
+    local colorscheme = args.fargs[1]
+    local bg = args.fargs[2]
+    local colors = { "Normal", "EndOfBuffer", "LineNr", "SignColumn", "TabLineFill" }
+
+    vim.cmd.colo(colorscheme)
+
+    if vim.list_contains({ "komau" }, colorscheme) then
+        vim.api.nvim_set_hl(0, "WinSeparator", { bg = "#222222" })
+    end
+
+    if bg == nil then
+        is_transparent = false
+        return
+    end
+
+    if bg == "NONE" then
+        is_transparent = true
+    end
+
+    for _, color in ipairs(colors) do
+        vim.api.nvim_set_hl(0, color, { bg = bg })
+    end
+
+    vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#2a2a2a" })
+    vim.api.nvim_set_hl(0, "Float", { bg = "#2a2a2a" })
+    vim.api.nvim_set_hl(0, "TabLine", { fg = "#666666" })
+    vim.api.nvim_set_hl(0, "TabLineSel", { fg = "#dadada" })
+    vim.api.nvim_set_hl(0, "StatusLine", { fg = "#ffffff", bg = "#000000" })
+end, { nargs = "+", complete = "color" })
+
+local default_colorscheme = "komau"
+local function set_colors()
+    local current_colorscheme = vim.g.colors_name or default_colorscheme
+    if is_transparent then
+        vim.cmd("Colo " .. current_colorscheme .. " NONE")
+    else
+        vim.cmd.Colo(current_colorscheme)
+    end
+end
+set_colors()
+
+-- Neovide
 if vim.g.neovide then
-    vim.g.neovide_opacity = 0.73
-    vim.g.neovide_normal_opacity = 0.8
-    vim.g.neovide_scale_factor = 1.3
+    vim.g.neovide_opacity = .73
+    vim.g.neovide_normal_opacity = .73
+    vim.g.neovide_scale_factor = 1.43
     vim.o.guifont = "Maple Mono"
     vim.g.neovide_hide_mouse_when_typing = true
     vim.g.neovide_no_idle = false
-    vim.g.neovide_fullscreen = false
+    vim.g.neovide_fullscreen = not is_transparent
     vim.g.neovide_confirm_quit = true
     vim.g.neovide_cursor_animation_length = 0
-    vim.g.neovide_position_animation_length = 0.15
+    vim.g.neovide_position_animation_length = .15
     vim.g.neovide_scroll_animation_length = 0
     vim.g.neovide_cursor_vfx_mode = ""
-    vim.schedule(function()
-        vim.cmd.term()
-        vim.cmd.startinsert()
+
+    vim.api.nvim_create_autocmd("VimEnter", {
+        callback = function() vim.cmd.edit("~/TODO.md") end
+    })
+
+    vim.keymap.set("n", "<C-enter>", function()
+        is_transparent = not is_transparent
+        vim.g.neovide_fullscreen = not is_transparent
+        set_colors()
     end)
-    vim.keymap.set("n", "<C-enter>", "<cmd>lua vim.g.neovide_fullscreen=not vim.g.neovide_fullscreen<cr>")
+    vim.keymap.set("n", "<C-=>", function()
+        vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.05
+        vim.notify("Scale: " .. vim.g.neovide_scale_factor)
+    end, { noremap = true })
+    vim.keymap.set("n", "<C-->", function()
+        vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.05
+        vim.notify("Scale: " .. vim.g.neovide_scale_factor)
+    end, { noremap = true })
 end
 
 -- Settings
@@ -47,21 +110,19 @@ vim.o.spell = true
 vim.o.spelllang = "en,ru"
 
 -- Abbreviations
-vim.cmd.abbreviate("W w")
-vim.cmd.abbreviate("Wa wa")
-vim.cmd.abbreviate("n norm")
-vim.cmd.abbreviate("CD cd %:p:h")
-vim.cmd.abbreviate("m make | copen | wincmd p<Home><Right><Right><Right><Right>")
-vim.cmd.abbreviate("mc make % | copen | wincmd p")
-vim.cmd.abbreviate("gr grep | copen | wincmd p<Home><Right><Right><Right><Right>")
+vim.cmd.cabbrev("W w")
+vim.cmd.cabbrev("Wa wa")
+vim.cmd.cabbrev("n norm")
 
 -- Keymaps
 vim.keymap.set({ "t", "n" }, "<C-\\><C-d>", "<C-\\><C-n>:Cd <C-r>=getcwd()<cr>/<C-d>", { noremap = true })
-vim.keymap.set("n", "<C-\\><C-f>", "<C-\\><C-n>:sp <C-r>=expand('%:p:h')<cr>/<C-d>", { noremap = true })
-vim.keymap.set("t", "<C-\\><C-f>", "<C-\\><C-n>:sp <C-r>=getcwd()<cr>/<C-d>", { noremap = true })
+vim.keymap.set("n", "<C-f>", ":sp <C-r>=expand('%:p:h')<cr>/<C-d>", { noremap = true })
+vim.keymap.set({ "t", "n" }, "<C-\\><C-f>", "<C-\\><C-n>:sp <C-r>=getcwd()<cr>/<C-d>", { noremap = true })
 vim.keymap.set({ "t", "n" }, "<C-\\><C-h>", "<C-\\><C-n>:sp ~/<C-d>", { noremap = true })
-vim.keymap.set({ "t", "n" }, "<C-\\><C-\\><C-f>", "<C-\\><C-n>:sp <C-r>=getcwd()<cr>/<C-d>", { noremap = true })
-vim.keymap.set({ "i", "n" }, "<C-f>", "<esc>:sf ", { noremap = true })
+vim.keymap.set({ "i", "n" }, "<C-p>", "<esc>:sf ", { noremap = true })
+
+vim.keymap.set("n", "<C-\\><C-\\><C-d>", "<cmd>cd %:p:h<cr><cmd>echo expand('%:p:h')<cr>", { noremap = true })
+vim.keymap.set("n", "<C-\\><C-t>", "<cmd>e ~/TODO.md<cr>", { noremap = true, silent = true })
 
 vim.keymap.set("n", "<leader>gw", "<cmd>%bd|e#|bd#<cr>", { silent = true, noremap = true })
 vim.keymap.set("n", "gw", "<cmd>bp|bd #<cr>", { silent = true, noremap = true })
@@ -84,16 +145,45 @@ vim.keymap.set({ "t", "n", "i" }, "<M-o>", "<cmd>tabnext<cr>", { silent = true, 
 vim.keymap.set({ "t", "n", "i" }, "<M-S-i>", "<cmd>tabmove -<cr>", { silent = true, noremap = true })
 vim.keymap.set({ "t", "n", "i" }, "<M-S-o>", "<cmd>tabmove +<cr>", { silent = true, noremap = true })
 
-vim.keymap.set({ "t", "n", "i" }, "<M-h>", "<C-\\><C-n><cmd>norm! <C-w>h<cr>", { silent = true, noremap = true })
-vim.keymap.set({ "t", "n", "i" }, "<M-j>", "<C-\\><C-n><cmd>norm! <C-w>j<cr>", { silent = true, noremap = true })
-vim.keymap.set({ "t", "n", "i" }, "<M-k>", "<C-\\><C-n><cmd>norm! <C-w>k<cr>", { silent = true, noremap = true })
-vim.keymap.set({ "t", "n", "i" }, "<M-l>", "<C-\\><C-n><cmd>norm! <C-w>l<cr>", { silent = true, noremap = true })
+vim.keymap.set({ "n", "i" }, "<M-h>", "<cmd>norm! <C-w>h<cr>", { silent = true, noremap = true })
+vim.keymap.set({ "n", "i" }, "<M-j>", "<cmd>norm! <C-w>j<cr>", { silent = true, noremap = true })
+vim.keymap.set({ "n", "i" }, "<M-k>", "<cmd>norm! <C-w>k<cr>", { silent = true, noremap = true })
+vim.keymap.set({ "n", "i" }, "<M-l>", "<cmd>norm! <C-w>l<cr>", { silent = true, noremap = true })
+
+vim.keymap.set("t", "<M-h>", "<C-\\><C-n><cmd>norm! <C-w>h<cr><cmd>startinsert<cr>", { silent = true, noremap = true })
+vim.keymap.set("t", "<M-j>", "<C-\\><C-n><cmd>norm! <C-w>j<cr><cmd>startinsert<cr>", { silent = true, noremap = true })
+vim.keymap.set("t", "<M-k>", "<C-\\><C-n><cmd>norm! <C-w>k<cr><cmd>startinsert<cr>", { silent = true, noremap = true })
+vim.keymap.set("t", "<M-l>", "<C-\\><C-n><cmd>norm! <C-w>l<cr><cmd>startinsert<cr>", { silent = true, noremap = true })
+
+vim.keymap.set("n", "<C-q>", "<cmd>cope<cr>", { silent = true, noremap = true })
 
 vim.keymap.set("n", "<M-c>", ":let @+=expand('%:p')<cr>", { silent = true, noremap = true })
 
+vim.keymap.set("n", "<leader>m", function()
+    vim.ui.input({ prompt = "Make> " }, function(input)
+        if input == nil then return end
+        vim.cmd.copen()
+        vim.cmd.wincmd("p")
+        vim.cmd("silent! make " .. input)
+    end)
+end , { noremap = true })
+
+vim.keymap.set("n", "<leader>g", function()
+    vim.ui.input({ prompt = "Grep> " }, function(input)
+        if input == nil or input == "" then
+            return
+        end
+        vim.cmd.copen()
+        vim.cmd.wincmd("p")
+        vim.cmd("silent! grep '" .. input .. "'")
+    end)
+end, { noremap = true })
+
 -- Emacs-like keymaps
 vim.o.cedit = "<C-s>"
-vim.keymap.set({ "n", "i", "v" }, "<C-l>", "<cmd>t.<cr>", { silent = true, noremap = true }) -- duplicate current line, like in emacs
+
+-- duplicate current line
+vim.keymap.set({ "n", "i", "v" }, "<C-l>", "<cmd>t.<cr>", { silent = true, noremap = true })
 vim.keymap.set("i", "<C-/>", "<C-o>u", { noremap = true })
 vim.keymap.set("i", "<M-a>", "<C-o>(", { noremap = true })
 vim.keymap.set("i", "<M-e>", "<C-o>)", { noremap = true })
@@ -116,7 +206,7 @@ vim.keymap.set("i", "<C-k>", function()
     end
     return "<C-o>d$"
 end, { noremap = true, expr = true })
-vim.keymap.set("c", "<C-k>", "<C-s><esc>d$<C-c><End><space>", { noremap = true })
+vim.keymap.set("c", "<C-k>", "<C-s><esc>ld$<C-c><End><space>", { noremap = true })
 vim.keymap.set("c", "<M-d>", "<C-s><esc>ce<C-c><space>", { noremap = true })
 vim.keymap.set("i", "<M-d>", "<C-o>ce", { noremap = true })
 vim.keymap.set("i", "<C-k>", function()
@@ -128,25 +218,48 @@ vim.keymap.set("i", "<C-k>", function()
     return "<C-o>d$"
 end, { noremap = true, expr = true })
 
--- User commands
-vim.api.nvim_create_user_command("P", function(args)
-    local user_command = args.args
-    if user_command == "" then
-        return
-    end
-    local out = vim.fn.execute(user_command)
-    out = out:gsub("^\n+", ""):gsub("\n+$", "")
-    vim.cmd(":new | setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile")
-    vim.api.nvim_put(vim.split(out, "\n"), "l", true, true)
-end, {
-    nargs = "+",
-    complete = function(_, cmdline, cursorpos)
-        local line = cmdline:sub(1, cursorpos)
-        line = line:gsub("^%s*P%s+", "")
-        return vim.fn.getcompletion(line, "cmdline")
-    end,
-})
+local function run_and_out(user_command)
+    local cmd = user_command:gsub("^%s*:", ""):gsub("%s+$", "")
 
+    local ok, res = pcall(vim.api.nvim_exec2, cmd, { output = true })
+    local out
+    if not ok then
+        out = "Error: " .. tostring(res)
+    else
+        out = (res and res.output) and res.output or ""
+    end
+
+    out = out:gsub("^\n+", ""):gsub("\n+$", "")
+
+    vim.cmd(":new | setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile")
+
+    local buf = vim.api.nvim_get_current_buf()
+
+    vim.keymap.set("n", "q", function()
+        vim.api.nvim_buf_delete(buf, { force = true })
+        vim.cmd("stopinsert")
+    end, { buffer = buf, noremap = true })
+
+    local lines = vim.split(out, "\n", { plain = true })
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+end
+
+vim.keymap.set("c", "<C-g>", function()
+    local user_command = vim.fn.getcmdline()
+    if user_command == "" then
+        user_command = vim.fn.histget(":", -1)
+    end
+
+    user_command = user_command:gsub("^%s*:", ""):gsub("%s+$", "")
+
+    local cancel = vim.api.nvim_replace_termcodes("<C-c>", true, false, true)
+    vim.schedule(function()
+        run_and_out(user_command)
+    end)
+    return cancel
+end, { expr = true, silent = true, noremap = true })
+
+-- User commands
 vim.api.nvim_create_user_command("Cd", function(args)
     local utils = require("sessionizer.utils")
     vim.cmd.Sess("unload")
@@ -171,6 +284,7 @@ vim.cmd([[
 -- Plugins
 vim.opt.runtimepath:append("/home/nnofly/code/personal/sessionizer.nvim")
 vim.pack.add({
+    "https://github.com/chentoast/marks.nvim",
     "https://github.com/mason-org/mason.nvim",
     "https://github.com/neovim/nvim-lspconfig",
     "https://github.com/supermaven-inc/supermaven-nvim",
@@ -179,6 +293,7 @@ vim.pack.add({
 require("terminal")
 
 -- require("vim._extui").enable({ enable = true, msg = { target = "msg", timeout = 4000 } })
+require("marks").setup({ builtin_marks = { ".", "<", ">", "^" } })
 require("mason").setup()
 require("supermaven-nvim").setup({})
 vim.schedule(function()
@@ -187,9 +302,9 @@ end)
 vim.keymap.set({ "n", "i" }, "<M-g>", function()
     require("supermaven-nvim.api").toggle()
     if require("supermaven-nvim.api").is_running() then
-        print("Supermaven is enabled")
+        vim.notify("Supermaven is enabled")
     else
-        print("Supermaven is disabled")
+        vim.notify("Supermaven is disabled")
     end
 end)
 
@@ -203,6 +318,7 @@ require("sessionizer").setup({
         "~/.config/nvim",
     },
     smart_auto_load = false,
+    auto_save = false,
     log_level = "error",
     before_load = {
         auto_save_files = true,
@@ -242,16 +358,38 @@ vim.api.nvim_create_user_command("DT", function()
     vim.notify("Purged terminal buffers")
 end, { nargs = 0 })
 
-local prev_buf_ft = nil
+local sessionizer_commands = require("sessionizer.commands")
+local sessionizer_opts = require("sessionizer").get_opts()
+local sessionizer_state = require("sessionizer.state")
+
+vim.api.nvim_create_autocmd("VimLeavePre", {
+    callback = function()
+        if vim.list_contains(sessionizer_opts.exclude_filetypes, vim.bo.filetype) then
+            return
+        end
+        if not sessionizer_state.get_current_session() then
+            return
+        end
+        sessionizer_utils.purge_term_buffers()
+        sessionizer_commands.save()
+    end
+})
+
+vim.g.sess_unload_is_enabled = true
+
 vim.api.nvim_create_autocmd("BufLeave", {
     callback = function()
-        prev_buf_ft = vim.bo.filetype
+        if vim.bo.filetype == "shell" then
+            vim.g.sess_unload_is_enabled = false
+        else
+            vim.g.sess_unload_is_enabled = true
+        end
     end,
 })
 
 vim.api.nvim_create_autocmd("DirChangedPre", {
     callback = function()
-        if vim.bo.filetype == "shell" or prev_buf_ft == "shell" then
+        if not vim.g.sess_unload_is_enabled or vim.bo.filetype == "shell" then
             return
         end
         vim.cmd.Sess("unload")
@@ -266,9 +404,20 @@ vim.diagnostic.config({ jump = { float = true } })
 
 local lsp = require("lsp")
 
-lsp.setup_linters()
-lsp.setup_formatters()
-lsp.setup_lsps()
+lsp.setup_linters({ "pyrefly", "shellcheck", "biome" })
+lsp.setup_formatters({ "ruff", "prettier", "biome", "stylua" })
+lsp.setup_lsps({
+    "lua-language-server",
+    "pyrefly",
+    "ruff",
+    "typescript-language-server",
+    "biome",
+    "css-lsp",
+    "css-variables-language-server",
+    "emmet-language-server",
+    "html-lsp",
+    "clangd",
+})
 
 vim.api.nvim_create_autocmd("LspAttach", {
     group = vim.api.nvim_create_augroup("LspOnAttach", { clear = true }),
@@ -277,26 +426,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
         if not client then
             return
         end
-        vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
+        vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = false })
         vim.lsp.semantic_tokens.enable(false, { bufnr = args.buf })
     end,
 })
 
 vim.api.nvim_create_user_command("LspServersInstall", lsp.lsps_server_install, { nargs = 0 })
-
--- Theme
--- vim.pack.add({ "https://github.com/mhartington/oceanic-next" })
-vim.o.bg = "dark"
-vim.cmd.colorscheme("quiet")
-
-local bg = "NONE"
-local colors = { "Normal", "EndOfBuffer", "LineNr", "SignColumn", "TabLineFill" }
-for _, color in ipairs(colors) do
-    vim.api.nvim_set_hl(0, color, { bg = bg })
-end
-
-vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#2a2a2a" })
-vim.api.nvim_set_hl(0, "Float", { bg = "#2a2a2a" })
-vim.api.nvim_set_hl(0, "TabLine", { fg = "#666666" })
-vim.api.nvim_set_hl(0, "TabLineSel", { fg = "#dadada" })
-vim.api.nvim_set_hl(0, "StatusLine", { fg = "#dadada", bg = "#2a2a2a" })

@@ -7,16 +7,14 @@ local M = {}
 ---        lsp?: vim.lsp.Config,
 ---        formatter?: {cmd?: string},
 ---        linter?: {cmd?: string, errorformat?: string}}}}
-local lsps = {
+local all_servers = {
     ["pyrefly"] = {
         name = "pyrefly",
         type = {
             lsp = {
                 cmd = { "pyrefly", "lsp" },
                 pyrefly = {
-                    analysis = {
-                        diagnosticMode = "workspace",
-                    },
+                    analysis = { diagnosticMode = "workspace" },
                     displayTypeErrors = "force-on",
                 },
             },
@@ -30,23 +28,26 @@ local lsps = {
     },
     ["pyright"] = {
         name = "pyright",
-        type = { linter = { cmd = "uv run pyright" } },
+        type = {
+            lsp = {},
+            linter = { cmd = "uv run pyright" },
+        },
         langs = { "python" },
     },
-    -- ["ty"] = {
-    --     name = "ty",
-    --     type = {
-    --         lsp = {
-    --             cmd = { "uv", "tool", "run", "ty", "server" },
-    --             filetypes = { "python" },
-    --             root_markers = { "ty.toml", "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt", ".git" },
-    --             settings = {
-    --                 ty = { diagnosticMode = "workspace" },
-    --             },
-    --         },
-    --     },
-    --     langs = { "python" },
-    -- },
+    ["ty"] = {
+        name = "ty",
+        type = {
+            lsp = {
+                cmd = { "uv", "tool", "run", "ty", "server" },
+                filetypes = { "python" },
+                root_markers = { "ty.toml", "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt", ".git" },
+                settings = {
+                    ty = { diagnosticMode = "workspace" },
+                },
+            },
+        },
+        langs = { "python" },
+    },
     ["clangd"] = {
         name = "clangd",
         type = { lsp = {} },
@@ -190,34 +191,44 @@ local lsps = {
     },
 }
 
-M.get_lsps = function()
-    return lsps
-end
+---@param type "formatter"|"linter"
+---@param list string[]
+---@return table<string, table>
+local function get_by_type(type, list)
+    local result = {}
 
-M.get_lsps_names = function()
-    local lsp_servers = {}
-    for _, lsp_server in pairs(lsps) do
-        if vim.list_contains(vim.tbl_keys(lsp_server.type), "lsp") then
-            table.insert(lsp_servers, lsp_server.name)
+    for _, f in pairs(list) do
+        local item = all_servers[f]
+        if item == nil then
+            vim.notify("Not found in lsps: " .. f, vim.log.levels.ERROR)
+            goto continue
         end
+
+        local langs = item.langs
+        local item_type = item.type[type]
+
+        if item_type == nil then
+            vim.notify("This is not a " .. type .. ": " .. f, vim.log.levels.ERROR)
+            goto continue
+        end
+
+        for _, lang in pairs(langs) do
+            result[lang] = item_type
+        end
+
+        ::continue::
     end
-    return lsp_servers
+
+    return result
 end
 
-M.setup_formatters = function()
-    local formatters = {
-        python = lsps["ruff"].type.formatter,
-        html = lsps["prettier"].type.formatter,
-        css = lsps["prettier"].type.formatter,
-        javascript = lsps["biome"].type.formatter,
-        javascriptreact = lsps["biome"].type.formatter,
-        typescript = lsps["biome"].type.formatter,
-        typescriptreact = lsps["biome"].type.formatter,
-        lua = lsps["stylua"].type.formatter,
-    }
+---@param formatters_list string[]
+M.setup_formatters = function(formatters_list)
+    local formatters = get_by_type("formatter", formatters_list)
 
     vim.api.nvim_create_autocmd("FileType", { -- formatting with `gq`
         pattern = vim.tbl_keys(formatters),
+
         callback = function(args)
             local cur_opt = vim.bo[args.buf]
             local fname = vim.api.nvim_buf_get_name(args.buf)
@@ -226,17 +237,9 @@ M.setup_formatters = function()
     })
 end
 
-M.setup_linters = function()
-    local linters = {
-        python = lsps["pyrefly"].type.linter,
-        bash = lsps["shellcheck"].type.linter,
-        html = lsps["biome"].type.linter,
-        css = lsps["biome"].type.linter,
-        javascript = lsps["biome"].type.linter,
-        javascriptreact = lsps["biome"].type.linter,
-        typescript = lsps["biome"].type.linter,
-        typescriptreact = lsps["biome"].type.linter,
-    }
+---@param linters_list string[]
+M.setup_linters = function(linters_list)
+    local linters = get_by_type("linter", linters_list)
 
     vim.api.nvim_create_autocmd("FileType", { -- linting with `make`
         pattern = vim.tbl_keys(linters),
@@ -250,19 +253,20 @@ M.setup_linters = function()
     })
 end
 
-M.setup_lsps = function()
-    for _, lsp_server in pairs(lsps) do
-        if not vim.list_contains(vim.tbl_keys(lsp_server.type), "lsp") then
+---@param lsps_list string[]
+M.setup_lsps = function(lsps_list)
+    for _, lsp_server_name in pairs(lsps_list) do
+        local lsp_server = all_servers[lsp_server_name]
+        if lsp_server == nil then
+            vim.notify("Not found in lsps: " .. lsp_server_name, vim.log.levels.ERROR)
             goto continue
         end
 
         local lsp_config = lsp_server.type.lsp
-        if lsp_config == nil or next(lsp_config) == nil then
-            vim.lsp.enable(lsp_server.name)
-            goto continue
+        if lsp_config ~= nil and next(lsp_config) ~= nil then
+            vim.lsp.config(lsp_server.name, lsp_config)
         end
 
-        vim.lsp.config(lsp_server.name, lsp_config)
         vim.lsp.enable(lsp_server.name)
 
         ::continue::
@@ -270,7 +274,7 @@ M.setup_lsps = function()
 end
 
 M.lsps_server_install = function()
-    local lsp_servers = vim.tbl_keys(lsps)
+    local lsp_servers = vim.tbl_keys(all_servers)
     for _, lsp_server in ipairs(lsp_servers) do
         if vim.fn.executable(lsp_server) == 0 then
             vim.cmd("MasonInstall " .. lsp_server)
